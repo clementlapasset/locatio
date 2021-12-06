@@ -68,6 +68,11 @@ res.json({result: false });
 
 } )
 
+router.get('/document', function (req, res){
+
+res.json()
+})
+
 module.exports = router;
 
 
