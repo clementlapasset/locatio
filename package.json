@@ -6,7 +6,6 @@
     "start": "node ./bin/www",
     "heroku-postbuild": "cd reactapp && npm install && npm run build"
   },
-  
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

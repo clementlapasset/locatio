@@ -1,21 +1,11 @@
-
-
 h4 {
   color: white;
   font-weight: bold
 }
 
-.Login-page{
+.Homepage{
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height:100vh;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    
-
+    height:100%;
     }
 
 .Login-input{
