@@ -55,23 +55,40 @@ router.post('/sign-up', async function (req, res) {
     
 });
 
-router.post('/sign-in', function (req, res) {
+router.post('/sign-in', async function(req,res,next){
 
-let email = req.body.email
-
-let password = req.body.password
-
-if(email && password){
-
-res.json({result: true });
-
-}else{
-
-res.json({result: false });
-
-}
-
-});
+    var result = false
+    var user = null
+    var error = []
+    var token = null
+    
+    if(req.body.email == ''
+    || req.body.password == ''
+    ){
+      error.push('Champs vides')
+    }
+  
+    if(error.length == 0){
+      user = await userModel.findOne({
+        email: req.body.email,
+      })
+      
+      if(user){
+        if(bcrypt.compareSync(req.body.password, user.password)){
+          result = true
+          token = user.token
+        } else {
+          result = false
+          error.push('Mot de passe ou email incorrect')
+        }
+      } 
+    }
+    
+  
+    res.json({result, user, error, token})
+  
+  
+  })
 
 router.post('/property-info', function (req, res){
 

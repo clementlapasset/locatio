@@ -21,28 +21,20 @@ export default function Signup() {
 
     return (
         
-        <div className="Signup-page">
+        <div className="Signup-page" lg={10}>
             <div className="Signup-area">
                 
                 <Form className="Signup-area">
                     <h2>Inscrivez-vous !</h2>
                     <FormGroup row>
-                        <Col >
+                        <Col lg={10} >
                             <Input className="Login-input"  onChange={(e) => setSignUpFirstname(e.target.value)} placeholder="Prénom"/>
                             <Input className="Login-input"  onChange={(e) => setSignUpLastname(e.target.value)} placeholder="Nom"/>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col >
                             <Input className="Login-input"  type="email"  placeholder="Email" onChange={(e) => setSignUpEmail(e.target.value)}/>
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Col >
                             <Input className="Login-input"  type="password" onChange={(e) => setSignUpPassword(e.target.value)} placeholder="Password"/>
                         </Col>
                     </FormGroup>
-                    <Button onClick={() => handleSubmitSignup()} className="Login-input" >Sign-up</Button>
+                    <Button onClick={() => handleSubmitSignup()}  style={{backgroundColor:'#00C689', borderColor:'#00C689'}} >Sign-up</Button>
                 </Form>
     
             </div>
