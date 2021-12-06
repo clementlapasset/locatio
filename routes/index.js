@@ -20,16 +20,17 @@ router.post('/sign-up', async function (req, res) {
     var token = null
 
     const data = await userModel.findOne({
-        email: req.body.emailFromFront
+        email: req.body.email
     })
     
     if(data != null){
         error.push('utilisateur déjà présent')
     }
     
-    if(req.body.usernameFromFront == ''
-    || req.body.emailFromFront == ''
-    || req.body.passwordFromFront == ''
+    if(req.body.firstName == ''
+    || req.body.lastName == ''
+    || req.body.email == ''
+    || req.body.password == ''
     ){
         error.push('champs vides')
     }

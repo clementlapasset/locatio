@@ -6,16 +6,16 @@ h4 {
 }
 
 .Signup-page{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height:100vh;
-    background-position: center;
-    background-color: rgb(235, 238, 242);
-    background-repeat: no-repeat;
-    background-size: cover;
-    }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height:100vh;
+  background-position: center;
+  background-color: rgb(235, 238, 242);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 .Login-input{
   height: 40px;
