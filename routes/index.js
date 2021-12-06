@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-res.render('index', { title: 'Locatio back-end test maj' });
+res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
 });
 
