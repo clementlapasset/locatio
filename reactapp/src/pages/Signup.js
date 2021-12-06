@@ -24,6 +24,7 @@ export default function Signup() {
     <div>
         <NavBarHome/>
         
+<<<<<<< HEAD
         <div className="Signup-page">
         
         <div className="Signup-area">
@@ -49,6 +50,25 @@ export default function Signup() {
                 <Button onClick={() => handleSubmitSignup()} className="Login-input" >Sign-up</Button>
             </Form>
 
+=======
+        <div className="Signup-page" lg={10}>
+            <div className="Signup-area">
+                
+                <Form className="Signup-area">
+                    <h2>Inscrivez-vous !</h2>
+                    <FormGroup row>
+                        <Col lg={10} >
+                            <Input className="Login-input"  onChange={(e) => setSignUpFirstname(e.target.value)} placeholder="Prénom"/>
+                            <Input className="Login-input"  onChange={(e) => setSignUpLastname(e.target.value)} placeholder="Nom"/>
+                            <Input className="Login-input"  type="email"  placeholder="Email" onChange={(e) => setSignUpEmail(e.target.value)}/>
+                            <Input className="Login-input"  type="password" onChange={(e) => setSignUpPassword(e.target.value)} placeholder="Password"/>
+                        </Col>
+                    </FormGroup>
+                    <Button onClick={() => handleSubmitSignup()}  style={{backgroundColor:'#00C689', borderColor:'#00C689'}} >Sign-up</Button>
+                </Form>
+    
+            </div>
+>>>>>>> 83a02a0d194ac3a025c0e2c74796ca06364af1ad
         </div>
       </div>
     </div>
