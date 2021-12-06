@@ -1,6 +1,8 @@
 var express = require('express');
-
 var router = express.Router();
+var userModel = require('../models/users')
+var uid2 = require('uid2')
+var bcrypt = require('bcrypt');
 
 /* GET home page. */
 
@@ -10,26 +12,46 @@ res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
 });
 
-router.post('/sign-up', function (req, res) {
+router.post('/sign-up', async function (req, res) {
 
-let firstname = req.body.firstname;
+    var error = []
+    var result = false
+    var saveUser = null
+    var token = null
 
-let lastname = req.body.lastname
+    const data = await userModel.findOne({
+        email: req.body.emailFromFront
+    })
+    
+    if(data != null){
+        error.push('utilisateur déjà présent')
+    }
+    
+    if(req.body.usernameFromFront == ''
+    || req.body.emailFromFront == ''
+    || req.body.passwordFromFront == ''
+    ){
+        error.push('champs vides')
+    }
 
-let email = req.body.email
-
-let password = req.body.password
-
-if(firstname && lastname && email && password){
-
-res.json({result: true });
-
-}else{
-
-res.json({result: false });
-
-}
-
+    if(error.length == 0){
+        var hash = bcrypt.hashSync(req.body.password, 10);
+        var newUser = new userModel({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: hash,
+            token: uid2(32),
+        })
+        saveUser = await newUser.save()
+        if(saveUser){
+            result = true
+            token = saveUser.token
+        }
+    }
+    
+    res.json({result, saveUser, error, token})
+    
 });
 
 router.post('/sign-in', function (req, res) {

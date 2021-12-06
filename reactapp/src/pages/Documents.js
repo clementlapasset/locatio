@@ -1,98 +1,62 @@
 import React, { useState } from "react";
-import { Accordion, AccordionItem, AccordionHeader } from 'reactstrap';
+import { Accordion, AccordionItem, AccordionHeader, Collapse } from 'reactstrap';
+import '../App.css'
+
 
 
 
 
 
 function Documents() {
-    
-    const [open, setOpen] = useState(false);
 
+    const [isOpen, setIsOpen] = useState(false);
+    const [isSelected, setIsSelected] = useState("")
+    var documents = ["Bail n°1", "Quittance n°1", "Etat des lieux", "Régularisation des charges"]
+    
+
+    const setAcc = (x) => {
+       
+        if (isOpen === x) {
+            setIsOpen("");
+          } else {
+            setIsOpen(x);
+          }
+        if (isSelected === x){
+            setIsSelected("")
+        } else {
+            setIsSelected(x)
+        }
+        
+        console.log(x)
+    }
 
     return (
-        <div style={{display: "flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
+        
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+            
             <h1>Créez ou consultez vos document</h1>
-            <Accordion
-                open="1"
-                toggle={function noRefCheck() { }}
-            >
-                <AccordionItem style={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-                    <AccordionHeader targetId="1" data-bs-toggle="collapse">
-                        Bail
-                    </AccordionHeader>
-                    <AccordionItem accordionId="1">
-                        <strong>
-                            This is the first item's accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the{' '}
-                        <code>
-                            .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-                    </AccordionItem>
-                </AccordionItem>
-                <AccordionItem style={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-                    <AccordionHeader targetId="2">
-                        Etat des lieux
-                    </AccordionHeader>
-                    <AccordionItem accordionId="2">
-                        <strong>
-                            This is the second item's accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the{' '}
-                        <code>
-                            .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-                    </AccordionItem>
-                </AccordionItem>
-                <AccordionItem style={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-                    <AccordionHeader targetId="3">
-                        Quittances
-                    </AccordionHeader>
-                    <AccordionItem accordionId="3">
-                        <strong>
-                            This is the third item's accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the{' '}
-                        <code>
-                            .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-                    </AccordionItem>
-                </AccordionItem>
-                <AccordionItem style={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-                    <AccordionHeader targetId="4">
-                        Régularisation des charges
-                    </AccordionHeader>
-                    <AccordionItem accordionId="4">
-                        <strong>
-                            This is the first item's accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the{' '}
-                        <code>
-                            .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-                    </AccordionItem>
-                </AccordionItem>
-                <AccordionItem style={{display:"flex", flexDirection: "column", justifyContent:"center", alignItems:"center"}}>
-                    <AccordionHeader targetId="5">
-                        Révision de loyer
-                    </AccordionHeader>
-                    <AccordionItem accordionId="5">
-                        <strong>
-                            This is the first item's accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the{' '}
-                        <code>
-                            .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-                    </AccordionItem>
-                </AccordionItem>
-            </Accordion>
+
+            
+                <div>
+                {documents.map((document, i) => (
+                    <Accordion open={isSelected} toggle={function noRefCheck() { }}>
+                    
+                        <AccordionItem onClick={() => setAcc(i)} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "80vw", height:"52px",backgroundColor:"#00C689", color:"white", marginBottom:"10px" }}>
+                            {/* <AccordionHeader targetId={i} style={{width:"50%", backgroundColor:"red"}}> */}
+                                {document}
+                            {/* </AccordionHeader > */}
+                            <Collapse isOpen={isOpen === i}>
+                                <AccordionItem accordionId={i} >
+                                    + Ajouter un document
+                                </AccordionItem>
+                            </Collapse>
+                        </AccordionItem>
+                        
+                    </Accordion>
+                    ))}
+                </div>
+            
+
         </div>
 
 
