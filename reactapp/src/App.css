@@ -3,29 +3,38 @@ h4 {
   font-weight: bold
 }
 
-.Homepage{
-    display: flex;
-    height:100%;
-    }
-
-.Login-input{
-  margin: 15px;
-  width: 400px;
+.Signup-page{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height:100vh;
+  background-position: center;
+  background-color: rgb(235, 238, 242);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.Sign {
+.Login-input{
+  height: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.Signup-area {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     justify-content: center;
     padding-bottom: 15px;
-    border-radius: 5%;
-    border-color: white;
-    background-color: rgba(63,169,255,0.5);
+    border-radius: 10px;
+    background-color: white;
     margin: 40px;
 }
 
-.Sign .Login-input{
+.Signup-area .Login-input{
   width: 250px;
 }
 
@@ -49,5 +58,4 @@ h4 {
   justify-content: center;
 
 }
-
 

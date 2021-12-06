@@ -8,7 +8,7 @@ export default function Homepage() {
     return (
     <div>
       <NavBarHome/>
-      <div className='Homepage'>
+      <div>
       <div>
       <Card>
       <CardBody>
