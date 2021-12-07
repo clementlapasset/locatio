@@ -68,5 +68,30 @@ h4 {
 
 }
 
+.circleProvision {
+  display: flex;
+  width: 125px;
+  height: 125px;
+  background-color: #00C689;
+  border-radius: 50%;
+}
+
+.circleCharges {
+  display: flex;
+  width: 125px;
+  height: 125px;
+  background-color: #FE645A;
+  border-radius: 50%;
+}
+
+.circleTotal {
+  display: flex;
+  width: 125px;
+  height: 125px;
+  background-color: #00C689;
+  opacity: 50%;
+  border-radius: 50%;
+}
+
 
 

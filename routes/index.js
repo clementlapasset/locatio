@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var userModel = require('../models/users')
 var documentModel = require('../models/documents')
+var financeModel = require('../models/finances')
 var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 
@@ -115,7 +116,39 @@ router.get('/document', function (req, res){
 res.json()
 })
 
-module.exports = router;
 
+router.get('/finance/:type', async function (req, res){
+
+  if(req.params.type==='charges'){
+    var financeListCharges = await financeModel.find({type: ['charge', 'provision']})
+    console.log(financeListCharges)
+    res.json(financeListCharges)
+
+  }else{
+    res.json({result: 'nothing found'})
+  }
+
+  
+})
+
+router.post('/finance', async function (req, res){
+
+  var newFinance = new financeModel({
+    type: req.body.type,
+    montant: req.body.montant,
+    description: req.body.description,
+    dateDebut: req.body.startDate,
+    dateFin: req.body.endDate,
+    frequence: req.body.frequence
+})
+saveFinance = await newFinance.save()
+
+if (saveFinance) {
+  res.json({result: true})
+}else{
+  res.json({result: false})
+}
+
+})
 
 module.exports = router;

@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 
 import { Bar } from 'react-chartjs-2';
-import faker from 'faker';
+var faker = require('faker');
 
 ChartJS.register(
   CategoryScale,
@@ -24,9 +24,6 @@ ChartJS.register(
 export const options = {
   responsive: true,
   plugins: {
-    legend: {
-      position: 'top' as const,
-    },
     title: {
       display: true,
       text: 'Chart.js Bar Chart',
@@ -52,6 +49,6 @@ export const data = {
   ],
 };
 
-export function App() {
+export function BarChart() {
   return <Bar options={options} data={data} />;
 }
