@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Button, Col, Container, Row, Table, Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap'
+import { Button, Col, Container, Row, Table, Card, CardBody, CardText } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import { BarChart } from '../components/BarChart'
 
