@@ -2,6 +2,7 @@ import React from "react";
 import Documents from './pages/Documents';
 import Signup from './pages/Signup';
 import Homepage from './pages/Homepage';
+import Charges from "./pages/Charges";
 import './App.css';
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
       <Homepage/>
       <Signup/>
       <Documents/>
-    
+      <Charges/>
     </>
   );
 }
