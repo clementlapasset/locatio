@@ -7,7 +7,7 @@ export default function Charges() {
             <NavBarMain/>
             <Container>
               <Row style={{marginTop: '30px'}}><Col lg={{size:6, offset:'8'}}><Button>Ce mois-ci</Button>{' '}<Button>Cette année</Button></Col></Row>
-              <Row><Col></Col></Row>
+              <Row><Col md='6'></Col><Col md='6'></Col></Row>
               <Row></Row>
               <Row></Row>
             </Container>

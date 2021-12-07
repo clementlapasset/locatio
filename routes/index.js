@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require('../models/users')
+var documentModel = require('../models/documents')
 var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 
@@ -109,6 +110,7 @@ res.json({result: false });
 } )
 
 router.get('/document', function (req, res){
+  
 
 res.json()
 })
