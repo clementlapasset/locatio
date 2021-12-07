@@ -6,6 +6,8 @@ const userSchema = mongoose.Schema({
     email: String,
     password: String,
     token: String,
+    landlord: Boolean,
+    adressLandlord: String
 })
 
 const userModel = mongoose.model('users', userSchema)
