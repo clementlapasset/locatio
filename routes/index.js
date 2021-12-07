@@ -109,10 +109,17 @@ res.json({result: false });
 
 } )
 
-router.get('/document', function (req, res){
+router.get('/document', async function (req, res){
   
+  var bail = await documentModel.findOne({type: "bail"});
+  var quittance = await documentModel.findOne({type: "quittance"});
+  var etatdeslieux = await documentModel.findOne({type: "etat des lieux"});
+  var regulcharges = await documentModel.findOne({type: "regularisation charges"});
+  var revisionloyer = await documentModel.findOne({type: "revision loyer"});
+  
+  console.log(bail + quittance)
 
-res.json()
+  res.json(bail, quittance, etatdeslieux, regulcharges, revisionloyer)
 })
 
 module.exports = router;
