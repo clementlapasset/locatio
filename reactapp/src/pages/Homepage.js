@@ -8,7 +8,8 @@ import { Card, CardBody, CardTitle, CardText, Button, Container, Row, Col } from
 export default function Homepage() {
 
     return (
-      <>
+      <div style={{height:'100vh'}}>
+
       <NavBarHome/>
 
       <Container fluid className='g-0'>
@@ -28,7 +29,7 @@ export default function Homepage() {
             </Col>
         </Row>
       </Container>   
-      </>
+      </div>
          
     )
 }
