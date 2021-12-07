@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Accordion, AccordionItem, AccordionHeader, Collapse } from 'reactstrap';
+import { Accordion, AccordionItem, Collapse } from 'reactstrap';
 import '../App.css'
 
 
