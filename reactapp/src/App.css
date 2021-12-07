@@ -68,5 +68,9 @@ h4 {
 
 }
 
-
+.accordion-button{
+  background-color: #00C689;
+  color: white;
+  font-weight: bold;
+}
 
