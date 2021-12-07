@@ -8,11 +8,11 @@ import { Card, CardBody, CardTitle, CardText, Button, Container, Row, Col } from
 export default function Homepage() {
 
     return (
-<<<<<<< HEAD
-      <Container fluid>
-        <Row>
-            <NavBarHome/>
-        </Row>
+      <>
+      <NavBarHome/>
+
+      <Container fluid className='g-0'>
+
         <Row style={{backgroundColor:'rgb(235, 238, 242)'}}>
             <Col xs='7'>
             <Card style={{marginTop:'100px', marginLeft: '50px', marginRight: '50px'}}>
@@ -27,27 +27,8 @@ export default function Homepage() {
             <div className='buildingImage' />
             </Col>
         </Row>
-      </Container>      
-=======
-    <div>
-      <NavBarHome/>
-      <div>
-      <div>
-      <Card>
-      <CardBody>
-      <CardTitle tag="h5">Card title</CardTitle>
-      <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-      <Button onClick={function noRefCheck(){}}>Button</Button>
-      </CardBody>
-      </Card>
-      </div>
-      <div>
-      <img src='../homepage.jpg' alt=""/>
-      </div>
-      </div>
-    </div>
-        
-        
->>>>>>> 83a02a0d194ac3a025c0e2c74796ca06364af1ad
+      </Container>   
+      </>
+         
     )
 }
