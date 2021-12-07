@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Link, useNavigate } from "react-router-dom";
 import { Navbar, NavbarBrand, Nav, NavLink, NavItem, Button, Input, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 export default function NavBarHome() {
@@ -11,6 +12,9 @@ export default function NavBarHome() {
     const [userExists, setUserExists] = useState(false)
     const [listErrorsSignin, setErrorsSignin] = useState([])
 
+    let navigate = useNavigate();
+
+
     var handleSubmitSignin = async () => {
         const data = await fetch('/sign-in', {
             method: 'POST',
@@ -19,28 +23,27 @@ export default function NavBarHome() {
           })
       
           const body = await data.json()
-      
+          
           if(body.result === true){
             setUserExists(true)
-            
           }  else {
             setErrorsSignin(body.error)
+            console.log(body)
           }
     }
 
-
-
     if(userExists){
-        //redirect to dashboard
-        console.log("user exists")
+        navigate('/documents');
     }
+
     var tabErrorsSignin = listErrorsSignin.map((error,i) => {
         return(<p>{error}</p>)
       })
+    
 
     return (
         <Navbar style={{backgroundColor:'#2A327D', justifyContent:'space-between'}}>
-        <NavbarBrand style={{color:'#FFFFFF'}}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt=""/>Locatio</NavbarBrand>
+        <NavbarBrand style={{color:'#FFFFFF'}}><Link to="/" style={{ textDecoration: 'none', color:'white' }}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt=""/>Locatio</Link></NavbarBrand>
         <Nav>
         <NavItem >
             <NavLink id="PopoverLogin" style={{color:'white', cursor:"pointer"}} >Login</NavLink>
@@ -62,7 +65,11 @@ export default function NavBarHome() {
                 </PopoverBody>
             </Popover>
         </NavItem>
-        <Nav pills ><NavItem style={{marginRight:'20px'}}><NavLink style={{backgroundColor:'#00C689'}} active href="/sign-up" >Sign-up</NavLink></NavItem></Nav>
+        <Nav pills >
+            <NavItem style={{marginRight:'20px'}}>
+                <NavLink style={{backgroundColor:'#00C689'}} active href="/signup" >Sign-up</NavLink>
+            </NavItem>
+            </Nav>
         </Nav>
         </Navbar>
     )
