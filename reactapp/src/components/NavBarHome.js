@@ -43,7 +43,7 @@ export default function NavBarHome() {
         <NavbarBrand style={{color:'#FFFFFF'}}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt=""/>Locatio</NavbarBrand>
         <Nav>
         <NavItem >
-            <NavLink id="PopoverLogin" style={{color:'white'}} /**/ >Login</NavLink>
+            <NavLink id="PopoverLogin" style={{color:'white', cursor:"pointer"}} >Login</NavLink>
             <Popover
                 flip
                 placement="bottom"
