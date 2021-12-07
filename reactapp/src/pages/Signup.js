@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import '../App.css';
 import { Col, Button, Form, FormGroup, Input } from 'reactstrap';
+import NavBarHome from '../components/NavBarHome';
 
 export default function Signup() {
 
@@ -20,6 +21,8 @@ export default function Signup() {
     }
 
     return (
+    <div>
+        <NavBarHome/>
         
         <div className="Signup-page" lg={10}>
             <div className="Signup-area">
@@ -39,6 +42,8 @@ export default function Signup() {
     
             </div>
         </div>
+      </div>
+        
     );
 }
 

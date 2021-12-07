@@ -15,6 +15,15 @@ h4 {
   background-size: cover;
 }
 
+.buildingImage {
+    height:100vh;
+    background-image: url('/src/images/homepage.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: end;
+}
+
 .Login-input{
   height: 40px;
   border: 1px solid rgba(0, 0, 0, 0.5);
