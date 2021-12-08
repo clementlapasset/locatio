@@ -12,11 +12,12 @@ import InformationTenant from './pages/InformationTenant';
 import Documents from './pages/Documents';
 import Finances from './pages/Finances';
 import Charges from './pages/Charges';
+import charges from "./reducers/charges";
 
 
 import './App.css';
 
-const store = createStore(combineReducers({}))
+const store = createStore(combineReducers({charges}))
 
 function App() {
   return (
