@@ -26,7 +26,6 @@ export const options = {
   plugins: {
     title: {
       display: true,
-      text: 'Chart.js Bar Chart',
     },
   },
 };
