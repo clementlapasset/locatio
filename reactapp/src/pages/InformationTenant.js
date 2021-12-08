@@ -16,15 +16,13 @@ export default function InformationTenant() {
 
     var renderTenantInputFields = tenantInputFields.map((inputField, i) => {
         return (
-            <Col>
+            <Col key={i}>
             <Row style={{ display: 'flex', flexDirection: 'row', width: '20vw', flexWrap: 'unset', justifyContent: 'center' }}>
                     <Input type="text" className="Login-input" onChange={(e) => { setTenantFirstname(e.target.value); setAlert(false); }} placeholder="Prénom" />
                     <Input type="text" className="Login-input" onChange={(e) => { setTenantLastname(e.target.value); setAlert(false); }} placeholder="Nom" />
                 </Row>
                 <Input className="Login-input" type="email" placeholder="Email" onChange={(e) => setTenantEmail(e.target.value)} />
-            </Col>
-                
-            
+            </Col>    
         )
     })
 
