@@ -23,6 +23,7 @@ function Documents() {
     const [title, setTitle] = useState("")
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
+    const [downloadedFile, setDownloadedFile] = useState("")
 
 
 
@@ -31,36 +32,73 @@ function Documents() {
         const findDocuments = async () => {
             const data = await fetch('/document')
             const body = await data.json()
-            setDocumentsByType([... documentsByType, body])
+            setDocumentsByType(body)
             // console.log(body)
         }
         findDocuments()
-    }, [documentsByType])
+    }, [])
 
 
 
-    const addDocument = async () => {
-        var date = Date.now()
-        const addDoc = await fetch('/document-add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`
-        })
-    }
+    // const addDocument = async () => {
+    //     var date = Date.now()
+    //     const addDoc = await fetch('/document-add', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    //         body: `type=${indice}&date=${date}&title=${title}`
+    //     })
+    // }
 
 
 
     const modalClick = () => {
-        addDocument()
+        var date = Date.now()
         setIsVisible(false)
+        const formData = new FormData();
+        formData.append("document", file);
+        formData.append("type", indice)
+        formData.append("date", date)
+        formData.append("title", title)
+        fetch("/upload-file", {
+            method: "POST",
+            body: formData,
+        })
+        // addDocument()
         console.log(file)
     }
 
-    
+
     const handleChange = file => {
         setFile(file);
     };
 
+
+    const downloadDoc = async () => {
+        var formdata = new FormData();
+
+        
+        // const data = await fetch("/download-file")
+        
+        
+        fetch("/download-file")
+            .then(response => response.blob())
+            .then(blob => {
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = "filename.pdf";
+                document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+                a.click();    
+                a.remove();  //afterwards we remove the element again         
+            })
+            .then((result) => {
+                // console.log(result)
+                setDownloadedFile(result)
+                console.log(result)
+            
+            })
+            .catch(error => console.log('error', error));
+    }
 
 
 
@@ -86,7 +124,7 @@ function Documents() {
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
 
-                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Créez ou consultez vos document</h1>
+                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Créez ou consultez vos documents</h1>
 
 
                 <div style={{ margin: "auto" }}>
@@ -105,9 +143,10 @@ function Documents() {
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <p style={{ marginTop: "5px", marginBottom: "5px" }}>{doctype.title}</p>
+                                                    <p onClick={() => downloadDoc()} style={{ marginTop: "5px", marginBottom: "5px" }}>{doctype.title}</p>
                                                 )
                                             }
+                                            
 
                                         })}
                                         <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px" }}> + Ajouter un document</Button>
@@ -132,14 +171,14 @@ function Documents() {
                                 types={fileTypes}
                                 children
                             >
-                                <p style={{margin:"auto"}}>Cliquez ou glissez le fichier à mettre en ligne</p>
+                                <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne</p>
                             </FileUploader>
                         </ModalBody>
                         <ModalFooter>
                             <Button
                                 color="primary"
                                 onClick={() => modalClick()}
-                                
+
                             >
                                 Valider
                             </Button>

@@ -6,6 +6,8 @@ var documentModel = require('../models/documents')
 var financeModel = require('../models/finances')
 var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
+var uniqid = require('uniqid');
+var fs = require('fs');
 
 /* GET home page. */
 
@@ -131,23 +133,59 @@ router.get('/finance/:type', async function (req, res) {
   router.get('/document', async function (req, res) {
 
     var documents = await documentModel.find();
-    console.log(documents)
 
     res.json(documents)
   })
 
-  router.post('/document-add', async function (req, res) {
+  // router.post('/document-add', async function (req, res) {
+
+  //   var newDocument = new documentModel({
+  //     type: req.body.type,
+  //     title: req.body.title,
+  //     url: req.body.url,
+  //     date: req.body.date
+
+  //   });
+  //   var documentSaved = await newDocument.save();
+    
+  // })
+
+  router.post('/upload-file', async function (req, res) {
+    var documentName = './files/' + uniqid() + '.pdf';
+    var document = await req.files.document
+    document.mv(documentName)
+    console.log(document)
 
     var newDocument = new documentModel({
       type: req.body.type,
       title: req.body.title,
-      url: req.body.url,
+      url: documentName,
       date: req.body.date
 
     });
     var documentSaved = await newDocument.save();
-    
+    console.log(documentSaved)
+    res.json(document)
+
   })
+
+  router.get('/download-file', async function(req, res) {
+    var filePath = await documentModel.findOne();
+    console.log("-----------------  " + filePath.url + " -----------------")
+ 
+    fs.readFile('/Users/alex/Desktop/locatio/routes/1gqshwrkdkwxk44wg.pdf', function(err, data) {
+      if(err){
+        console.log(err)
+      }else{
+        console.log(data)
+        res.contentType("application/pdf");
+        res.send(data);
+      }
+    });
+ });
+ 
+
+
 
   router.post('/finance', async function (req, res) {
 
