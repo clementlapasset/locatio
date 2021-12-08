@@ -31,7 +31,7 @@ function Documents() {
         const findDocuments = async () => {
             const data = await fetch('/document')
             const body = await data.json()
-            setDocumentsByType([... documentsByType, body])
+            setDocumentsByType([...documentsByType, body])
             // console.log(body)
         }
         findDocuments()
@@ -41,7 +41,11 @@ function Documents() {
 
     const addDocument = async () => {
         var date = Date.now()
+<<<<<<< HEAD
+        await fetch('/document-add', {
+=======
         const addDoc = await fetch('/document-add', {
+>>>>>>> ff39e10bdd2ec07f5a7a535e3bb0deaf02b70c77
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`

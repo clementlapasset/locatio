@@ -15,7 +15,7 @@ router.get('/', function (req, res, next) {
 
 });
 
-router.post('/sign-up', async function (req, res) {
+router.post('/sign-up-landlord', async function (req, res) {
 
   var error = []
   var result = false
@@ -56,6 +56,22 @@ router.post('/sign-up', async function (req, res) {
 
   res.json({ result, saveUser, error, token })
 
+});
+
+router.post('/sign-up-tenant', async function (req, res) {
+  var result = false
+  var saveUser = null
+
+  var newUser = new userModel({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
+  })
+  saveUser = await newUser.save()
+  if (saveUser) {
+    result = true
+  }
+
+  res.json({ result, saveUser })
 });
 
 router.post('/sign-in', async function (req, res, next) {
@@ -128,29 +144,26 @@ router.get('/finance/:type', async function (req, res) {
   }
 })
 
-  router.get('/document', async function (req, res) {
+router.get('/document', async function (req, res) {
 
-    var documents = await documentModel.find();
-    console.log(documents)
+  var documents = await documentModel.find();
+  console.log(documents)
 
-    res.json(documents)
-  })
+  res.json(documents)
+})
 
-  router.post('/document-add', async function (req, res) {
+router.post('/document-add', async function (req, res) {
 
-    var newDocument = new documentModel({
-      type: req.body.type,
-      title: req.body.title,
-      url: req.body.url,
-      date: req.body.date
+  var newDocument = new documentModel({
+    type: req.body.type,
+    title: req.body.title,
+    url: req.body.url,
+    date: req.body.date
 
-    });
-    var documentSaved = await newDocument.save();
-    
-  })
+  });
+  var documentSaved = await newDocument.save();
 
-  router.post('/finance', async function (req, res) {
-
+})
     var newFinance = new financeModel({
       type: req.body.typeFromFront,
       montant: req.body.amountFromFront,
@@ -160,12 +173,24 @@ router.get('/finance/:type', async function (req, res) {
     })
     saveFinance = await newFinance.save()
 
-    if (saveFinance) {
-      res.json({ result: true })
-    } else {
-      res.json({ result: false })
-    }
+router.post('/finance', async function (req, res) {
 
+  var newFinance = new financeModel({
+    type: req.body.type,
+    montant: req.body.montant,
+    description: req.body.description,
+    dateDebut: req.body.startDate,
+    dateFin: req.body.endDate,
+    frequence: req.body.frequence
   })
+  saveFinance = await newFinance.save()
 
-  module.exports = router;
+  if (saveFinance) {
+    res.json({ result: true })
+  } else {
+    res.json({ result: false })
+  }
+
+})
+
+module.exports = router;
