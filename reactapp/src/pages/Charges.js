@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, CardTitle } from 'reactstrap'
+import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, CardTitle, Badge } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import { BarChart } from '../components/BarChart'
+import CurrencyInput from 'react-currency-input-field';
 
 
 export default function Charges() {
@@ -10,8 +11,14 @@ export default function Charges() {
     const [totalProvisions, setTotalProvisions] = useState(0)
     const [totalCharges, setTotalCharges] = useState(0)
     const [modal, setModal] = useState(false);
-    const toggle = () => setModal(!modal);
+    const [chargeDescription, setChargeDescription] = useState('')
+    const [chargeCost, setChargeCost] = useState(null)
+    const [chargeDate, setChargeDate] = useState(new Date(''))
+    const [chargeFrequence, setChargeFrequence] = useState(null)
 
+    const [chargeAdded, setChargeAdded] = useState(false)
+
+    const toggle = () => setModal(!modal);
 
     useEffect(() => {
         async function loadData() {
@@ -39,7 +46,26 @@ export default function Charges() {
 
 
         } loadData()
-    }, [])
+         
+        if (chargeAdded) {
+            loadData()
+            setChargeAdded(false)
+        }
+    }, [chargeAdded])
+
+    var handleAddCharge = async () => {
+
+        var rawResponse = await fetch('finance', {
+            method: 'POST',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: `typeFromFront=charge&descriptionFromFront=${chargeDescription}&amountFromFront=${chargeCost}&dateDebutFromFront=${chargeDate}&frequencyFromFront=${chargeFrequence}`
+           });
+
+        var response = await rawResponse.json();
+        console.log('from back end',response)
+        toggle()
+        setChargeAdded(true)
+    }
 
 
     return (
@@ -71,10 +97,10 @@ export default function Charges() {
                     </Button>
                 </Col></Row>
                 <Row>
-                    <Table><thead style={{backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th>Status</th><th>Description</th><th>Montant</th><th>Date</th></tr></thead><tbody>
+                    <Table><thead style={{backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Status</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
                         {/************************************** *************** add in map ********************************************************************/}
                         {financeList.map((finance) => (
-                            <tr><th scope="row">1</th><td>{finance.description}</td><td>{finance.montant}€</td><td>{finance.dateDebut}</td></tr>
+                            <tr><th scope="row"><Badge pill style={{backgroundColor:'#00C689', width:'100px'}}>Provision</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{finance.dateDebut}</td></tr>
                         ))}
                     </tbody>
                     </Table>
@@ -88,15 +114,16 @@ export default function Charges() {
                         </ModalHeader>
                         <ModalBody>
                         <Form>
-                            <FormGroup> <Input id="descriptionCharge" name="descriptionCharge" placeholder="Description" type="string"/></FormGroup>
-                            <FormGroup> <Input id="priceCharge" name="priceCharge" placeholder="Price" type="number"/></FormGroup>
-                            <FormGroup> <Input id="exampledateChargeEmail" name="dateCharge" placeholder="Date" type="date"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeDescription(e.target.value)} placeholder="Description" type="string"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeCost(parseInt(e.target.value))} placeholder="Cost" type="number"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeFrequence(parseInt(e.target.value))} placeholder="recourrance" type="select"><option>recourrance du charge</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>6</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></Input></FormGroup>
+                            <FormGroup> <Input onChange={(date) => setChargeDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
                         </Form>
                         </ModalBody>
                         <ModalFooter>
                             <Button
                                 style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
-                                onClick={() => toggle()}
+                                onClick={() => handleAddCharge()}
                             >
                                 Ajouter
                             </Button>
