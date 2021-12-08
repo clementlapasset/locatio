@@ -41,7 +41,7 @@ function Documents() {
 
     const addDocument = async () => {
         var date = Date.now()
-        const addDoc = await fetch('/document-add', {
+        await fetch('/document-add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`

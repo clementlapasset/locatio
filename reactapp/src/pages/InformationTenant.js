@@ -4,7 +4,7 @@ import { Row, Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
 
-import NavBarHome from '../components/NavBarHome';
+import NavBarMain from '../components/NavBarMain';
 
 export default function InformationTenant() {
     let navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function InformationTenant() {
 
     return (
         <>
-            <NavBarHome />
+            <NavBarMain />
 
             <div className="Signup-page" >
                 <Alert

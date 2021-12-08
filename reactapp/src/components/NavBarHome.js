@@ -33,7 +33,7 @@ export default function NavBarHome() {
     }
 
     if(userExists){
-        navigate('/documents');
+        navigate('/finances');
     }
 
     var tabErrorsSignin = listErrorsSignin.map((error,i) => {
@@ -58,10 +58,10 @@ export default function NavBarHome() {
                 Se connecter
                 </PopoverHeader>
                 <PopoverBody>
-                    <Input onChange={(e) => setSignInEmail(e.target.value)} className="Login-input" type="email"  placeholder="Email" />
-                    <Input onChange={(e) => setSignInPassword(e.target.value)} className="Login-input" type="password"  placeholder="Password" />
+                    <Input onChange={(e) => setSignInEmail(e.target.value)} className="Login-home" type="email"  placeholder="Email" />
+                    <Input onChange={(e) => setSignInPassword(e.target.value)} className="Login-home" type="password"  placeholder="Password" />
                     {tabErrorsSignin}
-                    <Button onClick={() => handleSubmitSignin()} className="Login-input" >Valider</Button>
+                    <Button onClick={() => handleSubmitSignin()} className="Login-home" >Valider</Button>
                 </PopoverBody>
             </Popover>
         </NavItem>

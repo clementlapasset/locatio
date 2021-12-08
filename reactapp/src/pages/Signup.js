@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import '../App.css';
 import { Col, Button, Form, FormGroup, Input } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
-import NavBarHome from '../components/NavBarHome';
+import NavBarMain from '../components/NavBarMain';
 
 export default function Signup() {
 
@@ -35,7 +35,7 @@ export default function Signup() {
 
     return (
     <div>
-        <NavBarHome/>
+        <NavBarMain/>
         
         <div className="Signup-page" lg={10}>
             <div className="Signup-area">
