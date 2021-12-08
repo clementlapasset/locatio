@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, CardTitle, Badge } from 'reactstrap'
+import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import { BarChart } from '../components/BarChart'
-import CurrencyInput from 'react-currency-input-field';
+import {connect} from 'react-redux'
 
 
-export default function Charges() {
+function Charges(props) {
 
     const [financeList, setFinanceList] = useState([])
     const [totalProvisions, setTotalProvisions] = useState(0)
@@ -62,7 +62,9 @@ export default function Charges() {
            });
 
         var response = await rawResponse.json();
-        console.log('from back end',response)
+
+        props.onAddChargeClick(response)
+
         toggle()
         setChargeAdded(true)
     }
@@ -136,3 +138,16 @@ export default function Charges() {
         </div>
     )
 }
+
+function mapDispatchToProps(dispatch) {
+ return {
+   onAddChargeClick: function(chargeResponse) {
+       dispatch( {type: 'charge', charge: chargeResponse })
+       console.log('this has passed to the reducer',chargeResponse)
+   }
+ }
+}
+export default connect(
+    null,
+    mapDispatchToProps
+ )(Charges);

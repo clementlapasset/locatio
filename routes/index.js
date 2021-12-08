@@ -171,17 +171,16 @@ router.post('/document-add', async function (req, res) {
 router.post('/finance', async function (req, res) {
 
   var newFinance = new financeModel({
-    type: req.body.type,
-    montant: req.body.montant,
-    description: req.body.description,
-    dateDebut: req.body.startDate,
-    dateFin: req.body.endDate,
-    frequence: req.body.frequence
+    type: req.body.typeFromFront,
+    montant: req.body.amountFromFront,
+    description: req.body.descriptionFromFront,
+    dateDebut: req.body.dateDebutFromFront,
+    frequence: req.body.frequencyFromFront
   })
   saveFinance = await newFinance.save()
 
   if (saveFinance) {
-    res.json({ result: true })
+    res.json(saveFinance)
   } else {
     res.json({ result: false })
   }
