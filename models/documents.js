@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const documentSchema = mongoose.Schema({
     type: String,
+    title: String,
     date: Date,
     url: String
 })

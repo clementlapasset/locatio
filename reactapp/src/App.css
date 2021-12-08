@@ -99,5 +99,15 @@ h4 {
   border-radius: 50%;
 }
 
-
+.iGsRvx {
+  margin-top: 10px;
+  width:465px;
+  height: 120px;
+  border-style: dashed;
+  border-width: 2px;
+  border-radius:10px ;
+  border-color: #ced4da;
+  color: rgb(133, 133, 133);
+  padding: .375rem 0.75rem;
+}  
 
