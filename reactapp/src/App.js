@@ -1,6 +1,9 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
+import {Provider} from 'react-redux'
+import {createStore, combineReducers} from 'redux'
+
 import Homepage from './pages/Homepage';
 import Signup from './pages/Signup';
 import InformationProperty from './pages/InformationProperty';
@@ -13,10 +16,12 @@ import Charges from './pages/Charges';
 
 import './App.css';
 
+const store = createStore(combineReducers({}))
+
 function App() {
   return (
-    <>
-      <Routes>
+    <Provider store={store}>
+    <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="signup" element={<Signup />} />
         <Route path="information-property" element={<InformationProperty />} />
@@ -26,7 +31,8 @@ function App() {
         <Route path="finances" element={<Finances />} />
         <Route path="charges" element={<Charges />} />
       </Routes>    
-    </>
+    </Provider>
+      
   );
 }
 
