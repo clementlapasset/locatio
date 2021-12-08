@@ -15,10 +15,10 @@ export default function Signup() {
     let navigate = useNavigate();
 
     var handleSubmitSignup = async () => {
-        const data = await fetch('/sign-up', {
+        const data = await fetch('/sign-up-landlord', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `firstName=${signUpFirstname}&lastName=${signUpLastname}&email=${signUpEmail}&password=${signUpPassword}`
+            body: `firstName=${signUpFirstname}&lastName=${signUpLastname}&email=${signUpEmail}&password=${signUpPassword}&landlord=${true}`
         })
         const body = await data.json()
 

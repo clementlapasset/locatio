@@ -31,7 +31,7 @@ function Documents() {
         const findDocuments = async () => {
             const data = await fetch('/document')
             const body = await data.json()
-            setDocumentsByType([... documentsByType, body])
+            setDocumentsByType([...documentsByType, body])
             // console.log(body)
         }
         findDocuments()
@@ -41,22 +41,12 @@ function Documents() {
 
     const addDocument = async () => {
         var date = Date.now()
-<<<<<<< HEAD
-            const addDoc = await fetch('/document-add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `type=${x}&url=http://test.fr&date=${date}`
-            })
-            console.log(addDoc)
-        }
-=======
-        const addDoc = await fetch('/document-add', {
+        await fetch('/document-add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`
         })
     }
->>>>>>> d504093a635aaa4b30234721c97a014058b75256
 
 
 
@@ -121,11 +111,7 @@ function Documents() {
                                             }
 
                                         })}
-<<<<<<< HEAD
-                                        <Button onClick={() => {handleClick(); addDocument(i)}} style={{ margin: "10px" }}> + Ajouter un document</Button>
-=======
                                         <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px" }}> + Ajouter un document</Button>
->>>>>>> d504093a635aaa4b30234721c97a014058b75256
                                     </AccordionItem>
                                 </Collapse>
                             </AccordionItem>
