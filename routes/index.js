@@ -44,6 +44,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      landlord: req.body.landlord,
       password: hash,
       token: uid2(32),
     })
@@ -64,7 +65,9 @@ router.post('/sign-up-tenant', async function (req, res) {
 
   var newUser = new userModel({
     firstName: req.body.firstName,
-    lastName: req.body.lastName
+    lastName: req.body.lastName,
+    email: req.body.email,
+    landlord: req.body.landlord
   })
   saveUser = await newUser.save()
   if (saveUser) {
