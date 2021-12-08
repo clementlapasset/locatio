@@ -167,14 +167,6 @@ router.post('/document-add', async function (req, res) {
   var documentSaved = await newDocument.save();
 
 })
-    var newFinance = new financeModel({
-      type: req.body.typeFromFront,
-      montant: req.body.amountFromFront,
-      description: req.body.descriptionFromFront,
-      dateDebut: req.body.dateDebutFromFront,
-      frequence: req.body.frequencyFromFront
-    })
-    saveFinance = await newFinance.save()
 
 router.post('/finance', async function (req, res) {
 
