@@ -37,6 +37,7 @@ function Documents() {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `type=${x}&url=http://test.fr&date=${date}`
             })
+            console.log(addDoc)
         }
 
     //Fonction ajouter un document dans BDD avec modale
@@ -84,6 +85,7 @@ function Documents() {
                                 </AccordionHeader >
                                 <Collapse isOpen={isOpen === i}>
                                     <AccordionItem accordionId={i} style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+                                    {/* eslint-disable-next-line */}
                                         {documentsByType.map((doctype) => {
 
 
@@ -95,7 +97,7 @@ function Documents() {
                                             }
 
                                         })}
-                                        <Button onClick={() => handleClick(), addDocument(i)} style={{ margin: "10px" }}> + Ajouter un document</Button>
+                                        <Button onClick={() => {handleClick(); addDocument(i)}} style={{ margin: "10px" }}> + Ajouter un document</Button>
                                     </AccordionItem>
                                 </Collapse>
                             </AccordionItem>

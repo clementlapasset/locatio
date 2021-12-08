@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Button, Col, Container, Row, Table, Card, CardBody, CardTitle, CardSubtitle, CardText } from 'reactstrap'
+import { Button, Col, Container, Row, Table, Card, CardBody, CardText } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import { BarChart } from '../components/BarChart'
 
@@ -17,9 +17,10 @@ export default function Charges() {
             var response = await rawResponse.json();
             setFinanceList(response)
             
+            // eslint-disable-next-line
             response.filter((element) => {
                 if (element.type==='charge'){
-                    
+
                 }
             })
             
@@ -29,6 +30,7 @@ export default function Charges() {
                     sumCharges += element.montant
                 }   
             })
+            console.log(chargesOnInitialisation)
             setTotalCharges(sumCharges)
             
             var sumProvisions = 0;
@@ -37,6 +39,7 @@ export default function Charges() {
                     sumProvisions += element.montant
                 }   
             })
+            console.log(provisionsOnInitialisation)
             setTotalProvisions(sumProvisions)
                
 

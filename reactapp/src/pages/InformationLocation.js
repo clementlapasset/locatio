@@ -13,15 +13,35 @@ export default function InformationLocation() {
     const [monthlyCreditCost, setMonthlyCreditCost] = useState('');
     const [alert, setAlert] = useState(false);
 
-    var handleSubmitPropertyInfo = async () => {
-        const data = await fetch('/property-info', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `monthlyRent=${monthlyRent}&monthlyProvision=${monthlyProvision}&monthlyCreditCost=${monthlyCreditCost}`
-        })
-        const body = await data.json()
-
-        if (body.result === true) {
+    var handleSubmitLocationInfo = async () => {
+        if (monthlyRent && monthlyProvision) {
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `
+                    montant=${monthlyRent}&
+                    type="rent"&
+                    frequence="monthly"
+                `
+            })
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `
+                    montant=${monthlyProvision}&
+                    type="provision"&
+                    frequence="monthly"
+                `
+            })
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `
+                    montant=${monthlyCreditCost}&
+                    type="cost"&
+                    frequence="monthly"
+                `
+            })
             navigate('/information-tenant');
         } else {
             setAlert(true)
@@ -33,9 +53,7 @@ export default function InformationLocation() {
             <NavBarHome />
 
             <div className="Signup-page" >
-                <Alert
-                    color="primary"
-                >
+                <Alert color="primary">
                     Veuillez renseigner quelques informations de bases sur votre location.
                 </Alert>
 
@@ -56,7 +74,7 @@ export default function InformationLocation() {
                             </Col>
                         </FormGroup>
                         <Alert color="danger" isOpen={alert} >Merci de remplir tous les champs</Alert>
-                        <Button onClick={() => handleSubmitPropertyInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
+                        <Button onClick={() => handleSubmitLocationInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
                     </Form>
                 </div>
             </div>
