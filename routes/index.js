@@ -115,12 +115,6 @@ router.post('/property-info', async function (req, res) {
   }
 })
 
-router.get('/document', function (req, res) {
-
-
-  res.json()
-})
-
 
 router.get('/finance/:type', async function (req, res) {
 
@@ -146,12 +140,13 @@ router.get('/finance/:type', async function (req, res) {
 
     var newDocument = new documentModel({
       type: req.body.type,
+      title: req.body.title,
       url: req.body.url,
       date: req.body.date
 
     });
     var documentSaved = await newDocument.save();
-
+    
   })
 
   router.post('/finance', async function (req, res) {
