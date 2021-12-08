@@ -19,18 +19,13 @@ export default function Charges() {
             var response = await rawResponse.json();
             setFinanceList(response)
 
-            response.filter((element) => {
-                if (element.type === 'charge') {
-
-                }
-            })
-
             var sumCharges = 0;
             var chargesOnInitialisation = response.forEach((element) => {
                 if (element.type === 'charge') {
                     sumCharges += element.montant
                 }
             })
+            console.log(chargesOnInitialisation)
             setTotalCharges(sumCharges)
 
             var sumProvisions = 0;
@@ -39,6 +34,7 @@ export default function Charges() {
                     sumProvisions += element.montant
                 }
             })
+            console.log(provisionsOnInitialisation)
             setTotalProvisions(sumProvisions)
 
 

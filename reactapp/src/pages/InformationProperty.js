@@ -33,9 +33,7 @@ export default function InformationProprerty() {
             <NavBarHome />
 
             <div className="Signup-page" >
-                <Alert
-                    color="primary"
-                >
+                <Alert color="primary">
                     Merci pour votre inscription. Nous vous invitons dorénavant à renseigner quelques informations de bases sur votre bien.
                 </Alert>
 
