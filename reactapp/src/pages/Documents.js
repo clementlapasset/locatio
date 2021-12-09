@@ -30,24 +30,7 @@ function Documents() {
             // console.log(body)
         }
         findDocuments()
-<<<<<<< HEAD
-    }, [documentsByType])
-
-
-
-    const addDocument = async () => {
-        var date = Date.now()
-        await fetch('/document-add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`
-        })
-    }
-
-
-=======
     }, [])
->>>>>>> c012e267d58f7f85d50d6ae9b26cbfade628461b
 
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
     const modalClick = () => {
