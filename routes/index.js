@@ -11,11 +11,18 @@ var fs = require('fs');
 
 /* GET home page. */
 
-router.get('/', function (req, res, next) {
 
-  res.render('index', { title: 'Locatio back-end' });
-
+router.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, "reactapp/build/index.html"));
 });
+
+
+
+// router.get('/', function (req, res, next) {
+
+//   res.render('index', { title: 'Locatio back-end' });
+
+// });
 
 router.post('/sign-up-landlord', async function (req, res) {
 
