@@ -101,6 +101,7 @@ function Documents() {
                                 </AccordionHeader >
                                 <Collapse isOpen={isOpen === i}>
                                     <AccordionItem accordionId={i} style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
+                                    {/* eslint-disable-next-line */}
                                         {documentsByType.map((doctype) => {
 
 

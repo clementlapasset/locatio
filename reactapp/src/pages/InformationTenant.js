@@ -1,28 +1,61 @@
 import React, { useState } from 'react';
 import '../App.css';
-import { Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
+import { Row, Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
 
 import NavBarHome from '../components/NavBarHome';
 
-export default function InformationProprerty() {
+export default function InformationTenant() {
     let navigate = useNavigate();
-    const [propertyAddress, setPropertyAddress] = useState('');
-    const [surface, setSurface] = useState('');
-    const [numberRooms, setNumberRooms] = useState('');
+    const [tenantFirstname, setTenantFirstname] = useState('')
+    const [tenantLastname, setTenantLastname] = useState('')
+    const [tenantEmail, setTenantEmail] = useState('')
+    const [tenantInputFields, setTenantInputFields] = useState(["inputField"])
     const [alert, setAlert] = useState(false);
 
-    var handleSubmitPropertyInfo = async () => {
-        const data = await fetch('/property-info', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `propertyAddress=${propertyAddress}&surface=${surface}&numberRooms=${numberRooms}`
-        })
-        const body = await data.json()
+    var renderTenantInputFields = tenantInputFields.map((inputField, i) => {
+        return (
+            <Col key={i} >
+                <Row style={{ width: '20vw', flexWrap: 'unset' }}>
+                    <Input type="text" className="Login-input" onChange={(e) => { setTenantFirstname(e.target.value); setAlert(false); }} placeholder="Prénom" />
+                    <Input type="text" className="Login-input" onChange={(e) => { setTenantLastname(e.target.value); setAlert(false); }} placeholder="Nom" />
+                </Row>
+                <Input className="Login-input" type="email" placeholder="Email" onChange={(e) => setTenantEmail(e.target.value)} />
+            </Col>
+        )
+    })
 
-        if (body.result === true) {
-            navigate('/information-location');
+    var handleAddTenant = async () => {
+        if (tenantFirstname && tenantLastname) {
+            console.log("trying to add tenant")
+            const data = await fetch('/sign-up-tenant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&landlord=${false}`
+            });
+            const body = await data.json()
+            console.log(body.result)
+            setTenantInputFields([...tenantInputFields, "inputField"]);
+            setTenantFirstname('');
+            setTenantLastname('');
+        } else {
+            setAlert(true)
+        }
+    }
+
+    var handleSubmitTenantInfo = async () => {
+        if (tenantFirstname && tenantLastname) {
+            const data = await fetch('/sign-up-tenant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&landlord=${false}`
+            })
+            const body = await data.json()
+
+            if (body.result === true) {
+                navigate('/finances');
+            }
         } else {
             setAlert(true)
         }
@@ -36,27 +69,26 @@ export default function InformationProprerty() {
                 <Alert
                     color="primary"
                 >
-                    Merci pour votre inscription. Nous vous invitons dorénavant à renseigner quelques informations de bases sur votre bien.
+                    Veuillez renseigner l'identité de votre (ou vos) locataire(s).
                 </Alert>
 
                 <div className="Signup-area">
                     <Stepper
                         steps={[{ title: 'Informations du bien' }, { title: 'Informations de la location' }, { title: 'Informations locataire(s)' }]}
-                        activeStep={0}
+                        activeStep={2}
                         activeColor={'#00C689'}
                         completeColor={'#00C689'}
                     />
                     <Form className="Signup-area">
-                        <h2>Informations du bien</h2>
-                        <FormGroup >
-                            <Col >
-                                <Input type="text" className="Login-input" onChange={(e) => { setPropertyAddress(e.target.value); setAlert(false) }} placeholder="Adresse" />
-                                <Input type="number" className="Login-input" onChange={(e) => { setSurface(e.target.value); setAlert(false) }} placeholder="Superficie (m2)" />
-                                <Input type="number" className="Login-input" onChange={(e) => { setNumberRooms(e.target.value); setAlert(false) }} placeholder="Nombre de pièces" />
-                            </Col>
+                        <h2>Informations locataire(s)</h2>
+                        <FormGroup style={{ justifyContent: 'center' }} >
+
+                            {renderTenantInputFields}
+                            <Alert color="danger" isOpen={alert} >Merci de renseigner au moins un(e) locataire</Alert>
+                            <Button onClick={() => handleAddTenant()} className="Button" style={{ color: '#00C689', backgroundColor: 'white', border: 'solid', borderColor: '#00C689', width: '35vw' }} >Ajouter un(e) locataire</Button>
+
                         </FormGroup>
-                        <Alert color="danger" isOpen={alert} >Merci de remplir tous les champs</Alert>
-                        <Button onClick={() => handleSubmitPropertyInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
+                        <Button onClick={() => handleSubmitTenantInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
                     </Form>
                 </div>
             </div>

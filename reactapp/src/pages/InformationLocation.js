@@ -8,20 +8,35 @@ import NavBarHome from '../components/NavBarHome';
 
 export default function InformationLocation() {
     let navigate = useNavigate();
-    const [monthlyRent, setMonthlyRent] = useState('');
-    const [monthlyProvision, setMonthlyProvision] = useState('');
-    const [monthlyCreditCost, setMonthlyCreditCost] = useState('');
+    const [monthlyRent, setMonthlyRent] = useState(0);
+    const [monthlyProvision, setMonthlyProvision] = useState(0);
+    const [monthlyCreditCost, setMonthlyCreditCost] = useState(0);
+    const [monthlyAnnexCost, setMonthlyAnnexCost] = useState(0);
     const [alert, setAlert] = useState(false);
 
-    var handleSubmitPropertyInfo = async () => {
-        const data = await fetch('/property-info', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `monthlyRent=${monthlyRent}&monthlyProvision=${monthlyProvision}&monthlyCreditCost=${monthlyCreditCost}`
-        })
-        const body = await data.json()
-
-        if (body.result === true) {
+    var handleSubmitLocationInfo = async () => {
+        if (monthlyRent) {
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `montant=${monthlyRent}&type=rent&frequence=12`
+            })
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `montant=${monthlyProvision}&type=provision&frequence=12`
+            })
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `montant=${monthlyCreditCost}&type=cost&frequence=12`
+            })
+            await fetch('/finance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `montant=${monthlyAnnexCost}&type=cost&frequence=12`
+            })
+            console.log("info submitted")
             navigate('/information-tenant');
         } else {
             setAlert(true)
@@ -33,10 +48,8 @@ export default function InformationLocation() {
             <NavBarHome />
 
             <div className="Signup-page" >
-                <Alert
-                    color="primary"
-                >
-                    Veuillez renseigner quelques informations de bases sur votre location.
+                <Alert color="primary">
+                    Veuillez renseigner quelques informations de bases sur vos revenus et coûts mensuels.
                 </Alert>
 
                 <div className="Signup-area">
@@ -47,16 +60,17 @@ export default function InformationLocation() {
                         completeColor={'#00C689'}
                     />
                     <Form className="Signup-area">
-                        <h2>Informations du bien</h2>
+                        <h2>Revenus et coûts mensuel</h2>
                         <FormGroup >
                             <Col >
-                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyRent(e.target.value); setAlert(false) }} placeholder="Loyer mensuel (hors charges)" />
-                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyProvision(e.target.value); setAlert(false) }} placeholder="Charges provisionnelles mensuelles" />
-                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyCreditCost(e.target.value) }} placeholder="Coût mensuel du crédit" />
+                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyRent(e.target.value); setAlert(false) }} placeholder="Loyer mensuel (hors charges)*" />
+                                <Alert color="danger" isOpen={alert} >Merci de remplir un loyer</Alert>
+                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyProvision(e.target.value); }} placeholder="Charges provisionnelles mensuelles" />
+                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyCreditCost(e.target.value); }} placeholder="Mensualité de votre crédit" />
+                                <Input type="number" className="Login-input" onChange={(e) => { setMonthlyAnnexCost(e.target.value); }} placeholder="Coût mensuel annexe (ex : assurance, taxes, etc.)" />
                             </Col>
                         </FormGroup>
-                        <Alert color="danger" isOpen={alert} >Merci de remplir tous les champs</Alert>
-                        <Button onClick={() => handleSubmitPropertyInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
+                        <Button onClick={() => handleSubmitLocationInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
                     </Form>
                 </div>
             </div>

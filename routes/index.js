@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
 
 });
 
-router.post('/sign-up', async function (req, res) {
+router.post('/sign-up-landlord', async function (req, res) {
 
   var error = []
   var result = false
@@ -46,6 +46,7 @@ router.post('/sign-up', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      landlord: req.body.landlord,
       password: hash,
       token: uid2(32),
     })
@@ -58,6 +59,24 @@ router.post('/sign-up', async function (req, res) {
 
   res.json({ result, saveUser, error, token })
 
+});
+
+router.post('/sign-up-tenant', async function (req, res) {
+  var result = false
+  var saveUser = null
+
+  var newUser = new userModel({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    landlord: req.body.landlord
+  })
+  saveUser = await newUser.save()
+  if (saveUser) {
+    result = true
+  }
+
+  res.json({ result, saveUser })
 });
 
 router.post('/sign-in', async function (req, res, next) {
@@ -173,26 +192,23 @@ router.get('/finance/:type', async function (req, res) {
  });
  
 
+router.post('/finance', async function (req, res) {
 
-
-  router.post('/finance', async function (req, res) {
-
-    var newFinance = new financeModel({
-      type: req.body.type,
-      montant: req.body.montant,
-      description: req.body.description,
-      dateDebut: req.body.startDate,
-      dateFin: req.body.endDate,
-      frequence: req.body.frequence
-    })
-    saveFinance = await newFinance.save()
-
-    if (saveFinance) {
-      res.json({ result: true })
-    } else {
-      res.json({ result: false })
-    }
-
+  var newFinance = new financeModel({
+    type: req.body.typeFromFront,
+    montant: req.body.amountFromFront,
+    description: req.body.descriptionFromFront,
+    dateDebut: req.body.dateDebutFromFront,
+    frequence: req.body.frequencyFromFront
   })
+  saveFinance = await newFinance.save()
 
-  module.exports = router;
+  if (saveFinance) {
+    res.json(saveFinance)
+  } else {
+    res.json({ result: false })
+  }
+
+})
+
+module.exports = router;
