@@ -17,7 +17,7 @@ function Documents() {
     const [title, setTitle] = useState("")
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
-    
+
 
 
 
@@ -54,9 +54,15 @@ function Documents() {
     };
 
     // ------------------- Téléchargement d'un document via serveur distant (backend) ------------------- \\
-    const downloadDoc = async () => {
+    const downloadDoc = async (idDoc) => {
+        console.log(idDoc)
+        await fetch('/download-file', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `docId=${idDoc}`
+        })
 
-        fetch("/download-file")
+        await fetch("/download-file")
             .then(response => response.blob())
             .then(blob => {
                 window.open(URL.createObjectURL(blob));
@@ -84,7 +90,7 @@ function Documents() {
     return (
 
         <div>
-            <NavBarMain /> 
+            <NavBarMain />
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
 
@@ -101,15 +107,15 @@ function Documents() {
                                 </AccordionHeader >
                                 <Collapse isOpen={isOpen === i}>
                                     <AccordionItem accordionId={i} style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
-                                    {/* eslint-disable-next-line */}
+                                        {/* eslint-disable-next-line */}
                                         {documentsByType.map((doctype) => {
 
 
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <div style={{borderBottom:"solid", borderBottomWidth:"1px", borderBottomColor:"#ced4da", width:"100%", display:"flex" ,justifyContent:"center", alignItems:"center"}}>
-                                                    <p onClick={() => downloadDoc()} style={{ marginTop: "5px", marginBottom: "5px", cursor:"pointer" }}>- {doctype.title} -</p>
+                                                    <div style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                        <p onClick={() => downloadDoc(doctype._id)} style={{ marginTop: "5px", marginBottom: "5px", cursor: "pointer" }}>- {doctype.title} -</p>
                                                     </div>
                                                 )
                                             }
@@ -139,10 +145,10 @@ function Documents() {
                                 children
                             >
                                 <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne (.pdf)</p>
-                                
-                                
+
+
                                 {/* <p>{file.name}</p> */}
-                                        
+
                             </FileUploader>
                         </ModalBody>
                         <ModalFooter>

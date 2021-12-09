@@ -148,49 +148,58 @@ router.get('/finance/:type', async function (req, res) {
     res.json({ result: 'nothing found' })
   }
 })
-  // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
-  router.get('/document', async function (req, res) {
+// __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
+router.get('/document', async function (req, res) {
 
-    var documents = await documentModel.find();
+  var documents = await documentModel.find();
 
-    res.json(documents)
-  })
+  res.json(documents)
+})
 
-  //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
-  router.post('/upload-file', async function (req, res) {
-    var documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
-    var document = await req.files.document
-    document.mv(documentName)
-    console.log(document)
+//  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
-    var newDocument = new documentModel({
-      type: req.body.type,
-      title: req.body.title,
-      url: documentName,
-      date: req.body.date
+router.post('/upload-file', async function (req, res) {
+  documentName = 'https://locatio-web-app.herokuapp.com/files/' + uniqid() + '.pdf';
+  var document = await req.files.document
+  document.mv(documentName)
+  console.log(document)
 
-    });
-    var documentSaved = await newDocument.save();
-    console.log(documentSaved)
-    res.json(document)
+  var newDocument = new documentModel({
+    type: req.body.type,
+    title: req.body.title,
+    url: documentName,
+    date: req.body.date
+  });
+  
+  var documentSaved = await newDocument.save();
+  console.log(documentSaved)
+  res.json(document)
 
-  })
-  //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
-  router.get('/download-file', async function(req, res) {
-    var filePath = await documentModel.findOne();
-    console.log("-----------------  " + filePath.url + " -----------------")
- 
-    fs.readFile(filePath.url, function(err, data) {
-      if(err){
-        console.log(err)
-      }else{
-        console.log(data)
-        res.contentType("application/pdf");
-        res.send(data);
-      }
-    });
- });
- 
+})
+//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route POST /download-file -- Alex __________ \\
+var idDocument= ""
+router.post('/download-file', async function (req, res) {
+  idDocument = req.body.docId
+  res.json(idDocument)
+})
+
+//  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
+router.get('/download-file', async function (req, res) {
+  
+  var filePath = await documentModel.findById(idDocument);
+  console.log("-----------------  " + filePath.url + " -----------------")
+
+  fs.readFile(filePath.url, function (err, data) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(data)
+      res.contentType("application/pdf");
+      res.send(data);
+    }
+  });
+});
+
 
 router.post('/finance', async function (req, res) {
 
