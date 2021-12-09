@@ -164,7 +164,7 @@ router.get('/finance/:type', async function (req, res) {
 router.get('/document', async function (req, res) {
 
   var documents = await documentModel.find();
-
+  console.log(documents)
   res.json(documents)
 })
 
