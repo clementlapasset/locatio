@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import faker from "faker";
+import { connect } from 'react-redux'
 
 ChartJS.register(
   LinearScale,
@@ -23,6 +24,7 @@ ChartJS.register(
 );
 
 const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 
 export const data = {
   labels,
@@ -46,6 +48,44 @@ export const data = {
   ]
 };
 
-export function BarChart() {
-  return <Chart type="bar" data={data} />;
-}
+
+
+function BarChart(props) {
+
+  useEffect(async() => {
+    async function loadData() {
+      var rawResponse = await fetch('/finance/charges');
+      var response = await rawResponse.json();
+
+      let chartData = response.map((item) => {
+        return ({month: new Date(item.dateDebut).getMonth(), total: item.montant})
+    })
+
+
+    var reducer = chartData.reduce((acc, item) => {
+        let isExist = acc.find(({month}) => item.month === month);
+        if(isExist) {
+          isExist.total += item.total;
+        } else {
+          acc.push(item);
+        }
+        return acc;
+      }, []);
+ 
+      console.log(reducer)
+      
+    } loadData()
+  }, [])
+
+
+      return <Chart type="bar" data={data} />;
+    }
+
+    function mapStateToProps(state) {
+      return { charges: state.charges }
+    }
+
+    export default connect(
+      mapStateToProps,
+      null
+    )(BarChart);
