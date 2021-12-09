@@ -129,7 +129,7 @@ router.get('/finance/:type', async function (req, res) {
     res.json({ result: 'nothing found' })
   }
 })
-
+  // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
   router.get('/document', async function (req, res) {
 
     var documents = await documentModel.find();
@@ -137,21 +137,9 @@ router.get('/finance/:type', async function (req, res) {
     res.json(documents)
   })
 
-  // router.post('/document-add', async function (req, res) {
-
-  //   var newDocument = new documentModel({
-  //     type: req.body.type,
-  //     title: req.body.title,
-  //     url: req.body.url,
-  //     date: req.body.date
-
-  //   });
-  //   var documentSaved = await newDocument.save();
-    
-  // })
-
+  //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
   router.post('/upload-file', async function (req, res) {
-    var documentName = './files/' + uniqid() + '.pdf';
+    var documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
     var document = await req.files.document
     document.mv(documentName)
     console.log(document)
@@ -168,12 +156,12 @@ router.get('/finance/:type', async function (req, res) {
     res.json(document)
 
   })
-
+  //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
   router.get('/download-file', async function(req, res) {
     var filePath = await documentModel.findOne();
     console.log("-----------------  " + filePath.url + " -----------------")
  
-    fs.readFile('/Users/alex/Desktop/locatio/routes/1gqshwrkdkwxk44wg.pdf', function(err, data) {
+    fs.readFile(filePath.url, function(err, data) {
       if(err){
         console.log(err)
       }else{

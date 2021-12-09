@@ -3,13 +3,7 @@ import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, Mod
 import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
-
-
-
-
-
-
-
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 
 function Documents() {
@@ -23,11 +17,11 @@ function Documents() {
     const [title, setTitle] = useState("")
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
-    const [downloadedFile, setDownloadedFile] = useState("")
+    
 
 
 
-    //Lecture BDD à l'initialisation du composant
+    // ------------------- Lecture base de données a l'initialisation du composant ------------------- \\
     useEffect(() => {
         const findDocuments = async () => {
             const data = await fetch('/document')
@@ -38,19 +32,7 @@ function Documents() {
         findDocuments()
     }, [])
 
-
-
-    // const addDocument = async () => {
-    //     var date = Date.now()
-    //     const addDoc = await fetch('/document-add', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    //         body: `type=${indice}&date=${date}&title=${title}`
-    //     })
-    // }
-
-
-
+    // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
     const modalClick = () => {
         var date = Date.now()
         setIsVisible(false)
@@ -63,46 +45,28 @@ function Documents() {
             method: "POST",
             body: formData,
         })
-        // addDocument()
         console.log(file)
     }
 
-
+    // ------------------- Gestion upload area ------------------- \\
     const handleChange = file => {
         setFile(file);
     };
 
-
+    // ------------------- Téléchargement d'un document via serveur distant (backend) ------------------- \\
     const downloadDoc = async () => {
-        var formdata = new FormData();
 
-        
-        // const data = await fetch("/download-file")
-        
-        
         fetch("/download-file")
             .then(response => response.blob())
             .then(blob => {
-                var url = window.URL.createObjectURL(blob);
-                var a = document.createElement('a');
-                a.href = url;
-                a.download = "filename.pdf";
-                document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
-                a.click();    
-                a.remove();  //afterwards we remove the element again         
-            })
-            .then((result) => {
-                // console.log(result)
-                setDownloadedFile(result)
-                console.log(result)
-            
+                window.open(URL.createObjectURL(blob));
             })
             .catch(error => console.log('error', error));
     }
 
 
 
-    // Gestion ouverture-fermeture des <Accordion>
+    // ------------------- Gestion ouverture-fermeture des <Accordion> ------------------- \\
     const setAcc = (x) => {
 
         if (isOpen === x) {
@@ -120,7 +84,7 @@ function Documents() {
     return (
 
         <div>
-            <NavBarMain />
+            <NavBarMain /> 
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
 
@@ -143,10 +107,12 @@ function Documents() {
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <p onClick={() => downloadDoc()} style={{ marginTop: "5px", marginBottom: "5px" }}>{doctype.title}</p>
+                                                    <div style={{borderBottom:"solid", borderBottomWidth:"1px", borderBottomColor:"#ced4da", width:"100%", display:"flex" ,justifyContent:"center", alignItems:"center"}}>
+                                                    <p onClick={() => downloadDoc()} style={{ marginTop: "5px", marginBottom: "5px", cursor:"pointer" }}>- {doctype.title} -</p>
+                                                    </div>
                                                 )
                                             }
-                                            
+
 
                                         })}
                                         <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px" }}> + Ajouter un document</Button>
@@ -171,7 +137,11 @@ function Documents() {
                                 types={fileTypes}
                                 children
                             >
-                                <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne</p>
+                                <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne (.pdf)</p>
+                                
+                                
+                                {/* <p>{file.name}</p> */}
+                                        
                             </FileUploader>
                         </ModalBody>
                         <ModalFooter>
