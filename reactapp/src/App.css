@@ -32,6 +32,13 @@ h4 {
   width: 500px !important;
 }
 
+.Login-home{
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin: 5px;
+}
+
 .Signup-area {
     display: flex;
     flex-direction: column;

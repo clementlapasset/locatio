@@ -7,11 +7,11 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 export default function NavBarMain() {
     return (
         <Navbar style={{backgroundColor:'#2A327D', justifyContent:'space-between'}}>
-        <NavbarBrand style={{color:'#FFFFFF', marginLeft:'20px'}}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt=""/>Locatio</NavbarBrand>
+        <NavbarBrand style={{color:'#FFFFFF', marginLeft:'20px'}}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt="" href="/"/>Locatio</NavbarBrand>
         <Nav>
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/documents">Documents</NavLink></NavItem>
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/charges">Charges</NavLink></NavItem>
-        <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/finance">Finance</NavLink></NavItem>
+        <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/finances">Finance</NavLink></NavItem>
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/incidents">Incidents</NavLink></NavItem>
         </Nav>
         <Nav>
