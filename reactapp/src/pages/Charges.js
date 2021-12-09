@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
-import { BarChart } from '../components/BarChart'
+import BarChart from '../components/BarChart'
 import {connect} from 'react-redux'
 
 
@@ -24,6 +24,7 @@ function Charges(props) {
         async function loadData() {
             var rawResponse = await fetch('/finance/charges');
             var response = await rawResponse.json();
+            console.log(typeof(response.dateDebut))
             setFinanceList(response)
 
             var sumCharges = 0;
@@ -32,7 +33,6 @@ function Charges(props) {
                     sumCharges += element.montant
                 }
             })
-            console.log(chargesOnInitialisation)
             setTotalCharges(sumCharges)
 
             var sumProvisions = 0;
@@ -41,8 +41,23 @@ function Charges(props) {
                     sumProvisions += element.montant
                 }
             })
-            console.log(provisionsOnInitialisation)
             setTotalProvisions(sumProvisions)
+
+            const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            let chartData = response.map((item) => {
+                return ({month: new Date(item.dateDebut).getMonth(), total: item.montant})
+            })
+
+            var reducer = chartData.reduce((acc, item) => {
+                let isExist = acc.find(({month}) => item.month === month);
+                if(isExist) {
+                  isExist.total += item.total;
+                } else {
+                  acc.push(item);
+                }
+                return acc;
+              }, []);
 
 
         } loadData()
