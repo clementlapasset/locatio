@@ -43,8 +43,9 @@ export default function NavBarHome() {
 
     return (
         <Navbar style={{backgroundColor:'#2A327D', justifyContent:'space-between'}}>
-        <NavbarBrand style={{color:'#FFFFFF'}}><Link to="/" style={{ textDecoration: 'none', color:'white' }}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt=""/>Locatio</Link></NavbarBrand>
+        <NavbarBrand style={{color:'#FFFFFF'}}><Link to="/" style={{ textDecoration: 'none', color:'white' }}><img src='../images/logo.png' style={{padding:'10px'}} alt=""/>Locatio</Link></NavbarBrand>
         <Nav>
+        <img src='../images/logo.png' style={{padding:'10px'}} alt=""/>
         <NavItem >
             <NavLink id="PopoverLogin" style={{color:'white', cursor:"pointer"}} >Login</NavLink>
             <Popover
