@@ -3,13 +3,7 @@ import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, Mod
 import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
-
-
-
-
-
-
-
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 
 function Documents() {
@@ -23,25 +17,27 @@ function Documents() {
     const [title, setTitle] = useState("")
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
+    
 
 
 
-    //Lecture BDD à l'initialisation du composant
+    // ------------------- Lecture base de données a l'initialisation du composant ------------------- \\
     useEffect(() => {
         const findDocuments = async () => {
             const data = await fetch('/document')
             const body = await data.json()
-            setDocumentsByType([...documentsByType, body])
+            setDocumentsByType(body)
             // console.log(body)
         }
         findDocuments()
+<<<<<<< HEAD
     }, [documentsByType])
 
 
 
     const addDocument = async () => {
         var date = Date.now()
-        const addDoc = await fetch('/document-add', {
+        await fetch('/document-add', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `type=${indice}&url=http://test.fr&date=${date}&title=${title}`
@@ -49,22 +45,45 @@ function Documents() {
     }
 
 
+=======
+    }, [])
+>>>>>>> c012e267d58f7f85d50d6ae9b26cbfade628461b
 
+    // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
     const modalClick = () => {
-        addDocument()
+        var date = Date.now()
         setIsVisible(false)
+        const formData = new FormData();
+        formData.append("document", file);
+        formData.append("type", indice)
+        formData.append("date", date)
+        formData.append("title", title)
+        fetch("/upload-file", {
+            method: "POST",
+            body: formData,
+        })
         console.log(file)
     }
 
-    
+    // ------------------- Gestion upload area ------------------- \\
     const handleChange = file => {
         setFile(file);
     };
 
+    // ------------------- Téléchargement d'un document via serveur distant (backend) ------------------- \\
+    const downloadDoc = async () => {
+
+        fetch("/download-file")
+            .then(response => response.blob())
+            .then(blob => {
+                window.open(URL.createObjectURL(blob));
+            })
+            .catch(error => console.log('error', error));
+    }
 
 
 
-    // Gestion ouverture-fermeture des <Accordion>
+    // ------------------- Gestion ouverture-fermeture des <Accordion> ------------------- \\
     const setAcc = (x) => {
 
         if (isOpen === x) {
@@ -82,11 +101,11 @@ function Documents() {
     return (
 
         <div>
-            <NavBarMain />
+            <NavBarMain /> 
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
 
 
-                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Créez ou consultez vos document</h1>
+                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Créez ou consultez vos documents</h1>
 
 
                 <div style={{ margin: "auto" }}>
@@ -106,9 +125,12 @@ function Documents() {
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <p style={{ marginTop: "5px", marginBottom: "5px" }}>{doctype.title}</p>
+                                                    <div style={{borderBottom:"solid", borderBottomWidth:"1px", borderBottomColor:"#ced4da", width:"100%", display:"flex" ,justifyContent:"center", alignItems:"center"}}>
+                                                    <p onClick={() => downloadDoc()} style={{ marginTop: "5px", marginBottom: "5px", cursor:"pointer" }}>- {doctype.title} -</p>
+                                                    </div>
                                                 )
                                             }
+
 
                                         })}
                                         <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px" }}> + Ajouter un document</Button>
@@ -133,14 +155,18 @@ function Documents() {
                                 types={fileTypes}
                                 children
                             >
-                                <p style={{margin:"auto"}}>Cliquez ou glissez le fichier à mettre en ligne</p>
+                                <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne (.pdf)</p>
+                                
+                                
+                                {/* <p>{file.name}</p> */}
+                                        
                             </FileUploader>
                         </ModalBody>
                         <ModalFooter>
                             <Button
                                 color="primary"
                                 onClick={() => modalClick()}
-                                
+
                             >
                                 Valider
                             </Button>

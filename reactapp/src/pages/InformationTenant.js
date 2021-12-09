@@ -4,7 +4,7 @@ import { Row, Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
 
-import NavBarHome from '../components/NavBarHome';
+import NavBarMain from '../components/NavBarMain';
 
 export default function InformationTenant() {
     let navigate = useNavigate();
@@ -16,13 +16,13 @@ export default function InformationTenant() {
 
     var renderTenantInputFields = tenantInputFields.map((inputField, i) => {
         return (
-            <Col key={i}>
-            <Row style={{ display: 'flex', flexDirection: 'row', width: '20vw', flexWrap: 'unset', justifyContent: 'center' }}>
+            <Col key={i} >
+                <Row style={{ width: '20vw', flexWrap: 'unset' }}>
                     <Input type="text" className="Login-input" onChange={(e) => { setTenantFirstname(e.target.value); setAlert(false); }} placeholder="Prénom" />
                     <Input type="text" className="Login-input" onChange={(e) => { setTenantLastname(e.target.value); setAlert(false); }} placeholder="Nom" />
                 </Row>
                 <Input className="Login-input" type="email" placeholder="Email" onChange={(e) => setTenantEmail(e.target.value)} />
-            </Col>    
+            </Col>
         )
     })
 
@@ -45,15 +45,17 @@ export default function InformationTenant() {
     }
 
     var handleSubmitTenantInfo = async () => {
-        const data = await fetch('/sign-up-tenant', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&landlord=${false}`
-        })
-        const body = await data.json()
+        if (tenantFirstname && tenantLastname) {
+            const data = await fetch('/sign-up-tenant', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&landlord=${false}`
+            })
+            const body = await data.json()
 
-        if (body.result === true) {
-            navigate('/documents');
+            if (body.result === true) {
+                navigate('/finances');
+            }
         } else {
             setAlert(true)
         }
@@ -61,13 +63,13 @@ export default function InformationTenant() {
 
     return (
         <>
-            <NavBarHome />
+            <NavBarMain />
 
             <div className="Signup-page" >
                 <Alert
                     color="primary"
                 >
-                    Ici, vous pouvez renseigner l'identité de votre (ou vos) locataire(s) et envoyer une invitation à rejoindre l'application.
+                    Veuillez renseigner l'identité de votre (ou vos) locataire(s).
                 </Alert>
 
                 <div className="Signup-area">
@@ -79,12 +81,12 @@ export default function InformationTenant() {
                     />
                     <Form className="Signup-area">
                         <h2>Informations locataire(s)</h2>
-                        <FormGroup >
-                            <Col style={{ display: 'flex', flexDirection: 'column' }}>
-                                {renderTenantInputFields}
-                                <Alert color="danger" isOpen={alert} >Merci de remplir tous les champs</Alert>
-                                <Button onClick={() => handleAddTenant()} className="Button" style={{ color: '#00C689', backgroundColor: 'white', border: 'solid', borderColor: '#00C689' }} >Ajouter un(e) locataire</Button>
-                            </Col>
+                        <FormGroup style={{ justifyContent: 'center' }} >
+
+                            {renderTenantInputFields}
+                            <Alert color="danger" isOpen={alert} >Merci de renseigner au moins un(e) locataire</Alert>
+                            <Button onClick={() => handleAddTenant()} className="Button" style={{ color: '#00C689', backgroundColor: 'white', border: 'solid', borderColor: '#00C689', width: '35vw' }} >Ajouter un(e) locataire</Button>
+
                         </FormGroup>
                         <Button onClick={() => handleSubmitTenantInfo()} className="Button" style={{ backgroundColor: '#00C689' }} >Valider</Button>
                     </Form>
