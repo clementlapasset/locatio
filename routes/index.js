@@ -13,7 +13,7 @@ var fs = require('fs');
 
 router.get('/', function (req, res, next) {
 
-  res.render('index', { title: 'Locatio back-end test maj super pizza' });
+  res.render('index', { title: 'Locatio back-end' });
 
 });
 
