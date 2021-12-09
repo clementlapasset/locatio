@@ -36,7 +36,7 @@ export default function InformationLocation() {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `montant=${monthlyAnnexCost}&type=cost&frequence=12`
             })
-            console.log("info submitted")
+            console.log("Monthly revenues & charges submitted")
             navigate('/information-tenant');
         } else {
             setAlert(true)

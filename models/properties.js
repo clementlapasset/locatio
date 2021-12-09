@@ -4,7 +4,7 @@ const propertySchema = mongoose.Schema({
     propertyAddress: String,
     surface: Number,
     numberRooms: Number,
-    landlordId: String
+    landlordId: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
 })
 
 const propertyModel = mongoose.model('properties', propertySchema)

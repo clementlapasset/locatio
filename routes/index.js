@@ -120,17 +120,23 @@ router.post('/property-info', async function (req, res) {
   let propertyAddress = req.body.propertyAddress
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
+  
+  user = await userModel.findOne({
+    token: req.body.token
+  })
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
-      propertyAddress: req.body.propertyAddress,
-      surface: req.body.surface,
-      numberRooms: req.body.numberRooms
+      propertyAddress: propertyAddress,
+      surface: surface,
+      numberRooms: numberRooms,
+      landlordId: user.id
     })
     saveProperty = await newProperty.save()
     result = true
+    console.log(saveProperty)
     res.json({ result, saveProperty });
-
+    
   } else {
     res.json({ result: false });
   }
