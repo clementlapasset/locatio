@@ -8,6 +8,7 @@ var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
+const path = require('path')
 
 /* GET home page. */
 
