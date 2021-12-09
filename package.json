@@ -12,11 +12,13 @@
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "express-fileupload": "^1.2.1",
     "faker": "^5.5.3",
     "http-errors": "~1.6.3",
     "mongoose": "^6.0.15",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.15",
-    "uid2": "^1.0.0"
+    "uid2": "^1.0.0",
+    "uniqid": "^5.4.0"
   }
 }
