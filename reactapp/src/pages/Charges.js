@@ -152,7 +152,8 @@ function Charges(props) {
                             <Button onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
                         </Card>
                     </Col>
-                    <Col lg='6'><BarChart /></Col></Row>
+                    <Col lg='6'><BarChart /></Col>
+                    </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px'}}><Col style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Charges et provisions</h3>
                     <Button 
