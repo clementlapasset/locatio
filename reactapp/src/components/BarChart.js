@@ -8,7 +8,7 @@ import {
   LineElement,
   Legend,
   Tooltip
-} from "chart.js";
+} from "chart.js/auto";
 import { Chart } from "react-chartjs-2";
 import { connect } from 'react-redux'
 
