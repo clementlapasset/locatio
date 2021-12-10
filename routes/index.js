@@ -8,20 +8,14 @@ var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
-const path = require('path')
 
 /* GET home page. */
 
+router.get('/', function (req, res, next) {
 
+  res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
-
-
-
-// router.get('/', function (req, res, next) {
-
-//   res.render('index', { title: 'Locatio back-end' });
-
-// });
+});
 
 router.post('/sign-up-landlord', async function (req, res) {
 
@@ -126,23 +120,17 @@ router.post('/property-info', async function (req, res) {
   let propertyAddress = req.body.propertyAddress
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
-  
-  user = await userModel.findOne({
-    token: req.body.token
-  })
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
-      propertyAddress: propertyAddress,
-      surface: surface,
-      numberRooms: numberRooms,
-      landlordId: user.id
+      propertyAddress: req.body.propertyAddress,
+      surface: req.body.surface,
+      numberRooms: req.body.numberRooms
     })
     saveProperty = await newProperty.save()
     result = true
-    console.log(saveProperty)
     res.json({ result, saveProperty });
-    
+
   } else {
     res.json({ result: false });
   }
@@ -181,6 +169,7 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
+    Paiement: req.body.paymentFromFront,
   })
   saveFinance = await newFinance.save()
 
