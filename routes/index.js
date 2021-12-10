@@ -149,16 +149,12 @@ router.post('/property-info', async function (req, res) {
 })
 
 
-router.get('/finance/:type', async function (req, res) {
+router.get('/finance', async function (req, res) {
 
-  if (req.params.type === 'charges') {
-    var financeListCharges = await financeModel.find({ type: ['charge', 'provision'] })
-    console.log(financeListCharges)
+    var financeListCharges = await financeModel.find()
+
     res.json(financeListCharges)
 
-  } else {
-    res.json({ result: 'nothing found' })
-  }
 })
 // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
 router.get('/document', async function (req, res) {
@@ -220,7 +216,9 @@ router.post('/finance', async function (req, res) {
     montant: req.body.amountFromFront,
     description: req.body.descriptionFromFront,
     dateDebut: req.body.dateDebutFromFront,
-    frequence: req.body.frequencyFromFront
+    frequence: req.body.frequencyFromFront,
+    regulariserCharge: req.body.totalChargesFromFront,
+    regulariserProvision: req.body.totalProvisionsFromFront,
   })
   saveFinance = await newFinance.save()
 
