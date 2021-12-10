@@ -1,28 +1,26 @@
 import React, {useEffect, useState} from "react";
-// import {
-//   Chart, registerables
-//   // LinearScale,
-//   // CategoryScale,
-//   // BarElement,
-//   // PointElement,
-//   // LineElement,
-//   // Legend,
-//   // Tooltip
-// } from "chart.js";
-// import { Chart } from "react-chartjs-2";
-import  Chart  from "chart.js/auto";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Legend,
+  Tooltip
+} from "chart.js";
+import { Chart } from "react-chartjs-2";
 import { connect } from 'react-redux'
 
-// ChartJS.register(
-//   ...registerables
-//   // LinearScale,
-//   // CategoryScale,
-//   // BarElement,
-//   // PointElement,
-//   // LineElement,
-//   // Legend,
-//   // Tooltip
-// );
+ChartJS.register(
+  LinearScale,
+  CategoryScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Legend,
+  Tooltip
+);
 
 
 function BarChart(props) {
