@@ -3,10 +3,11 @@ import '../App.css';
 import { Row, Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux'
 
 import NavBarMain from '../components/NavBarMain';
 
-export default function InformationTenant() {
+function InformationTenant(props) {
     let navigate = useNavigate();
     const [tenantFirstname, setTenantFirstname] = useState('')
     const [tenantLastname, setTenantLastname] = useState('')
@@ -32,7 +33,7 @@ export default function InformationTenant() {
             const data = await fetch('/sign-up-tenant', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&landlord=${false}`
+                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&isLandlord=${false}&token=${props.token}`
             });
             const body = await data.json()
             console.log(body.result)
@@ -49,7 +50,7 @@ export default function InformationTenant() {
             const data = await fetch('/sign-up-tenant', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&landlord=${false}`
+                body: `firstName=${tenantFirstname}&lastName=${tenantLastname}&email=${tenantEmail}&isLandlord=${false}&token=${props.token}`
             })
             const body = await data.json()
 
@@ -96,3 +97,11 @@ export default function InformationTenant() {
     );
 }
 
+function mapStateToProps(state) {
+    return { token: state.token }
+}
+
+export default connect(
+    mapStateToProps,
+    null
+)(InformationTenant);

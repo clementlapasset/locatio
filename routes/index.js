@@ -9,6 +9,15 @@ var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
 
+<<<<<<< HEAD
+// var user = "";
+
+// router.get('/', async function (req, res, next) {
+//   user = await userModel.findOne({
+//     token: req.body.token
+//   })
+// });
+=======
 /* GET home page. */
 
 router.get('/', function (req, res, next) {
@@ -16,6 +25,7 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
 });
+>>>>>>> c92322fa70428b47545c6f7e6728f4fa40a15e27
 
 router.post('/sign-up-landlord', async function (req, res) {
 
@@ -46,7 +56,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      landlord: req.body.landlord,
+      isLandlord: req.body.isLandlord,
       password: hash,
       token: uid2(32),
     })
@@ -65,11 +75,22 @@ router.post('/sign-up-tenant', async function (req, res) {
   var result = false
   var saveUser = null
 
+  user = await userModel.findOne({
+    token: req.body.token
+  })
+  console.log(user)
+
+  property = await propertyModel.findOne({
+    landlordId: user.id
+  })
+  console.log(property)
+
   var newUser = new userModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    landlord: req.body.landlord
+    isLandlord: req.body.isLandlord,
+    propertyId: property.id
   })
   saveUser = await newUser.save()
   if (saveUser) {
@@ -140,7 +161,7 @@ router.post('/property-info', async function (req, res) {
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
 router.post('/upload-file', async function (req, res) {
-  documentName = 'https://locatio-web-app.herokuapp.com/files/' + uniqid() + '.pdf';
+  documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
   var document = await req.files.document
   document.mv(documentName)
   console.log(document)
@@ -157,14 +178,17 @@ router.post('/upload-file', async function (req, res) {
   res.json(document)
 
 })
-//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route GET /download-file -- Alex __________ \\
-var idDocument= ""
-router.post('/download-file', async function (req, res) {
-  idDocument = req.body.docId
-  res.json(idDocument)
-})
+
 
 router.post('/finance', async function (req, res) {
+
+  user = await userModel.findOne({
+    token: req.body.token
+  })
+
+  property = await propertyModel.findOne({
+    landlordId: user.id
+  })
 
   var newFinance = new financeModel({
     type: req.body.typeFromFront,
@@ -174,10 +198,14 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
+<<<<<<< HEAD
+    propertyId: property.id
+=======
     Paiement: req.body.paymentFromFront,
+>>>>>>> c92322fa70428b47545c6f7e6728f4fa40a15e27
   })
   saveFinance = await newFinance.save()
-
+  console.log(saveFinance)
   if (saveFinance) {
     res.json(saveFinance)
   } else {

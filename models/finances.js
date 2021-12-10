@@ -9,7 +9,8 @@ const financeSchema = mongoose.Schema({
     frequence: Number,
     regulariserCharge: Number,
     regulariserProvision: Number,
-    Paiement: Number
+    Paiement: Number,
+    propertyId: {type: mongoose.Schema.Types.ObjectId, ref: 'properties'}
 })
 
 const financeModel = mongoose.model('finances', financeSchema)

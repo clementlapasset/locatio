@@ -7,7 +7,7 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
 export default function NavBarMain() {
     return (
         <Navbar style={{backgroundColor:'#2A327D', justifyContent:'space-between'}}>
-        <NavbarBrand style={{color:'#FFFFFF', marginLeft:'20px'}}><img src='https://placeholder.com/40' style={{padding:'10px'}} alt="" href="/"/>Locatio</NavbarBrand>
+        <NavbarBrand style={{color:'#FFFFFF', marginLeft:'20px'}}><img src='../images/rent.png' style={{padding:'10px'}} alt="" href="/"/>Locatio</NavbarBrand>
         <Nav>
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/documents">Documents</NavLink></NavItem>
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/charges">Charges</NavLink></NavItem>
@@ -15,7 +15,7 @@ export default function NavBarMain() {
         <NavItem style={{paddingInline: '20px'}}><NavLink style={{color:'#FFFFFF'}}href="/incidents">Incidents</NavLink></NavItem>
         </Nav>
         <Nav>
-        <NavItem><NavLink href="/sign-in"><FontAwesomeIcon icon={faPowerOff} size={'lg'} inverse style={{marginTop:'3px'}} /></NavLink></NavItem>
+        <NavItem><NavLink href="/"><FontAwesomeIcon icon={faPowerOff} size={'lg'} inverse style={{marginTop:'3px'}} /></NavLink></NavItem>
         <NavbarText style={{color:'#00C689'}}>Déconnexion</NavbarText>
         </Nav>
         </Navbar>

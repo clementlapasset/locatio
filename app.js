@@ -1,5 +1,5 @@
 var fileUpload = require('express-fileupload');
-
+var fs = require('fs');
 var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
 
@@ -32,12 +32,20 @@ app.use(cookieParser());
 //Fix Heroku Router
 app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
 
+
 //  __________ Route qui gère l'affichage des documents -- Alex __________ \\
 app.get('/document', async function (req, res) {
 
   var documents = await documentModel.find();
   console.log(documents)
   res.json(documents)
+})
+
+//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route GET /download-file -- Alex __________ \\
+var idDocument= ""
+app.post('/download-file', async function (req, res) {
+  idDocument = req.body.docId
+  res.json(idDocument)
 })
 
 //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
