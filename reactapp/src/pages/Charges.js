@@ -28,6 +28,8 @@ function Charges(props) {
     // state variable to control useEffect with every additional charge added
     const [chargeAdded, setChargeAdded] = useState(false)
 
+    const [disabled, setdisabled] = useState(false)
+
     
     var currentMonth = new Date().getMonth()
 
@@ -35,11 +37,13 @@ function Charges(props) {
     useEffect(() => {
 
         async function loadData() {
+
             var rawResponse = await fetch('/finance');
             var response = await rawResponse.json();
 
             var filteredList = response.filter(item => item.type==='charge' || item.type==='provision' || item.type==='regularisation')
 
+            console.log('filtered list is', filteredList)
             setFinanceList(filteredList)
 
             //*******************************global sum of charges to date(includes any reguliarisations)**********************/
@@ -108,6 +112,7 @@ function Charges(props) {
         props.onAddChargeClick(response)
 
         toggle()
+        setdisabled(false)
         setChargeAdded(true)
     }
             //***********************************Function to RESET all charges Locataire/proprietaire***********************/
@@ -123,6 +128,7 @@ function Charges(props) {
 
         setTotalProvisions(0)
         setTotalCharges(0)
+        setdisabled(true)
         console.log('info sent to backend to reset charges', response)
 
 
@@ -149,7 +155,8 @@ function Charges(props) {
                     <Col lg='6'><BarChart /></Col></Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px'}}><Col style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Charges et provisions</h3>
-                    <Button
+                    <Button 
+                        disabled={disabled}
                         style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
                         onClick={() => toggle()}
                     >

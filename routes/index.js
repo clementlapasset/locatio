@@ -8,20 +8,14 @@ var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
-const path = require('path')
 
 /* GET home page. */
 
+router.get('/', function (req, res, next) {
 
+  res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
-
-
-
-// router.get('/', function (req, res, next) {
-
-//   res.render('index', { title: 'Locatio back-end' });
-
-// });
+});
 
 router.post('/sign-up-landlord', async function (req, res) {
 
@@ -126,23 +120,17 @@ router.post('/property-info', async function (req, res) {
   let propertyAddress = req.body.propertyAddress
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
-  
-  user = await userModel.findOne({
-    token: req.body.token
-  })
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
-      propertyAddress: propertyAddress,
-      surface: surface,
-      numberRooms: numberRooms,
-      landlordId: user.id
+      propertyAddress: req.body.propertyAddress,
+      surface: req.body.surface,
+      numberRooms: req.body.numberRooms
     })
     saveProperty = await newProperty.save()
     result = true
-    console.log(saveProperty)
     res.json({ result, saveProperty });
-    
+
   } else {
     res.json({ result: false });
   }
@@ -156,58 +144,49 @@ router.get('/finance', async function (req, res) {
     res.json(financeListCharges)
 
 })
-// __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
-router.get('/document', async function (req, res) {
+  // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
+  router.get('/document', async function (req, res) {
 
-  var documents = await documentModel.find();
-  console.log(documents)
-  res.json(documents)
-})
+    var documents = await documentModel.find();
 
-//  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
+    res.json(documents)
+  })
 
-router.post('/upload-file', async function (req, res) {
-  documentName = 'https://locatio-web-app.herokuapp.com/files/' + uniqid() + '.pdf';
-  var document = await req.files.document
-  document.mv(documentName)
-  console.log(document)
+  //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
+  router.post('/upload-file', async function (req, res) {
+    var documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
+    var document = await req.files.document
+    document.mv(documentName)
+    console.log(document)
 
-  var newDocument = new documentModel({
-    type: req.body.type,
-    title: req.body.title,
-    url: documentName,
-    date: req.body.date
-  });
-  
-  var documentSaved = await newDocument.save();
-  console.log(documentSaved)
-  res.json(document)
+    var newDocument = new documentModel({
+      type: req.body.type,
+      title: req.body.title,
+      url: documentName,
+      date: req.body.date
 
-})
-//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route POST /download-file -- Alex __________ \\
-var idDocument= ""
-router.post('/download-file', async function (req, res) {
-  idDocument = req.body.docId
-  res.json(idDocument)
-})
+    });
+    var documentSaved = await newDocument.save();
+    console.log(documentSaved)
+    res.json(document)
 
-//  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
-router.get('/download-file', async function (req, res) {
-  
-  var filePath = await documentModel.findById(idDocument);
-  console.log("-----------------  " + filePath.url + " -----------------")
-
-  fs.readFile(filePath.url, function (err, data) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(data)
-      res.contentType("application/pdf");
-      res.send(data);
-    }
-  });
-});
-
+  })
+  //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
+  router.get('/download-file', async function(req, res) {
+    var filePath = await documentModel.findOne();
+    console.log("-----------------  " + filePath.url + " -----------------")
+ 
+    fs.readFile(filePath.url, function(err, data) {
+      if(err){
+        console.log(err)
+      }else{
+        console.log(data)
+        res.contentType("application/pdf");
+        res.send(data);
+      }
+    });
+ });
+ 
 
 router.post('/finance', async function (req, res) {
 
@@ -219,6 +198,7 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
+    Paiement: req.body.paymentFromFront,
   })
   saveFinance = await newFinance.save()
 
