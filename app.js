@@ -1,6 +1,6 @@
 var fileUpload = require('express-fileupload');
 
-
+var documentModel = require('./models/documents')
 
 var createError = require('http-errors');
 var express = require('express');
@@ -27,13 +27,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'reactapp/build')));
 
+//Fix Heroku Router
 app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
-console.log(path.resolve(__dirname, 'reactapp/build'))
+
+app.get('/document', async function (req, res) {
+
+  var documents = await documentModel.find();
+  console.log(documents)
+  res.json(documents)
+})
 
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve(__dirname, 'reactapp/build','index.html'));
 });
-console.log(path.resolve(__dirname, 'reactapp/build','index.html'))
+
 
 
 app.use('/', indexRouter);
