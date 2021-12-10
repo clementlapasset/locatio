@@ -152,7 +152,7 @@ router.post('/property-info', async function (req, res) {
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
 router.post('/upload-file', async function (req, res) {
-  documentName = 'https://locatio-web-app.herokuapp.com/files/' + uniqid() + '.pdf';
+  documentName = 'https://locatio-web-app.herokuapp.com/reactapp/src/files' + uniqid() + '.pdf';
   var document = await req.files.document
   document.mv(documentName)
   console.log(document)
