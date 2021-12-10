@@ -2,64 +2,88 @@ import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import BarChart from '../components/BarChart'
+
 import {connect} from 'react-redux'
 
 
 function Charges(props) {
 
+    // state variable to store list of all finance documents 
     const [financeList, setFinanceList] = useState([])
+
+    // state variables to calculate global balance of charges
     const [totalProvisions, setTotalProvisions] = useState(0)
     const [totalCharges, setTotalCharges] = useState(0)
-    const [modal, setModal] = useState(false);
+
+    //state variables used to send data from 'add expense' to backend 
     const [chargeDescription, setChargeDescription] = useState('')
     const [chargeCost, setChargeCost] = useState(null)
     const [chargeDate, setChargeDate] = useState(new Date(''))
     const [chargeFrequence, setChargeFrequence] = useState(null)
 
+    // state variable to control modal popup
+    const [modal, setModal] = useState(false);
+    const toggle = () => setModal(!modal);
+   
+    // state variable to control useEffect with every additional charge added
     const [chargeAdded, setChargeAdded] = useState(false)
 
-    const toggle = () => setModal(!modal);
+    
+    var currentMonth = new Date().getMonth()
+
 
     useEffect(() => {
+
         async function loadData() {
-            var rawResponse = await fetch('/finance/charges');
+            var rawResponse = await fetch('/finance');
             var response = await rawResponse.json();
-            console.log(typeof(response.dateDebut))
-            setFinanceList(response)
 
+            var filteredList = response.filter(item => item.type==='charge' || item.type==='provision' || item.type==='regularisation')
+
+            setFinanceList(filteredList)
+
+            //*******************************global sum of charges to date(includes any reguliarisations)**********************/
             var sumCharges = 0;
-            var chargesOnInitialisation = response.forEach((element) => {
-                if (element.type === 'charge') {
-                    sumCharges += element.montant
+            response.forEach((element) => {
+                if (new Date(element.dateDebut).getMonth()<=currentMonth){
+                    if (element.type === 'charge') {
+                        sumCharges += element.montant
+                    }
                 }
             })
-            setTotalCharges(sumCharges)
+            var sumRegularistionDeCharges = 0
+            response.forEach((element) => {
+                if (element.regulariserCharge){
+                    sumRegularistionDeCharges += element.regulariserCharge
+                }
+                if (element.paiement<0)  {
+                    sumRegularistionDeCharges -= element.paiement
+                }
+                }
+            )
 
+            setTotalCharges((sumCharges - sumRegularistionDeCharges))
+
+            //******************************global sum of provisions to date(includes any reguliarisations)*************************/
             var sumProvisions = 0;
-            var provisionsOnInitialisation = response.forEach((element) => {
+            response.forEach((element) => {
                 if (element.type === 'provision') {
-                    sumProvisions += element.montant
+                    sumProvisions += element.montant * (currentMonth+1)
                 }
             })
-            setTotalProvisions(sumProvisions)
 
-            const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var sumRegularistionDeProvisions = 0
+            response.forEach((element) => {
+                if (element.regulariserProvision){
+                    sumRegularistionDeProvisions += element.regulariserProvision
+                }
+                if (element.paiement>0)  {
+                    sumRegularistionDeProvisions += element.paiement
+                }
+                }
+            )
+            setTotalProvisions((sumProvisions - sumRegularistionDeProvisions))
             
-            let chartData = response.map((item) => {
-                return ({month: new Date(item.dateDebut).getMonth(), total: item.montant})
-            })
-
-            var reducer = chartData.reduce((acc, item) => {
-                let isExist = acc.find(({month}) => item.month === month);
-                if(isExist) {
-                  isExist.total += item.total;
-                } else {
-                  acc.push(item);
-                }
-                return acc;
-              }, []);
-
-
         } loadData()
          
         if (chargeAdded) {
@@ -68,22 +92,41 @@ function Charges(props) {
         }
     }, [chargeAdded])
 
+            //******************************Function to POST new charge to DB and relaunch useEffect********************/
+
     var handleAddCharge = async () => {
 
-        var rawResponse = await fetch('finance', {
+        var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
             body: `typeFromFront=charge&descriptionFromFront=${chargeDescription}&amountFromFront=${chargeCost}&dateDebutFromFront=${chargeDate}&frequencyFromFront=${chargeFrequence}`
            });
 
         var response = await rawResponse.json();
+       
 
         props.onAddChargeClick(response)
 
         toggle()
         setChargeAdded(true)
     }
+            //***********************************Function to RESET all charges Locataire/proprietaire***********************/
+    var resetCharges = async () => {
+       console.log(totalCharges)
+        var rawResponse = await fetch('/finance', {
+            method: 'POST',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: `typeFromFront=regularisation&totalChargesFromFront=${totalCharges}&totalProvisionsFromFront=${totalProvisions}&amountFromFront=${totalProvisions-totalCharges}&descriptionFromFront=regularisation de charges`
+           });
 
+        var response = await rawResponse.json();
+
+        setTotalProvisions(0)
+        setTotalCharges(0)
+        console.log('info sent to backend to reset charges', response)
+
+
+    }
 
     return (
 
@@ -100,7 +143,7 @@ function Charges(props) {
                                 <div className='circleCharges'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalCharges}€</CardText></div> =
                                 <div className='circleTotal'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalProvisions - totalCharges}€</CardText></div>
                             </CardBody>
-                            <Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
+                            <Button onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
                         </Card>
                     </Col>
                     <Col lg='6'><BarChart /></Col></Row>
@@ -115,16 +158,16 @@ function Charges(props) {
                 </Col></Row>
                 <Row>
                     <Table><thead style={{backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Status</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
-                        {/************************************** *************** add in map ********************************************************************/}
+
                         {financeList.map((finance) => (
-                            <tr><th scope="row"><Badge pill style={{backgroundColor:'#00C689', width:'100px'}}>Provision</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{finance.dateDebut}</td></tr>
+                            <tr><th scope="row"><Badge pill style={{backgroundColor:'#00C689', width:'100px'}}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{finance.dateDebut}</td></tr>
                         ))}
+
                     </tbody>
                     </Table>
                 </Row>
             </Container>
             <Modal      isOpen={modal}
-                        fullscreen=""
                     >
                         <ModalHeader style={{justifyContent:'center'}} >
                             Ajouter une charge
@@ -162,6 +205,7 @@ function mapDispatchToProps(dispatch) {
    }
  }
 }
+
 export default connect(
     null,
     mapDispatchToProps

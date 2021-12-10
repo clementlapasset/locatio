@@ -6,7 +6,10 @@ const financeSchema = mongoose.Schema({
     description: String,
     dateDebut: Date,
     dateFin: Date,
-    frequence: Number
+    frequence: Number,
+    regulariserCharge: Number,
+    regulariserProvision: Number,
+    Paiement: Number
 })
 
 const financeModel = mongoose.model('finances', financeSchema)
