@@ -149,21 +149,6 @@ router.post('/property-info', async function (req, res) {
 })
 
 
-// router.get('/finance', async function (req, res) {
-
-//     var financeListCharges = await financeModel.find()
-
-//     res.json(financeListCharges)
-
-// })
-// __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
-// router.get('/document', async function (req, res) {
-
-//   var documents = await documentModel.find();
-//   console.log(documents)
-//   res.json(documents)
-// })
-
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
 router.post('/upload-file', async function (req, res) {
@@ -184,30 +169,12 @@ router.post('/upload-file', async function (req, res) {
   res.json(document)
 
 })
-//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route POST /download-file -- Alex __________ \\
+//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route GET /download-file -- Alex __________ \\
 var idDocument= ""
 router.post('/download-file', async function (req, res) {
   idDocument = req.body.docId
   res.json(idDocument)
 })
-
-//  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
-// router.get('/download-file', async function (req, res) {
-  
-//   var filePath = await documentModel.findById(idDocument);
-//   console.log("-----------------  " + filePath.url + " -----------------")
-
-//   fs.readFile(filePath.url, function (err, data) {
-//     if (err) {
-//       console.log(err)
-//     } else {
-//       console.log(data)
-//       res.contentType("application/pdf");
-//       res.send(data);
-//     }
-//   });
-// });
-
 
 router.post('/finance', async function (req, res) {
 
