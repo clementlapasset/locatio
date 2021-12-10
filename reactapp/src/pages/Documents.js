@@ -3,6 +3,7 @@ import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, Mod
 import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
+import { FaTrashAlt } from 'react-icons/fa';
 
 
 function Documents() {
@@ -16,6 +17,7 @@ function Documents() {
     const [title, setTitle] = useState("")
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
+    const [reloadComponent, setReloadComponent] = useState(null)
 
 
 
@@ -29,10 +31,10 @@ function Documents() {
             console.log(body)
         }
         findDocuments()
-    }, [])
+    }, [reloadComponent])
 
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
-    const modalClick = () => {
+    const modalClick = async () => {
         var date = Date.now()
         setIsVisible(false)
         const formData = new FormData();
@@ -40,11 +42,12 @@ function Documents() {
         formData.append("type", indice)
         formData.append("date", date)
         formData.append("title", title)
-        fetch("/upload-file", {
+        const response = await fetch("/upload-file", {
             method: "POST",
             body: formData,
         })
         console.log(file)
+        setReloadComponent(response)
     }
 
     // ------------------- Gestion upload area ------------------- \\
@@ -113,8 +116,9 @@ function Documents() {
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <div style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                                        <p onClick={() => downloadDoc(doctype._id)} style={{ marginTop: "5px", marginBottom: "5px", cursor: "pointer" }}>- {doctype.title} -</p>
+                                                    <div  style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                        <p className="accordionswagg" onClick={() => downloadDoc(doctype._id)} style={{ marginTop: "5px", marginBottom: "5px", cursor: "pointer" }}>- {doctype.title} -</p>
+                                                        <FaTrashAlt style={{display:"flex", justifyContent:"end"}}/>
                                                     </div>
                                                 )
                                             }

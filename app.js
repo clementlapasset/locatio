@@ -32,6 +32,7 @@ app.use(cookieParser());
 //Fix Heroku Router
 app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
 
+
 //  __________ Route qui gère l'affichage des documents -- Alex __________ \\
 app.get('/document', async function (req, res) {
 
