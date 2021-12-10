@@ -152,7 +152,7 @@ router.post('/property-info', async function (req, res) {
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
 router.post('/upload-file', async function (req, res) {
-  documentName = 'https://locatio-web-app.herokuapp.com/reactapp/src/files' + uniqid() + '.pdf';
+  documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
   var document = await req.files.document
   document.mv(documentName)
   console.log(document)
@@ -169,12 +169,7 @@ router.post('/upload-file', async function (req, res) {
   res.json(document)
 
 })
-//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route GET /download-file -- Alex __________ \\
-var idDocument= ""
-router.post('/download-file', async function (req, res) {
-  idDocument = req.body.docId
-  res.json(idDocument)
-})
+
 
 router.post('/finance', async function (req, res) {
 

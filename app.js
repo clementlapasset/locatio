@@ -40,10 +40,17 @@ app.get('/document', async function (req, res) {
   res.json(documents)
 })
 
+//  __________ Route qui permet de récupérer l'ID du document sur lequel on clique, afin de transmettre à la route GET /download-file -- Alex __________ \\
+var idDocument= ""
+app.post('/download-file', async function (req, res) {
+  idDocument = req.body.docId
+  res.json(idDocument)
+})
+
 //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
 app.get('/download-file', async function (req, res) {
   
-  var filePath = await documentModel.findById('61b333a8f923a5dccd64626c');
+  var filePath = await documentModel.findById(idDocument);
   console.log("-----------------  " + filePath.url + " -----------------")
 
   fs.readFile(filePath.url, function (err, data) {
