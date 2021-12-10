@@ -13,11 +13,12 @@ import Documents from './pages/Documents';
 import Finances from './pages/Finances';
 import Charges from './pages/Charges';
 import charges from "./reducers/charges";
+import token from './reducers/token'
 
 
 import './App.css';
 
-const store = createStore(combineReducers({charges}))
+const store = createStore(combineReducers({charges, token}))
 
 function App() {
   return (

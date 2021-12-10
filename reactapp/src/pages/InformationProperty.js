@@ -3,10 +3,11 @@ import '../App.css';
 import { Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux'
 
 import NavBarMain from '../components/NavBarMain';
 
-export default function InformationProprerty() {
+function InformationProprerty(props) {
     let navigate = useNavigate();
     const [propertyAddress, setPropertyAddress] = useState('');
     const [surface, setSurface] = useState('');
@@ -14,14 +15,15 @@ export default function InformationProprerty() {
     const [alert, setAlert] = useState(false);
 
     var handleSubmitPropertyInfo = async () => {
+        console.log("Property token :",props.token)
         const data = await fetch('/property-info', {
             method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `propertyAddress=${propertyAddress}&surface=${surface}&numberRooms=${numberRooms}`
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `propertyAddress=${propertyAddress}&surface=${surface}&numberRooms=${numberRooms}&token=${props.token}`
         })
         const body = await data.json()
 
-        if(body.result === true){
+        if (body.result === true) {
             navigate('/information-location');
         } else {
             setAlert(true)
@@ -62,3 +64,11 @@ export default function InformationProprerty() {
     );
 }
 
+function mapStateToProps(state) {
+    return { token: state.token }
+}
+
+export default connect(
+    mapStateToProps,
+    null
+)(InformationProprerty);

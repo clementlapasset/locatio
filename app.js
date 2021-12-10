@@ -27,6 +27,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'reactapp/build')));
 
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, "reactapp/build/index.html"));
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
