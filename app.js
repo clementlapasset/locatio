@@ -1,6 +1,8 @@
 var fileUpload = require('express-fileupload');
 
 var documentModel = require('./models/documents')
+var financeModel = require('./models/finances')
+
 
 var createError = require('http-errors');
 var express = require('express');
