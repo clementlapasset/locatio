@@ -26,7 +26,7 @@ function Documents() {
             const data = await fetch('/document')
             const body = await data.json()
             setDocumentsByType(body)
-            // console.log(body)
+            console.log(body)
         }
         findDocuments()
     }, [])

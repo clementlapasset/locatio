@@ -32,6 +32,7 @@ app.use(cookieParser());
 //Fix Heroku Router
 app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
 
+//  __________ Route qui gère l'affichage des documents -- Alex __________ \\
 app.get('/document', async function (req, res) {
 
   var documents = await documentModel.find();
@@ -39,6 +40,7 @@ app.get('/document', async function (req, res) {
   res.json(documents)
 })
 
+//  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
 app.get('/download-file', async function (req, res) {
   
   var filePath = await documentModel.findById(idDocument);
