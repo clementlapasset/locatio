@@ -1,5 +1,5 @@
 var fileUpload = require('express-fileupload');
-
+var fs = require('fs');
 var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
 
@@ -43,7 +43,7 @@ app.get('/document', async function (req, res) {
 //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
 app.get('/download-file', async function (req, res) {
   
-  var filePath = await documentModel.findById(idDocument);
+  var filePath = await documentModel.findById('61b333a8f923a5dccd64626c');
   console.log("-----------------  " + filePath.url + " -----------------")
 
   fs.readFile(filePath.url, function (err, data) {
