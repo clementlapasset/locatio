@@ -37,6 +37,30 @@ app.get('/document', async function (req, res) {
   res.json(documents)
 })
 
+app.get('/download-file', async function (req, res) {
+  
+  var filePath = await documentModel.findById(idDocument);
+  console.log("-----------------  " + filePath.url + " -----------------")
+
+  fs.readFile(filePath.url, function (err, data) {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(data)
+      res.contentType("application/pdf");
+      res.send(data);
+    }
+  });
+});
+
+app.get('/finance', async function (req, res) {
+
+  var financeListCharges = await financeModel.find()
+
+  res.json(financeListCharges)
+
+})
+
 app.get('/*', function (req, res) {
   res.sendFile(path.resolve(__dirname, 'reactapp/build','index.html'));
 });

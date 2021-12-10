@@ -149,20 +149,20 @@ router.post('/property-info', async function (req, res) {
 })
 
 
-router.get('/finance', async function (req, res) {
+// router.get('/finance', async function (req, res) {
 
-    var financeListCharges = await financeModel.find()
+//     var financeListCharges = await financeModel.find()
 
-    res.json(financeListCharges)
+//     res.json(financeListCharges)
 
-})
+// })
 // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
-router.get('/document', async function (req, res) {
+// router.get('/document', async function (req, res) {
 
-  var documents = await documentModel.find();
-  console.log(documents)
-  res.json(documents)
-})
+//   var documents = await documentModel.find();
+//   console.log(documents)
+//   res.json(documents)
+// })
 
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
@@ -192,21 +192,21 @@ router.post('/download-file', async function (req, res) {
 })
 
 //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
-router.get('/download-file', async function (req, res) {
+// router.get('/download-file', async function (req, res) {
   
-  var filePath = await documentModel.findById(idDocument);
-  console.log("-----------------  " + filePath.url + " -----------------")
+//   var filePath = await documentModel.findById(idDocument);
+//   console.log("-----------------  " + filePath.url + " -----------------")
 
-  fs.readFile(filePath.url, function (err, data) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(data)
-      res.contentType("application/pdf");
-      res.send(data);
-    }
-  });
-});
+//   fs.readFile(filePath.url, function (err, data) {
+//     if (err) {
+//       console.log(err)
+//     } else {
+//       console.log(data)
+//       res.contentType("application/pdf");
+//       res.send(data);
+//     }
+//   });
+// });
 
 
 router.post('/finance', async function (req, res) {
