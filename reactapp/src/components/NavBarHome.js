@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, NavbarBrand, Nav, NavLink, NavItem, Button, Input, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import {connect} from 'react-redux'
 
-export default function NavBarHome() {
+function NavBarHome(props) {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const toggle = () => setPopoverOpen(!popoverOpen);
 
@@ -26,6 +27,7 @@ export default function NavBarHome() {
           
           if(body.result === true){
             setUserExists(true)
+            props.addToken(body.token)
           }  else {
             setErrorsSignin(body.error)
             console.log(body)
@@ -76,3 +78,15 @@ export default function NavBarHome() {
     )
 }
 
+function mapDispatchToProps(dispatch){
+    return {
+      addToken: function(token){
+        dispatch({type: 'addToken', token: token})
+      }
+    }
+  }
+  
+  export default connect(
+    null,
+    mapDispatchToProps
+  )(NavBarHome)

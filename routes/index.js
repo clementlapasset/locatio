@@ -8,14 +8,20 @@ var uid2 = require('uid2')
 var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
+const path = require('path')
 
 /* GET home page. */
 
-router.get('/', function (req, res, next) {
 
-  res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
-});
+
+
+
+// router.get('/', function (req, res, next) {
+
+//   res.render('index', { title: 'Locatio back-end' });
+
+// });
 
 router.post('/sign-up-landlord', async function (req, res) {
 
@@ -120,41 +126,43 @@ router.post('/property-info', async function (req, res) {
   let propertyAddress = req.body.propertyAddress
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
+  
+  user = await userModel.findOne({
+    token: req.body.token
+  })
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
-      propertyAddress: req.body.propertyAddress,
-      surface: req.body.surface,
-      numberRooms: req.body.numberRooms
+      propertyAddress: propertyAddress,
+      surface: surface,
+      numberRooms: numberRooms,
+      landlordId: user.id
     })
     saveProperty = await newProperty.save()
     result = true
+    console.log(saveProperty)
     res.json({ result, saveProperty });
-
+    
   } else {
     res.json({ result: false });
   }
 })
 
 
-router.get('/finance/:type', async function (req, res) {
+// router.get('/finance', async function (req, res) {
 
-  if (req.params.type === 'charges') {
-    var financeListCharges = await financeModel.find({ type: ['charge', 'provision'] })
-    console.log(financeListCharges)
-    res.json(financeListCharges)
+//     var financeListCharges = await financeModel.find()
 
-  } else {
-    res.json({ result: 'nothing found' })
-  }
-})
+//     res.json(financeListCharges)
+
+// })
 // __________ Récupération de la base de données pour affichage dans les <Accordion> -- Alex __________ \\
-router.get('/document', async function (req, res) {
+// router.get('/document', async function (req, res) {
 
-  var documents = await documentModel.find();
-
-  res.json(documents)
-})
+//   var documents = await documentModel.find();
+//   console.log(documents)
+//   res.json(documents)
+// })
 
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
@@ -184,21 +192,21 @@ router.post('/download-file', async function (req, res) {
 })
 
 //  __________ Route qui gère le download de fichier vers le front-end -- Alex __________ \\
-router.get('/download-file', async function (req, res) {
+// router.get('/download-file', async function (req, res) {
   
-  var filePath = await documentModel.findById(idDocument);
-  console.log("-----------------  " + filePath.url + " -----------------")
+//   var filePath = await documentModel.findById(idDocument);
+//   console.log("-----------------  " + filePath.url + " -----------------")
 
-  fs.readFile(filePath.url, function (err, data) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(data)
-      res.contentType("application/pdf");
-      res.send(data);
-    }
-  });
-});
+//   fs.readFile(filePath.url, function (err, data) {
+//     if (err) {
+//       console.log(err)
+//     } else {
+//       console.log(data)
+//       res.contentType("application/pdf");
+//       res.send(data);
+//     }
+//   });
+// });
 
 
 router.post('/finance', async function (req, res) {
@@ -208,7 +216,9 @@ router.post('/finance', async function (req, res) {
     montant: req.body.amountFromFront,
     description: req.body.descriptionFromFront,
     dateDebut: req.body.dateDebutFromFront,
-    frequence: req.body.frequencyFromFront
+    frequence: req.body.frequencyFromFront,
+    regulariserCharge: req.body.totalChargesFromFront,
+    regulariserProvision: req.body.totalProvisionsFromFront,
   })
   saveFinance = await newFinance.save()
 

@@ -3,7 +3,6 @@ import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, Mod
 import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
-import { icon } from "@fortawesome/fontawesome-svg-core";
 
 
 function Documents() {

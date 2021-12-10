@@ -19,24 +19,24 @@ export default function InformationLocation() {
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `montant=${monthlyRent}&type=rent&frequence=12`
+                body: `amountFromFront=${monthlyRent}&typeFromFront=rent&frequencyFromFront=12`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `montant=${monthlyProvision}&type=provision&frequence=12`
+                body: `amountFromFront=${monthlyProvision}&typeFromFront=provision&frequencyFromFront=12`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `montant=${monthlyCreditCost}&type=cost&frequence=12`
+                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=cost&frequencyFromFront=12`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `montant=${monthlyAnnexCost}&type=cost&frequence=12`
+                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=cost&frequencyFromFront=12`
             })
-            console.log("info submitted")
+            console.log("Monthly revenues & charges submitted")
             navigate('/information-tenant');
         } else {
             setAlert(true)
