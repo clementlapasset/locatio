@@ -188,11 +188,8 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
-<<<<<<< HEAD
     propertyId: property.id,
     Paiement: req.body.paymentFromFront,
-=======
->>>>>>> d37f464ce207402649f523b7b092bc424ce0b57a
   })
   saveFinance = await newFinance.save()
   console.log(saveFinance)
