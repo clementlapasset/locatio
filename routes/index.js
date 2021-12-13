@@ -46,7 +46,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      landlord: req.body.landlord,
+      isLandlord: req.body.landlord,
       password: hash,
       token: uid2(32),
     })
@@ -64,12 +64,15 @@ router.post('/sign-up-landlord', async function (req, res) {
 router.post('/sign-up-tenant', async function (req, res) {
   var result = false
   var saveUser = null
+  var user =  await userModel.findOne({token: req.body.token})
+  var property = await propertyModel.findOne({landlordId: user.id})
 
   var newUser = new userModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    landlord: req.body.landlord
+    isLandlord: req.body.landlord,
+    propertyId: property.id
   })
   saveUser = await newUser.save()
   if (saveUser) {
@@ -120,12 +123,14 @@ router.post('/property-info', async function (req, res) {
   let propertyAddress = req.body.propertyAddress
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
+  var user =  await userModel.findOne({token: req.body.token})
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
       propertyAddress: req.body.propertyAddress,
       surface: req.body.surface,
-      numberRooms: req.body.numberRooms
+      numberRooms: req.body.numberRooms,
+      landlordId: user.id
     })
     saveProperty = await newProperty.save()
     result = true
@@ -146,7 +151,7 @@ router.post('/upload-file', async function (req, res) {
   document.mv(documentName)
   console.log(document)
 
-  var user = await await userModel.findOne({token: req.body.token})
+  var user = await userModel.findOne({token: req.body.token})
   console.log(user)
 
   var newDocument = new documentModel({
@@ -164,6 +169,9 @@ router.post('/upload-file', async function (req, res) {
 
 
 router.post('/finance', async function (req, res) {
+
+  var user =  await userModel.findOne({token: req.body.token})
+  var property = await propertyModel.findOne({landlordId: user.id})
 
   var newFinance = new financeModel({
     type: req.body.typeFromFront,
