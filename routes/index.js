@@ -146,14 +146,18 @@ router.post('/upload-file', async function (req, res) {
   document.mv(documentName)
   console.log(document)
 
-  var user = await await userModel.findOne({token: req.body.token})
+  var user = await userModel.findOne({token: req.body.token})
   console.log(user)
+
+  var property = await propertyModel.findOne({landlordId: user.id})
+  console.log(property)
 
   var newDocument = new documentModel({
     type: req.body.type,
     title: req.body.title,
     url: documentName,
-    date: req.body.date 
+    date: req.body.date,
+    propertyId: property.id
   });
   
   var documentSaved = await newDocument.save();
@@ -164,6 +168,10 @@ router.post('/upload-file', async function (req, res) {
 
 
 router.post('/finance', async function (req, res) {
+
+  var user = await userModel.findOne({token: req.body.token})
+
+  var property = await propertyModel.findOne({landlordId: user.id})
 
   var newFinance = new financeModel({
     type: req.body.typeFromFront,
