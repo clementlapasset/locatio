@@ -7,7 +7,9 @@ import {connect} from 'react-redux'
 import Doughnut from '../components/DoughnutChart'
 
 
-function Finance() {
+function Finance(props) {
+
+    console.log(props.token)
 
     // state variable to store list of all finance documents 
     const [financeList, setFinanceList] = useState([])
@@ -133,6 +135,9 @@ function mapDispatchToProps(dispatch) {
 }
 }
 
+function mapStateToProps(state) {
+    return { reset: state.resetCharges, token: state.token }
+  }
 
 export default connect(
     null,

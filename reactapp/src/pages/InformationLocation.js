@@ -15,6 +15,8 @@ function InformationLocation(props) {
     const [monthlyAnnexCost, setMonthlyAnnexCost] = useState(0);
     const [alert, setAlert] = useState(false);
 
+    console.log(props.token)
+
     var handleSubmitLocationInfo = async () => {
         if (monthlyRent) {
             await fetch('/finance', {
@@ -61,7 +63,7 @@ function InformationLocation(props) {
                         completeColor={'#00C689'}
                     />
                     <Form className="Signup-area">
-                        <h2>Revenus et coûts mensuel</h2>
+                        <h2>Revenus et coûts mensuels</h2>
                         <FormGroup >
                             <Col >
                                 <Input type="number" className="Login-input" onChange={(e) => { setMonthlyRent(e.target.value); setAlert(false) }} placeholder="Loyer mensuel (hors charges)*" />
