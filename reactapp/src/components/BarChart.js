@@ -35,7 +35,10 @@ function BarChart(props) {
       var rawResponse = await fetch('/finance');
       var response = await rawResponse.json();
       
-      let chartData = response.map((item) => {
+      var filteredResponse = response.filter(item => item.type==='charge' || item.type==='provision')
+      console.log('filtered list for barchart', filteredResponse)
+
+      let chartData = filteredResponse.map((item) => {
         return ({month: new Date(item.dateDebut).getMonth(), total: item.montant, chargeType: item.type, frequency: item.frequence})
     })
 

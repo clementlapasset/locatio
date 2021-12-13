@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge } from 'reactstrap'
+import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge, Label } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import BarChart from '../components/BarChart'
 
@@ -27,6 +27,7 @@ function Charges(props) {
    
     // state variable to control useEffect with every additional charge added
     const [chargeAdded, setChargeAdded] = useState(false)
+    const [resetChargesUseEffect, setResetChargesUseEffect] = useState([])
 
     const [disabled, setdisabled] = useState(false)
 
@@ -94,7 +95,10 @@ function Charges(props) {
             loadData()
             setChargeAdded(false)
         }
-    }, [chargeAdded])
+        if (totalProvisions===0&&totalCharges===0){
+            setdisabled(true)
+        }
+    }, [chargeAdded, resetChargesUseEffect])
 
             //******************************Function to POST new charge to DB and relaunch useEffect********************/
 
@@ -121,16 +125,18 @@ function Charges(props) {
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `typeFromFront=regularisation&totalChargesFromFront=${totalCharges}&totalProvisionsFromFront=${totalProvisions}&amountFromFront=${totalProvisions-totalCharges}&descriptionFromFront=regularisation de charges`
+            body: `typeFromFront=regularisation&totalChargesFromFront=${totalCharges}&totalProvisionsFromFront=${totalProvisions}&amountFromFront=${totalProvisions-totalCharges}&descriptionFromFront=regularisation de charges&dateDebutFromFront=${new Date()}`
            });
 
         var response = await rawResponse.json();
 
+        props.handleResetCharges(response)
+
         setTotalProvisions(0)
         setTotalCharges(0)
         setdisabled(true)
-        console.log('info sent to backend to reset charges', response)
-
+        
+        setResetChargesUseEffect(props.reset)
 
     }
 
@@ -139,17 +145,22 @@ function Charges(props) {
         <div>
             <NavBarMain />
             <Container fluid>
-                <Row style={{ marginTop: '20px'}}><Col lg={{ size: 6, offset: '8' }}><Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Ce mois-ci</Button>{' '}<Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Cette année</Button></Col></Row>
+                <Row style={{ marginTop: '20px'}}><Col lg={{ size: 6}}><Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Ce mois-ci</Button>{' '}<Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Cette année</Button></Col></Row>
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <Col lg='5'>
-                    Equilibre sur la période en cours
+                    <h5>Equilibre sur la période en cours</h5>
                         <Card>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems:'center', paddingLeft:'16px', paddingRight:'16px'}}>
+                            <span style={{width:'125px', textAlign:'center'}}>Global Provisions</span>
+                            <span style={{width:'125px', textAlign:'center'}}>Global Charges</span>
+                            <span style={{width:'125px', textAlign:'center'}}>Global Balance</span>
+                            </div>
                             <CardBody style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
                                 <div className='circleProvision'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalProvisions}€</CardText></div> -
                                 <div className='circleCharges'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalCharges}€</CardText></div> =
                                 <div className='circleTotal'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalProvisions - totalCharges}€</CardText></div>
                             </CardBody>
-                            <Button onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
+                            <Button    disabled={disabled} onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
                         </Card>
                     </Col>
                     <Col lg='6'><BarChart /></Col>
@@ -157,18 +168,17 @@ function Charges(props) {
                 <Row style={{ marginTop: '20px', paddingBottom: '10px'}}><Col style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Charges et provisions</h3>
                     <Button 
-                        disabled={disabled}
                         style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
                         onClick={() => toggle()}
                     >
                         Ajouter une charge
                     </Button>
                 </Col></Row>
-                <Row>
-                    <Table><thead style={{backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Status</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
+                <Row style={{height: '34vh', overflow: 'auto'}}>
+                    <Table><thead style={{borderBottomColor:'#FFB039', position:'sticky', top: '0', backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Type</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
 
                         {financeList.map((finance) => (
-                            <tr><th scope="row"><Badge pill style={{backgroundColor:'#00C689', width:'100px'}}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{finance.dateDebut}</td></tr>
+                            <tr><th scope="row"><Badge pill color='charge' style={{ width:'100px'}}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td></tr>
                         ))}
 
                     </tbody>
@@ -184,8 +194,8 @@ function Charges(props) {
                         <Form>
                             <FormGroup> <Input onChange={(e) => setChargeDescription(e.target.value)} placeholder="Description" type="string"/></FormGroup>
                             <FormGroup> <Input onChange={(e) => setChargeCost(parseInt(e.target.value))} placeholder="Cost" type="number"/></FormGroup>
-                            <FormGroup> <Input onChange={(e) => setChargeFrequence(parseInt(e.target.value))} placeholder="recourrance" type="select"><option>recourrance du charge</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>6</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></Input></FormGroup>
-                            <FormGroup> <Input onChange={(date) => setChargeDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeFrequence(parseInt(e.target.value))} placeholder="recourrance" type="select"><option>frequence de charge par an</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></Input></FormGroup>
+                            <FormGroup> <Label>Date de début</Label><Input onChange={(date) => setChargeDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
                         </Form>
                         </ModalBody>
                         <ModalFooter>
@@ -210,11 +220,19 @@ function mapDispatchToProps(dispatch) {
    onAddChargeClick: function(chargeResponse) {
        dispatch( {type: 'charge', charge: chargeResponse })
        console.log('this has passed to the reducer',chargeResponse)
-   }
- }
+   },
+   handleResetCharges: function(resetResponse) {
+    dispatch( {type: 'resetCharges', reset: resetResponse })
+    console.log('this has passed to the reducer to reset charges',resetResponse)
+    }
+}
 }
 
+function mapStateToProps(state) {
+    return { reset: state.resetCharges }
+  }
+
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
  )(Charges);
