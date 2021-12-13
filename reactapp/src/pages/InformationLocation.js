@@ -3,10 +3,11 @@ import '../App.css';
 import { Col, Button, Form, FormGroup, Input, Alert } from 'reactstrap';
 import Stepper from 'react-stepper-horizontal';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux'
 
 import NavBarMain from '../components/NavBarMain';
 
-export default function InformationLocation() {
+function InformationLocation(props) {
     let navigate = useNavigate();
     const [monthlyRent, setMonthlyRent] = useState(0);
     const [monthlyProvision, setMonthlyProvision] = useState(0);
@@ -19,24 +20,24 @@ export default function InformationLocation() {
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyRent}&typeFromFront=rent&frequencyFromFront=12`
+                body: `amountFromFront=${monthlyRent}&typeFromFront=rent&frequencyFromFront=12&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyProvision}&typeFromFront=provision&frequencyFromFront=12`
+                body: `amountFromFront=${monthlyProvision}&typeFromFront=provision&frequencyFromFront=12&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=cost&frequencyFromFront=12`
+                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=cost&frequencyFromFront=12&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=cost&frequencyFromFront=12`
+                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=cost&frequencyFromFront=12&token=${props.token}`
             })
-            console.log("Monthly revenues & charges submitted")
+            console.log("Finances submitted with user's token :", props.token)
             navigate('/information-tenant');
         } else {
             setAlert(true)
@@ -78,3 +79,11 @@ export default function InformationLocation() {
     );
 }
 
+function mapStateToProps(state) {
+    return { token: state.token }
+}
+
+export default connect(
+    mapStateToProps,
+    null
+)(InformationLocation);

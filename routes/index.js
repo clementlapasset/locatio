@@ -46,7 +46,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      landlord: req.body.landlord,
+      isLandlord: req.body.isLandlord,
       password: hash,
       token: uid2(32),
     })
@@ -65,11 +65,22 @@ router.post('/sign-up-tenant', async function (req, res) {
   var result = false
   var saveUser = null
 
+  user = await userModel.findOne({
+    token: req.body.token
+  })
+  console.log(user)
+
+  property = await propertyModel.findOne({
+    landlordId: user.id
+  })
+  console.log(property)
+
   var newUser = new userModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    landlord: req.body.landlord
+    isLandlord: req.body.isLandlord,
+    propertyId: property.id
   })
   saveUser = await newUser.save()
   if (saveUser) {
@@ -161,6 +172,14 @@ router.post('/upload-file', async function (req, res) {
 
 router.post('/finance', async function (req, res) {
 
+  user = await userModel.findOne({
+    token: req.body.token
+  })
+
+  property = await propertyModel.findOne({
+    landlordId: user.id
+  })
+
   var newFinance = new financeModel({
     type: req.body.typeFromFront,
     montant: req.body.amountFromFront,
@@ -169,10 +188,11 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
+    propertyId: property.id,
     Paiement: req.body.paymentFromFront,
   })
   saveFinance = await newFinance.save()
-
+  console.log(saveFinance)
   if (saveFinance) {
     res.json(saveFinance)
   } else {
