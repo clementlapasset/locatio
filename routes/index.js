@@ -9,15 +9,6 @@ var bcrypt = require('bcrypt');
 var uniqid = require('uniqid');
 var fs = require('fs');
 
-<<<<<<< HEAD
-// var user = "";
-
-// router.get('/', async function (req, res, next) {
-//   user = await userModel.findOne({
-//     token: req.body.token
-//   })
-// });
-=======
 /* GET home page. */
 
 router.get('/', function (req, res, next) {
@@ -25,7 +16,6 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Locatio back-end test maj super pizza' });
 
 });
->>>>>>> c92322fa70428b47545c6f7e6728f4fa40a15e27
 
 router.post('/sign-up-landlord', async function (req, res) {
 
@@ -198,11 +188,8 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
-<<<<<<< HEAD
-    propertyId: property.id
-=======
+    propertyId: property.id,
     Paiement: req.body.paymentFromFront,
->>>>>>> c92322fa70428b47545c6f7e6728f4fa40a15e27
   })
   saveFinance = await newFinance.save()
   console.log(saveFinance)
