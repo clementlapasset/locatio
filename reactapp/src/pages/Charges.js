@@ -95,6 +95,7 @@ function Charges(props) {
             loadData()
             setChargeAdded(false)
         }
+        console.log(disabled)
         if (totalProvisions===0&&totalCharges===0){
             setdisabled(true)
         }
@@ -160,7 +161,7 @@ function Charges(props) {
                                 <div className='circleCharges'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalCharges}€</CardText></div> =
                                 <div className='circleTotal'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalProvisions - totalCharges}€</CardText></div>
                             </CardBody>
-                            <Button    disabled={disabled} onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
+                            <Button disabled={disabled} onClick={() => resetCharges()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Regulariser Charges</Button>
                         </Card>
                     </Col>
                     <Col lg='6'><BarChart /></Col>

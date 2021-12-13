@@ -4,6 +4,7 @@ import NavBarMain from '../components/NavBarMain'
 import BarChart from '../components/BarChart'
 
 import {connect} from 'react-redux'
+import Doughnut from '../components/DoughnutChart'
 
 
 function Charges(props) {
@@ -147,7 +148,7 @@ function Charges(props) {
             <Container fluid>
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                         {/******************************INSERT GRAPH*************************************** */}
-                    <Col lg='6'><BarChart /></Col>
+                    <Col lg='6'><Doughnut /></Col>
                     <Col lg='6'><BarChart /></Col>
                     </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px'}}><Col style={{display: 'flex', justifyContent: 'space-between'}}>
