@@ -46,7 +46,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      isLandlord: req.body.isLandlord,
+      landlord: req.body.landlord,
       password: hash,
       token: uid2(32),
     })
@@ -65,22 +65,11 @@ router.post('/sign-up-tenant', async function (req, res) {
   var result = false
   var saveUser = null
 
-  user = await userModel.findOne({
-    token: req.body.token
-  })
-  console.log(user)
-
-  property = await propertyModel.findOne({
-    landlordId: user.id
-  })
-  console.log(property)
-
   var newUser = new userModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    isLandlord: req.body.isLandlord,
-    propertyId: property.id
+    landlord: req.body.landlord
   })
   saveUser = await newUser.save()
   if (saveUser) {
@@ -151,16 +140,20 @@ router.post('/property-info', async function (req, res) {
 //  __________ Route qui gère l'upload de fichier + sauvegarde dans un répertoire du backend -- Alex __________ \\
 
 router.post('/upload-file', async function (req, res) {
+  
   documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
   var document = await req.files.document
   document.mv(documentName)
   console.log(document)
 
+  var user = await await userModel.findOne({token: req.body.token})
+  console.log(user)
+
   var newDocument = new documentModel({
     type: req.body.type,
     title: req.body.title,
     url: documentName,
-    date: req.body.date
+    date: req.body.date 
   });
   
   var documentSaved = await newDocument.save();
@@ -172,14 +165,6 @@ router.post('/upload-file', async function (req, res) {
 
 router.post('/finance', async function (req, res) {
 
-  user = await userModel.findOne({
-    token: req.body.token
-  })
-
-  property = await propertyModel.findOne({
-    landlordId: user.id
-  })
-
   var newFinance = new financeModel({
     type: req.body.typeFromFront,
     montant: req.body.amountFromFront,
@@ -188,10 +173,10 @@ router.post('/finance', async function (req, res) {
     frequence: req.body.frequencyFromFront,
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
-    propertyId: property.id,
+    Paiement: req.body.paymentFromFront,
   })
   saveFinance = await newFinance.save()
-  console.log(saveFinance)
+
   if (saveFinance) {
     res.json(saveFinance)
   } else {
