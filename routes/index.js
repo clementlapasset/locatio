@@ -150,9 +150,9 @@ router.post('/upload-file', async function (req, res) {
   var document = await req.files.document
   document.mv(documentName)
   console.log(document)
-
+  console.log("token dans le backend " +req.body.token)
   var user = await userModel.findOne({token: req.body.token})
-  console.log(user)
+  console.log("Console log de user: "+user)
 
   var property = await propertyModel.findOne({landlordId: user.id})
   console.log(property)
@@ -169,6 +169,13 @@ router.post('/upload-file', async function (req, res) {
   console.log(documentSaved)
   res.json(document)
 
+})
+
+//  __________ Route qui gère le delete de fichier -- Alex __________ \\
+
+router.delete('/delete-file', async function(req, res){
+  var document = await documentModel.deleteOne({id: req.body.docId})
+  console.log(document)
 })
 
 
