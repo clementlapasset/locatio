@@ -14,6 +14,8 @@ function InformationProprerty(props) {
     const [numberRooms, setNumberRooms] = useState('');
     const [alert, setAlert] = useState(false);
 
+    console.log(props.token)
+
     var handleSubmitPropertyInfo = async () => {
         console.log("Property token :",props.token)
         const data = await fetch('/property-info', {

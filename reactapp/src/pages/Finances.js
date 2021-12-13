@@ -9,6 +9,8 @@ import Doughnut from '../components/DoughnutChart'
 
 function Charges(props) {
 
+    console.log(props.token)
+
     // state variable to store list of all finance documents 
     const [financeList, setFinanceList] = useState([])
 
@@ -215,7 +217,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    return { reset: state.resetCharges }
+    return { reset: state.resetCharges, token: state.token }
   }
 
 export default connect(

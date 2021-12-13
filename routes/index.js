@@ -124,6 +124,7 @@ router.post('/property-info', async function (req, res) {
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
   var user =  await userModel.findOne({token: req.body.token})
+  console.log(user)
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
