@@ -15,6 +15,8 @@ function InformationTenant(props) {
     const [tenantInputFields, setTenantInputFields] = useState(["inputField"])
     const [alert, setAlert] = useState(false);
 
+    console.log(props.token)
+
     var renderTenantInputFields = tenantInputFields.map((inputField, i) => {
         return (
             <Col key={i} >
