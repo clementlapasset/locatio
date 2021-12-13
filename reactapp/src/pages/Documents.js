@@ -4,9 +4,10 @@ import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
 import { FaTrashAlt } from 'react-icons/fa';
+import { connect } from 'react-redux'
 
 
-function Documents() {
+function Documents(props) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [isSelected, setIsSelected] = useState("")
@@ -38,10 +39,11 @@ function Documents() {
         var date = Date.now()
         setIsVisible(false)
         const formData = new FormData();
-        formData.append("document", file);
+        formData.append("document", file)
         formData.append("type", indice)
         formData.append("date", date)
         formData.append("title", title)
+        formData.append("user", props.token)
         const response = await fetch("/upload-file", {
             method: "POST",
             body: formData,
@@ -177,6 +179,14 @@ function Documents() {
 
 }
 
-export default Documents;
+function mapStateToProps(state) {
+    return { token: state.token }
+}
+
+export default connect(
+    mapStateToProps,
+    null
+)(Documents);
+
 
 
