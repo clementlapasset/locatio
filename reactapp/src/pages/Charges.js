@@ -175,10 +175,10 @@ function Charges(props) {
                     </Button>
                 </Col></Row>
                 <Row style={{height: '34vh', overflow: 'auto'}}>
-                    <Table><thead style={{borderBottomColor:'#FFB039', position:'sticky', top: '0', backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Status</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
+                    <Table><thead style={{borderBottomColor:'#FFB039', position:'sticky', top: '0', backgroundColor:'#FFB039', color: '#FFFFFF'}}><tr><th style={{width:'25%'}}>Type</th><th style={{width:'25%'}}>Description</th><th style={{width:'25%'}}>Montant</th><th style={{width:'25%'}}>Date</th></tr></thead><tbody>
 
                         {financeList.map((finance) => (
-                            <tr><th scope="row"><Badge pill style={{ width:'100px'}}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td></tr>
+                            <tr><th scope="row"><Badge pill color='charge' style={{ width:'100px'}}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td></tr>
                         ))}
 
                     </tbody>
