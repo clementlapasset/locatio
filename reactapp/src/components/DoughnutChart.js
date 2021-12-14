@@ -1,79 +1,106 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { Button } from 'reactstrap';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 function DoughnutChart() {
-  
-  const [doughnutChartData, setDoughnutChartData] = useState([])
 
-  useEffect( () => {
-    //**********************on initialisation of component populate bar chart with data from database*********************/
-  async function loadData() {
-    var rawResponse = await fetch('/finance');
-    var response = await rawResponse.json();
+    const [doughnutChartData, setDoughnutChartData] = useState([])
+    const [monthBtnActive, setMonthBtnActive] = useState(false)
 
-    var filteredResponse = response.filter(item => item.type==='cost' || item.type==='rent')
+    var currentMonth = new Date().getMonth()
 
-    let chartData = filteredResponse.map((item) => {
-      return ({month: new Date(item.dateDebut).getMonth(), total: item.montant, chargeType: item.type, frequency: item.frequence})
-  })
+    useEffect(() => {
 
-  console.log('chartData for doughnut is', chartData)
+        async function loadData() {
 
-    //******************************reduce costs into an array of months with month totals*************************/
-  var reducer = chartData.reduce((acc, item) => {
-      let isExist = acc.find(({chargeType}) => item.chargeType === chargeType);
-      if(isExist) {
-        isExist.total += item.total;
-      } else {
-        acc.push(item);
-      }
-      return acc;
-    }, []);
+            var rawResponse = await fetch('/finance');
+            var response = await rawResponse.json();
 
-    console.log('reducer for doughnut is', reducer)
+            var filteredResponse = response.filter(item => item.type === 'cost' || item.type === 'rent')
 
-    setDoughnutChartData(reducer)  
-      //************************create array of data for rent based on data submitted from sign up*************************/
-  var sumRent = 0;
-          chartData.forEach((element) => {
-              if (element.chargeType === 'rent') {
-                sumRent += (element.total*element.frequency)
-              }
-          })
-    
-  } loadData()
-    //****************************recharge componenet each time a new charge is added to update chart *****************************/
-}, [])
+            let chartData = filteredResponse.map((item) => {
+                return ({ month: new Date(item.dateDebut).getMonth(), total: item.montant, type: item.type, frequency: item.frequence, description: item.description })
+            })
 
-const labels= doughnutChartData.map(item => item.chargeType)
+            var rent = chartData.find(element => element.type === 'rent')
+            var credit = chartData.find(element => element.description === 'credit repayment')
+            var annexCosts = chartData.find(element => element.description === 'annex costs')
+            
+            if (monthBtnActive) {
 
-var array = doughnutChartData.map(item => item.total)
-const data = {
-    labels,
-    datasets: [
-      {
-        label: '# of Votes',
-        data: array,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
+                var costsMonth = 0;
+                chartData.forEach((element) => {
+                    if (element.month === currentMonth) {
+                        if (element.type === 'cost') {
+                            costsMonth += element.total
+                            return costsMonth
+                        }
+                    }
+        
+                })
 
+                setDoughnutChartData([{ type: 'cost', total: costsMonth }, {type: 'rent', total: rent.total}])
+            } else {
+                var rentYTD = rent.total * (currentMonth + 1)
+                var creditYTD = credit.total * (currentMonth + 1)
+                var annexYTD = annexCosts.total * (currentMonth + 1)
+
+                var costsYTD = 0;
+                chartData.forEach((element) => {
+                        if (element.type === 'cost'&& element.description!=='credit repayment' || element.type === 'cost'&& element.description!=='annex costs') {
+                            costsYTD += element.total
+                            return costsYTD
+                        }
+                })
+
+                var TotalCostsYTD = creditYTD + costsYTD + annexYTD
+
+                setDoughnutChartData([{ type: 'cost', total: TotalCostsYTD }, {type: 'rent', total: rentYTD}])
+            }
+        } loadData()
+
+    }, [monthBtnActive])
+
+    const labels = doughnutChartData.map(item => item.type)
+
+    var dataDonut = doughnutChartData.map(item => item.total)
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: '# of Votes',
+                data: dataDonut,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+
+                ],
+                borderWidth: 1,
+            },
         ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
+    };
 
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+    return (
+        <>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Button onClick={() => setMonthBtnActive(true)}>Month</Button>{' '}<Button onClick={() => setMonthBtnActive(false)}>YTD</Button>
+            </div>
+            <Doughnut
+                options={{ responsive: true, maintainAspectRatio: false}}
+                data={data} />
+        </>
+    )
 
-return <Doughnut data={data} />
 
 }
 
