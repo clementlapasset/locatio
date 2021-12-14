@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, ModalHeader, ModalBody, ModalFooter, Input, Form, FormGroup, Badge, Label } from 'reactstrap'
 import NavBarMain from '../components/NavBarMain'
 import BarChart from '../components/BarChart'
+import { useParams } from 'react-router-dom';
 
 import {connect} from 'react-redux'
 import Doughnut from '../components/DoughnutChart'
@@ -37,12 +38,11 @@ function Charges(props) {
     
     var currentMonth = new Date().getMonth()
 
-
     useEffect(() => {
 
         async function loadData() {
-
-            var rawResponse = await fetch('/finance');
+            console.log(props.token)
+            var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
 
             var filteredList = response.filter(item => item.type==='charge' || item.type==='provision' || item.type==='regularisation')

@@ -13,6 +13,7 @@ function NavBarHome(props) {
     const [signInPassword, setSignInPassword] = useState('')
     const [userExists, setUserExists] = useState(false)
     const [listErrorsSignin, setErrorsSignin] = useState([])
+    const [id, setId] = useState('')
 
     let navigate = useNavigate();
 
@@ -29,6 +30,7 @@ function NavBarHome(props) {
           if(body.result === true){
             setUserExists(true)
             props.addToken(body.token)
+            setId(body.token)
           }  else {
             setErrorsSignin(body.error)
             console.log(body)

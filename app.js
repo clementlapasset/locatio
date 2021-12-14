@@ -2,6 +2,9 @@ var fileUpload = require('express-fileupload');
 var fs = require('fs');
 var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
+var userModel = require('./models/users')
+var propertyModel = require('./models/properties')
+
 
 
 var createError = require('http-errors');
@@ -65,9 +68,15 @@ app.get('/download-file', async function (req, res) {
   });
 });
 
-app.get('/finance', async function (req, res) {
+app.get('/finance/:id', async function (req, res) {
 
-  var financeListCharges = await financeModel.find()
+  var user =  await userModel.findOne({token: req.params.id})
+  console.log(user)
+  console.log(user.id)
+  var property = await propertyModel.findOne({landlordId: user.id})
+  console.log(property)
+
+  var financeListCharges = await financeModel.find({propertyId: property.id})
 
   res.json(financeListCharges)
 

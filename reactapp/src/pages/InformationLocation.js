@@ -15,29 +15,29 @@ function InformationLocation(props) {
     const [monthlyAnnexCost, setMonthlyAnnexCost] = useState(0);
     const [alert, setAlert] = useState(false);
 
-    console.log(props.token)
+    var currentDate = new Date()
 
     var handleSubmitLocationInfo = async () => {
         if (monthlyRent) {
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyRent}&typeFromFront=rent&frequencyFromFront=12&token=${props.token}`
+                body: `amountFromFront=${monthlyRent}&typeFromFront=rent&frequencyFromFront=12&descriptionFromFront=Loyer&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyProvision}&typeFromFront=provision&frequencyFromFront=12&token=${props.token}`
+                body: `amountFromFront=${monthlyProvision}&typeFromFront=provision&frequencyFromFront=12&descriptionFromFront=Provision&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=cost&frequencyFromFront=12&token=${props.token}`
+                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=cost&frequencyFromFront=12&descriptionFromFront=MensualitéCrédit&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=cost&frequencyFromFront=12&token=${props.token}`
+                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=cost&frequencyFromFront=12&descriptionFromFront=CoûtAnnexe&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             console.log("Finances submitted with user's token :", props.token)
             navigate('/information-tenant');
