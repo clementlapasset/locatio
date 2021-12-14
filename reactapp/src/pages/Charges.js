@@ -106,7 +106,7 @@ function Charges(props) {
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `typeFromFront=charge&descriptionFromFront=${chargeDescription}&amountFromFront=${chargeCost}&dateDebutFromFront=${chargeDate}&frequencyFromFront=${chargeFrequence}`
+            body: `typeFromFront=charge&descriptionFromFront=${chargeDescription}&amountFromFront=${chargeCost}&dateDebutFromFront=${chargeDate}&frequencyFromFront=${chargeFrequence}&token=${props.token}`
            });
 
         var response = await rawResponse.json();
@@ -124,7 +124,7 @@ function Charges(props) {
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `typeFromFront=regularisation&totalChargesFromFront=${totalCharges}&totalProvisionsFromFront=${totalProvisions}&amountFromFront=${totalProvisions-totalCharges}&descriptionFromFront=regularisation de charges&dateDebutFromFront=${new Date()}`
+            body: `typeFromFront=regularisation&totalChargesFromFront=${totalCharges}&totalProvisionsFromFront=${totalProvisions}&amountFromFront=${totalProvisions-totalCharges}&descriptionFromFront=regularisation de charges&dateDebutFromFront=${new Date()}&token=${props.token}`
            });
 
         var response = await rawResponse.json();
