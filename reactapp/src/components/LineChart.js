@@ -27,13 +27,10 @@ var currentMonth = new Date().getMonth()
 
 function LineChart(props) {
 
-  var showActual = () => {
-    
-  }
-
   const [lineChartRent, setLineChartRent] = useState([])
-  const [lineChartFixedCosts, setLineChartFixedCosts] = useState([])
-  const [totalCosts, setTotalCosts] = useState([])
+  const [lineChartCosts, setLineChartCosts] = useState([])
+  const [showActual, setShowActual] = useState(false)
+
 
   const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -60,50 +57,50 @@ function LineChart(props) {
 
       setLineChartRent(accumulatedRentTable)
       /*************************************************CALCULATE ANNUAL FIXED COSTS**************************************************** */
-      var credit = chartData.find(element => element.description === 'MensualitéCrédit')
-      var annexCosts = chartData.find(element => element.description === 'CoûtAnnexe')
+      
+      if(showActual) {
+        var filteredTableByCosts = chartData.filter(item => item.type === 'cost')
 
-      var creditYear = credit.total
-      var annexYear = annexCosts.total
-
-      var totalFixedCostsMonthly = (creditYear + annexYear)
-
-      let accumulatedFixedCosts = 0
-
-      var accumulatedFixedCostTable = labels.map(() => accumulatedFixedCosts += totalFixedCostsMonthly)
-
-      setLineChartFixedCosts(accumulatedFixedCostTable)
-
-      /*************************************************CALCULATE ANNUAL TOTAL COSTS**************************************************** */
-
-      var filteredTableByCosts = chartData.filter(item => item.type === 'cost')
-
-      var reducer = filteredTableByCosts.reduce((acc, item) => {
-        let isExist = acc.find(({ month }) => item.month === month);
-        if (isExist) {
-          isExist.total += item.total;
-        } else {
-          acc.push(item);
-        }
-        return acc;
-      }, []);
-
-      var newArray = labels.map((label = 0, i) => {
-
-        var monthExists = reducer.find(month => i === month.month)
-
-        if (monthExists) {
-          return label = monthExists.total
-        } else {
-          return label = 0
-        }
-
-      })
-      setTotalCosts(newArray)
-
+        var reducer = filteredTableByCosts.reduce((acc, item) => {
+          let isExist = acc.find(({ month }) => item.month === month);
+          if (isExist) {
+            isExist.total += item.total;
+          } else {
+            acc.push(item);
+          }
+          return acc;
+        }, []);
+  
+        var newArray = labels.map((label = 0, i) => {
+  
+          var monthExists = reducer.find(month => i === month.month)
+  
+          if (monthExists) {
+            return label = monthExists.total
+          } else {
+            return label = 0
+          }
+  
+        })
+        setLineChartCosts(newArray)
+      }else{
+        var credit = chartData.find(element => element.description === 'MensualitéCrédit')
+        var annexCosts = chartData.find(element => element.description === 'CoûtAnnexe')
+  
+        var creditYear = credit.total
+        var annexYear = annexCosts.total
+  
+        var totalFixedCostsMonthly = (creditYear + annexYear)
+  
+        let accumulatedFixedCosts = 0
+  
+        var accumulatedFixedCostTable = labels.map(() => accumulatedFixedCosts += totalFixedCostsMonthly)
+  
+        setLineChartCosts(accumulatedFixedCostTable)
+      }
     } loadData()
 
-  }, [props.costs])
+  }, [props.costs,showActual])
 
   const options = {
     responsive: true,
@@ -117,24 +114,20 @@ function LineChart(props) {
     },
   };
 
-  var showProjection = () => {
-
-  }
-
   const data = {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Loyer',
         data: lineChartRent,
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgb(0, 198, 137)',
+        backgroundColor: 'rgba(0, 198, 137, 1)',
       },
       {
-        label: 'Dataset 2',
-        data: lineChartFixedCosts,
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        label: 'Dépenses',
+        data: lineChartCosts,
+        borderColor: 'rgb(254, 100, 90)',
+        backgroundColor: 'rgba(254, 100, 90, 1)',
       },
     ],
   };
@@ -143,7 +136,7 @@ function LineChart(props) {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '25px' }}>
-        <Button onClick={() => showActual()}>Projection</Button><Button onClick={() => showActual()}>Actual</Button>
+        Projection
       </div>
       <Line options={options} data={data} />
     </>

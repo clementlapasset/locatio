@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Button } from 'reactstrap';
 import { connect } from 'react-redux'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -43,9 +42,9 @@ function DoughnutChart(props) {
 
         } loadData()
 
-    }, [])
+    }, [props.costs])
 
-    const labels = doughnutChartData.map(item => item.type)
+    const labels = ["Dépenses","Loyer"]
 
     var dataDonut = doughnutChartData.map(item => item.total)
 
@@ -56,13 +55,14 @@ function DoughnutChart(props) {
                 label: '# of Votes',
                 data: dataDonut,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(254, 100, 90, 1)',
+                    'rgba(0, 198, 137, 1)',
 
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 176, 57, 1)',
+                    'rgba(42, 50, 125, 1)',
+                    
 
                 ],
                 borderWidth: 1,
@@ -73,7 +73,7 @@ function DoughnutChart(props) {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button>Month</Button>
+                Ce-mois ci
             </div>
             <Doughnut
                 options={{ responsive: true, maintainAspectRatio: false}}

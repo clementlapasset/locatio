@@ -124,7 +124,7 @@ router.post('/property-info', async function (req, res) {
   let surface = req.body.surface
   let numberRooms = req.body.numberRooms
   var user =  await userModel.findOne({token: req.body.token})
-  console.log(user)
+
 
   if (propertyAddress && surface && numberRooms) {
     var newProperty = new propertyModel({
@@ -150,8 +150,7 @@ router.post('/upload-file', async function (req, res) {
   documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
   var document = await req.files.document
   document.mv(documentName)
-  console.log(document)
-  console.log("token dans le backend " +req.body.token)
+
   var user = await userModel.findOne({token: req.body.token})
   var property = await propertyModel.findOne({landlordId: user.id})
   
@@ -165,7 +164,7 @@ router.post('/upload-file', async function (req, res) {
   });
   
   var documentSaved = await newDocument.save();
-  console.log(documentSaved)
+
   res.json(document)
 
 })
@@ -173,9 +172,9 @@ router.post('/upload-file', async function (req, res) {
 //  __________ Route qui gère le delete de fichier -- Alex __________ \\
 
 router.delete('/delete-file', async function(req, res){
-  console.log(req.body.docId)
+
   var document = await documentModel.deleteOne({id: req.body.docId})
-  console.log(document)
+
 })
 
 
@@ -202,6 +201,20 @@ router.post('/finance', async function (req, res) {
     res.json({ result: false })
   }
 
+})
+
+router.delete('/delete-cost', async function(req, res){
+
+  console.log('id to be deleted', req.body.costId)
+
+  var cost = await financeModel.deleteOne({_id: req.body.costId})
+  console.log(cost)
+  if(cost.deletedCount===1){
+    res.json({result: true})
+  }else {
+    res.json({result: false})
+  }
+ 
 })
 
 module.exports = router;
