@@ -5,7 +5,6 @@ var financeModel = require('./models/finances')
 var userModel = require('./models/users')
 var propertyModel = require('./models/properties')
 
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');

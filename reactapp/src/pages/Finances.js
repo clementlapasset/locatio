@@ -54,7 +54,7 @@ function Finance(props) {
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `typeFromFront=cost&descriptionFromFront=${depenseDescription}&amountFromFront=${depenseAmount}&dateDebutFromFront=${depenseDate}`
+            body: `typeFromFront=cost&descriptionFromFront=${depenseDescription}&amountFromFront=${depenseAmount}&dateDebutFromFront=${depenseDate}&token=${props.token}`
            });
 
         var response = await rawResponse.json();
@@ -138,6 +138,6 @@ function mapStateToProps(state) {
   }
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
  )(Finance);
