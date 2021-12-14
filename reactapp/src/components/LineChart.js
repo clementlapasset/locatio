@@ -27,7 +27,7 @@ var currentMonth = new Date().getMonth()
 function LineChart(props) {
 
     const [lineChartRent, setLineChartRent] = useState([])
-    const [lineChartCosts, setLineChartCosts] = useState([])
+    const [lineChartFixedCosts, setLineChartFixedCosts] = useState([])
     
     const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
@@ -65,7 +65,11 @@ function LineChart(props) {
 
       var totalFixedCostsMonthly = (creditYear+annexYear)
 
-      var extraMonthlyCostsArray = labels.map((label = 0, i) => {
+     var accumulatedFixedCostTable = labels.map(() => totalFixedCostsMonthly)
+
+     setLineChartFixedCosts(accumulatedFixedCostTable)
+
+     var extraMonthlyCostsArray = labels.map((label = 0, i) => {
   
       var months = chartData.find(item => i === item.month)
       if (months) {
@@ -76,11 +80,6 @@ function LineChart(props) {
         }
         }
      })
-
-     console.log(extraMonthlyCostsArray)
-     var accumulatedCostTable = extraMonthlyCostsArray.map(month => month + totalFixedCostsMonthly)
-
-      setLineChartCosts(accumulatedCostTable)
 
       } loadData()
 
@@ -112,7 +111,7 @@ function LineChart(props) {
           },
           {
             label: 'Dataset 2',
-            data: lineChartCosts,
+            data: lineChartFixedCosts,
             borderColor: 'rgb(53, 162, 235)',
             backgroundColor: 'rgba(53, 162, 235, 0.5)',
           },

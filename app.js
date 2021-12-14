@@ -4,10 +4,6 @@ var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
 var userModel = require('./models/users')
 var propertyModel = require('./models/properties')
-<<<<<<< HEAD
-
-=======
->>>>>>> 4fd93de6178a6e0dc6ccea33ca32d5ffc11eef8d
 
 
 var createError = require('http-errors');
@@ -79,13 +75,14 @@ app.get('/download-file', async function (req, res) {
 app.get('/finance/:id', async function (req, res) {
 
   var user =  await userModel.findOne({token: req.params.id})
-  console.log(user)
-  console.log(user.id)
+  console.log('user is',user)
+  console.log('user id is',user.id)
+
   var property = await propertyModel.findOne({landlordId: user.id})
-  console.log(property)
+  console.log('property is', property)
 
   var financeListCharges = await financeModel.find({propertyId: property.id})
-
+  console.log('finance charges', financeListCharges)
   res.json(financeListCharges)
 
 })

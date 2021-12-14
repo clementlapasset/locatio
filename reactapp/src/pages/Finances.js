@@ -31,7 +31,7 @@ function Finance(props) {
     useEffect(() => {
 
         async function loadData() {
-            console.log(props.token)
+            console.log('token is', props.token)
             var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
 
