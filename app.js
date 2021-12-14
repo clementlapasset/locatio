@@ -4,11 +4,6 @@ var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
 var userModel = require('./models/users')
 var propertyModel = require('./models/properties')
-<<<<<<< HEAD
-
-=======
->>>>>>> 4fd93de6178a6e0dc6ccea33ca32d5ffc11eef8d
-
 
 var createError = require('http-errors');
 var express = require('express');
