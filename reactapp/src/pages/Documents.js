@@ -22,7 +22,6 @@ function Documents(props) {
 
 
 
-
     // ------------------- Lecture base de données a l'initialisation du composant ------------------- \\
     useEffect(() => {
         const findDocuments = async () => {
@@ -36,14 +35,12 @@ function Documents(props) {
 
     // ------------------- Suppression d'un document ------------------- \\
     const deleteDoc = async (idDoc) => {
-        console.log("reloadComponent")
-        var deleteDocument = await fetch('/delete-file', {
+        const deleteDocument = await fetch('/delete-file', {
             method: "DELETE",
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `docId=${idDoc}`
         })
-        setReloadComponent("deletedDocument")
-        
+        setReloadComponent(deleteDocument)  
     }
 
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
@@ -86,7 +83,6 @@ function Documents(props) {
             })
             .catch(error => console.log('error', error));
     }
-
 
 
     // ------------------- Gestion ouverture-fermeture des <Accordion> ------------------- \\
@@ -141,7 +137,7 @@ function Documents(props) {
 
 
                                         })}
-                                        <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px" }}> + Ajouter un document</Button>
+                                        <Button onClick={() => { setIsVisible(true); setIndice(i) }} style={{ margin: "10px", backgroundColor: "#2A327D" }}> + Ajouter un document</Button>
                                     </AccordionItem>
                                 </Collapse>
                             </AccordionItem>
@@ -151,7 +147,7 @@ function Documents(props) {
                     <Modal
                         isOpen={isVisible}
                     >
-                        <ModalHeader toggle={function noRefCheck() { }}>
+                        <ModalHeader>
                             Ajouter un document
                         </ModalHeader>
                         <ModalBody>
@@ -165,16 +161,14 @@ function Documents(props) {
                             >
                                 <p style={{ margin: "auto" }}>Cliquez ou glissez le fichier à mettre en ligne (.pdf)</p>
 
-
-                                {/* <p>{file.name}</p> */}
-
                             </FileUploader>
                         </ModalBody>
                         <ModalFooter>
                             <Button
+                                className="buttonModal"
                                 color="primary"
                                 onClick={() => modalClick()}
-
+                                style={{backgroundColor: "#00C689", border: "none"}}
                             >
                                 Valider
                             </Button>

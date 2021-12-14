@@ -132,3 +132,7 @@ h4 {
   color: white;
   font-weight: bold;
 }
+
+.buttonModal:hover{
+  background-color: gainsboro;
+}

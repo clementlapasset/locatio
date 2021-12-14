@@ -176,6 +176,8 @@ router.delete('/delete-file', async function(req, res){
   console.log(req.body.docId)
   var document = await documentModel.deleteOne({id: req.body.docId})
   console.log(document)
+
+  res.json({result: true})
 })
 
 
