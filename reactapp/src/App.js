@@ -15,11 +15,12 @@ import Charges from './pages/Charges';
 import charges from "./reducers/charges";
 import token from './reducers/token'
 import resetCharges from "./reducers/resetCharges";
+import depenses from "./reducers/depenses"
 
 
 import './App.css';
 
-const store = createStore(combineReducers({charges, token, resetCharges}))
+const store = createStore(combineReducers({charges, token, resetCharges, depenses}))
 
 function App() {
   return (

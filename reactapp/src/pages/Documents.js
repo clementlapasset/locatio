@@ -26,7 +26,7 @@ function Documents(props) {
     // ------------------- Lecture base de données a l'initialisation du composant ------------------- \\
     useEffect(() => {
         const findDocuments = async () => {
-            const data = await fetch('/document')
+            const data = await fetch(`/document/${props.token}`)
             const body = await data.json()
             setDocumentsByType(body)
             console.log(body)
@@ -34,16 +34,27 @@ function Documents(props) {
         findDocuments()
     }, [reloadComponent])
 
+    // ------------------- Suppression d'un document ------------------- \\
+    const deleteDoc = async (idDoc) => {
+        var deleteDoc = await fetch('/delete-file', {
+            method: "DELETE",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `docId=${idDoc}`
+        })
+        setReloadComponent(deleteDoc)
+    }
+
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
     const modalClick = async () => {
         var date = Date.now()
         setIsVisible(false)
+        console.log(props.token)
         const formData = new FormData();
         formData.append("document", file)
         formData.append("type", indice)
         formData.append("date", date)
         formData.append("title", title)
-        formData.append("user", props.token)
+        formData.append("token", props.token)
         const response = await fetch("/upload-file", {
             method: "POST",
             body: formData,
@@ -120,7 +131,7 @@ function Documents(props) {
                                                 return (
                                                     <div  style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                                         <p className="accordionswagg" onClick={() => downloadDoc(doctype._id)} style={{ marginTop: "5px", marginBottom: "5px", cursor: "pointer" }}>- {doctype.title} -</p>
-                                                        <FaTrashAlt style={{display:"flex", justifyContent:"end"}}/>
+                                                        <FaTrashAlt onClick={() => deleteDoc(doctype._id)}></FaTrashAlt>
                                                     </div>
                                                 )
                                             }
