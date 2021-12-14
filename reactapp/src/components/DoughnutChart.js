@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Button } from 'reactstrap';
+import { connect } from 'react-redux'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-function DoughnutChart() {
+function DoughnutChart(props) {
 
     const [doughnutChartData, setDoughnutChartData] = useState([])
-    const [monthBtnActive, setMonthBtnActive] = useState(false)
 
     var currentMonth = new Date().getMonth()
 
@@ -17,7 +17,7 @@ function DoughnutChart() {
 
         async function loadData() {
 
-            var rawResponse = await fetch('/finance');
+            var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
 
             var filteredResponse = response.filter(item => item.type === 'cost' || item.type === 'rent')
@@ -27,11 +27,7 @@ function DoughnutChart() {
             })
 
             var rent = chartData.find(element => element.type === 'rent')
-            var credit = chartData.find(element => element.description === 'credit repayment')
-            var annexCosts = chartData.find(element => element.description === 'annex costs')
-            
-            if (monthBtnActive) {
-
+ 
                 var costsMonth = 0;
                 chartData.forEach((element) => {
                     if (element.month === currentMonth) {
@@ -44,26 +40,10 @@ function DoughnutChart() {
                 })
 
                 setDoughnutChartData([{ type: 'cost', total: costsMonth }, {type: 'rent', total: rent.total}])
-            } else {
-                var rentYTD = rent.total * (currentMonth + 1)
-                var creditYTD = credit.total * (currentMonth + 1)
-                var annexYTD = annexCosts.total * (currentMonth + 1)
 
-                var costsYTD = 0;
-                chartData.forEach((element) => {
-                        if (element.type === 'cost'&& element.description!=='credit repayment' || element.type === 'cost'&& element.description!=='annex costs') {
-                            costsYTD += element.total
-                            return costsYTD
-                        }
-                })
-
-                var TotalCostsYTD = creditYTD + costsYTD + annexYTD
-
-                setDoughnutChartData([{ type: 'cost', total: TotalCostsYTD }, {type: 'rent', total: rentYTD}])
-            }
         } loadData()
 
-    }, [monthBtnActive])
+    }, [])
 
     const labels = doughnutChartData.map(item => item.type)
 
@@ -93,7 +73,7 @@ function DoughnutChart() {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button onClick={() => setMonthBtnActive(true)}>Month</Button>{' '}<Button onClick={() => setMonthBtnActive(false)}>YTD</Button>
+                <Button>Month</Button>
             </div>
             <Doughnut
                 options={{ responsive: true, maintainAspectRatio: false}}
@@ -104,4 +84,11 @@ function DoughnutChart() {
 
 }
 
-export default DoughnutChart;
+function mapStateToProps(state) {
+    return { costs: state.costs, token: state.token }
+  }
+  
+  export default connect(
+    mapStateToProps,
+    null
+  )(DoughnutChart);

@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'reactstrap';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,104 +27,128 @@ var currentMonth = new Date().getMonth()
 
 function LineChart(props) {
 
-    const [lineChartRent, setLineChartRent] = useState([])
-    const [lineChartFixedCosts, setLineChartFixedCosts] = useState([])
-    
-    const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    
-    useEffect( () => {
+  const [lineChartRent, setLineChartRent] = useState([])
+  const [lineChartFixedCosts, setLineChartFixedCosts] = useState([])
+  const [totalCosts, setTotalCosts] = useState([])
 
-      async function loadData() {
-        var rawResponse = await fetch('/finance');
-        var response = await rawResponse.json();
-        
-        var filteredResponse = response.filter(item => item.type==='cost' || item.type==='rent')
-        console.log('filtered list for linechart', filteredResponse)
-  
-        let chartData = filteredResponse.map((item) => {
-          return ({month: new Date(item.dateDebut).getMonth(), total: item.montant, type: item.type, frequency: item.frequence, description: item.description})
+  const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  useEffect(() => {
+
+    async function loadData() {
+      var rawResponse = await fetch(`/finance/${props.token}`);
+      var response = await rawResponse.json();
+
+      var filteredResponse = response.filter(item => item.type === 'cost' || item.type === 'rent')
+
+      let chartData = filteredResponse.map((item) => {
+        return ({ month: new Date(item.dateDebut).getMonth(), total: item.montant, type: item.type, frequency: item.frequence, description: item.description })
       })
-
-      console.log('linechart chart data', chartData)
-  
+      /*************************************************CALCULATE ANNUAL RENT**************************************************** */
       var rent = chartData.find(element => element.type === 'rent')
 
       let accumulatedRent = 0
 
-      var accumulatedRentTable = labels.map(() =>{
+      var accumulatedRentTable = labels.map(() => {
         var montlyRent = rent.total
         return accumulatedRent += montlyRent
-      } )
+      })
 
       setLineChartRent(accumulatedRentTable)
-
-      var credit = chartData.find(element => element.description === 'credit repayment')
-      var annexCosts = chartData.find(element => element.description === 'annex costs')
+      /*************************************************CALCULATE ANNUAL FIXED COSTS**************************************************** */
+      var credit = chartData.find(element => element.description === 'MensualitéCrédit')
+      var annexCosts = chartData.find(element => element.description === 'CoûtAnnexe')
 
       var creditYear = credit.total
       var annexYear = annexCosts.total
 
-      var totalFixedCostsMonthly = (creditYear+annexYear)
+      var totalFixedCostsMonthly = (creditYear + annexYear)
 
-     var accumulatedFixedCostTable = labels.map(() => totalFixedCostsMonthly)
+      let accumulatedFixedCosts = 0
 
-     setLineChartFixedCosts(accumulatedFixedCostTable)
+      var accumulatedFixedCostTable = labels.map(() => accumulatedFixedCosts += totalFixedCostsMonthly)
 
-     var extraMonthlyCostsArray = labels.map((label = 0, i) => {
-  
-      var months = chartData.find(item => i === item.month)
-      if (months) {
-        if (months.type === 'cost'&& months.description!=='credit repayment' || months.type === 'cost'&& months.description!=='annex costs'){
-          return label = months.total
-        }else {
-        return label = 0
+      setLineChartFixedCosts(accumulatedFixedCostTable)
+
+      /*************************************************CALCULATE ANNUAL TOTAL COSTS**************************************************** */
+
+      var filteredTableByCosts = chartData.filter(item => item.type === 'cost')
+
+      var reducer = filteredTableByCosts.reduce((acc, item) => {
+        let isExist = acc.find(({ month }) => item.month === month);
+        if (isExist) {
+          isExist.total += item.total;
+        } else {
+          acc.push(item);
         }
+        return acc;
+      }, []);
+
+      var newArray = labels.map((label = 0, i) => {
+
+        var monthExists = reducer.find(month => i === month.month)
+
+        if (monthExists) {
+          return label = monthExists.total
+        } else {
+          return label = 0
         }
-     })
 
-      } loadData()
+      })
+      setTotalCosts(newArray)
 
-    }, [props.depenses])
+    } loadData()
 
-    const options = {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Chart.js Line Chart',
-          },
-        },
-      };
-      
-     console.log('line chart rent', lineChartRent)
-      
-      const data = {
-        labels,
-        datasets: [
-          {
-            label: 'Dataset 1',
-            data: lineChartRent,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          },
-          {
-            label: 'Dataset 2',
-            data: lineChartFixedCosts,
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-          },
-        ],
-      };
+  }, [props.costs])
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+      },
+    },
+  };
+
+  var showProjection = () => {
+
+  }
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: lineChartRent,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+      {
+        label: 'Dataset 2',
+        data: lineChartFixedCosts,
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+    ],
+  };
 
 
-  return <Line options={options} data={data} />;
+  return (
+    <>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '25px' }}>
+        <Button onClick={() => showActual()}>Projection</Button><Button onClick={() => showActual()}>Actual</Button>
+      </div>
+      <Line options={options} data={data} />
+    </>
+  )
+
 }
 
 function mapStateToProps(state) {
-  return { depenses: state.depenses }
+  return { costs: state.costs, token: state.token }
 }
 
 export default connect(

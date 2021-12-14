@@ -15,16 +15,16 @@ function Finance(props) {
     const [financeList, setFinanceList] = useState([])
 
     //state variables used to send data from 'add depense' to backend 
-    const [depenseDescription, setDepenseDescription] = useState('')
-    const [depenseAmount, setDepenseAmount] = useState(null)
-    const [depenseDate, setDepenseDate] = useState(new Date(''))
+    const [costDescription, setCostDescription] = useState('')
+    const [costAmount, setCostAmount] = useState(null)
+    const [costDate, setCostDate] = useState(new Date(''))
 
     // state variable to control modal popup
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
    
     // state variable to control useEffect with every additional charge added
-    const [depenseAdded, setDepenseAdded] = useState(false)
+    const [costAdded, setCostAdded] = useState(false)
 
     var currentMonth = new Date().getMonth()
 
@@ -42,27 +42,27 @@ function Finance(props) {
 
         } loadData()
          
-        if (depenseAdded) {
+        if (costAdded) {
             loadData()
         }
-    }, [depenseAdded])
+    }, [costAdded])
 
             //******************************Function to POST new charge to DB and relaunch useEffect********************/
 
-    var handleAddDepense = async () => {
+    var handleAddCost = async () => {
 
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `typeFromFront=cost&descriptionFromFront=${depenseDescription}&amountFromFront=${depenseAmount}&dateDebutFromFront=${depenseDate}&token=${props.token}`
+            body: `typeFromFront=cost&descriptionFromFront=${costDescription}&amountFromFront=${costAmount}&dateDebutFromFront=${costDate}&token=${props.token}`
            });
 
         var response = await rawResponse.json();
 
-        props.onAddDepenseClick(response)
+        props.onAddCostClick(response)
 
         toggle()
-
+        setCostAdded(true)   
     }
 
     return (
@@ -102,15 +102,15 @@ function Finance(props) {
                         </ModalHeader>
                         <ModalBody>
                         <Form>
-                            <FormGroup> <Input onChange={(e) => setDepenseDescription(e.target.value)} placeholder="Description" type="string"/></FormGroup>
-                            <FormGroup> <Input onChange={(e) => setDepenseAmount(parseInt(e.target.value))} placeholder="Cost" type="number"/></FormGroup>
-                            <FormGroup> <Input onChange={(date) => setDepenseDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setCostDescription(e.target.value)} placeholder="Description" type="string"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setCostAmount(parseInt(e.target.value))} placeholder="Cost" type="number"/></FormGroup>
+                            <FormGroup> <Input onChange={(date) => setCostDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
                         </Form>
                         </ModalBody>
                         <ModalFooter>
                             <Button
                                 style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
-                                onClick={() => handleAddDepense()}
+                                onClick={() => handleAddCost()}
                             >
                                 Ajouter
                             </Button>
@@ -126,9 +126,9 @@ function Finance(props) {
 
 function mapDispatchToProps(dispatch) {
  return {
-   onAddDepenseClick: function(depenseResponse) {
-       dispatch( {type: 'depense', depense: depenseResponse })
-       console.log('this has passed to the reducer',depenseResponse)
+   onAddCostClick: function(costResponse) {
+       dispatch( {type: 'cost', cost: costResponse })
+       console.log('this has passed to the reducer',costResponse)
    },
 }
 }
