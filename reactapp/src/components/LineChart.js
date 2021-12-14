@@ -27,6 +27,10 @@ var currentMonth = new Date().getMonth()
 
 function LineChart(props) {
 
+  var showActual = () => {
+    
+  }
+
   const [lineChartRent, setLineChartRent] = useState([])
   const [lineChartFixedCosts, setLineChartFixedCosts] = useState([])
   const [totalCosts, setTotalCosts] = useState([])

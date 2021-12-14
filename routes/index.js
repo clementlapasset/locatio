@@ -173,6 +173,7 @@ router.post('/upload-file', async function (req, res) {
 //  __________ Route qui gère le delete de fichier -- Alex __________ \\
 
 router.delete('/delete-file', async function(req, res){
+  console.log(req.body.docId)
   var document = await documentModel.deleteOne({id: req.body.docId})
   console.log(document)
 })
@@ -188,7 +189,7 @@ router.post('/finance', async function (req, res) {
     montant: req.body.amountFromFront,
     description: req.body.descriptionFromFront,
     dateDebut: req.body.dateDebutFromFront,
-    frequence: req.body.frequencyFromFront,
+    //frequence: req.body.frequencyFromFront,   /* Line disabled for demo */
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
     propertyId: property.id

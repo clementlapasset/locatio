@@ -5,6 +5,7 @@ var financeModel = require('./models/finances')
 var userModel = require('./models/users')
 var propertyModel = require('./models/properties')
 
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -36,10 +37,11 @@ app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
 
 //  __________ Route qui gère l'affichage des documents -- Alex __________ \\
 app.get('/document/:id', async function (req, res) {
+  
   console.log("token reçu du front " +req.params.id)
   var user = await userModel.findOne({token: req.params.id})
   console.log("Récupération du userId " +user.id)
-  var property = await propertyModel.find({landlordId: user.id})
+  var property = await propertyModel.findOne({landlordId: user.id})
   console.log("Récupération property " +property)
 
   var documents = await documentModel.find({propertyId: property.id});
@@ -74,9 +76,7 @@ app.get('/download-file', async function (req, res) {
 app.get('/finance/:id', async function (req, res) {
 
   var user =  await userModel.findOne({token: req.params.id})
-  console.log('user is',user)
-  console.log('user id is',user.id)
-
+  console.log(user)
   var property = await propertyModel.findOne({landlordId: user.id})
   console.log('property is', property)
 
