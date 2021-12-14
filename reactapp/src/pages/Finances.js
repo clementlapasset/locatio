@@ -5,6 +5,7 @@ import BarChart from '../components/BarChart'
 
 import {connect} from 'react-redux'
 import Doughnut from '../components/DoughnutChart'
+import LineChart from '../components/LineChart'
 
 
 function Finance(props) {
@@ -58,13 +59,11 @@ function Finance(props) {
            });
 
         var response = await rawResponse.json();
-        
-        console.log('response after click', response)
 
-        // props.onAddDepenseClick(response)
+        props.onAddDepenseClick(response)
 
-        // toggle()
-        // setDepenseAdded(true)
+        toggle()
+
     }
 
     return (
@@ -75,7 +74,7 @@ function Finance(props) {
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                         {/******************************INSERT GRAPH*************************************** */}
                     <Col lg='6' style={{position: 'relative', height: '40vh'}}><Doughnut /></Col>
-                    <Col lg='6'><BarChart /></Col>
+                    <Col lg='6'><LineChart /></Col>
                     </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px'}}><Col style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h3>Dépenses</h3>
