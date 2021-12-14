@@ -75,7 +75,6 @@ app.get('/finance/:id', async function (req, res) {
 
   var user =  await userModel.findOne({token: req.params.id})
   console.log(user)
-  console.log(user.id)
   var property = await propertyModel.findOne({landlordId: user.id})
   console.log(property)
 

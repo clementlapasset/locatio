@@ -22,7 +22,7 @@ function Charges(props) {
     const [chargeDate, setChargeDate] = useState(new Date(''))
     const [chargeFrequence, setChargeFrequence] = useState(null)
 
-    // state variable to control modal popup
+    // state variable to control modal popup to add a charge
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
    
@@ -71,7 +71,7 @@ function Charges(props) {
             var sumProvisions = 0;
             response.forEach((element) => {
                 if (element.type === 'provision') {
-                    sumProvisions += element.montant * (currentMonth+1)
+                    sumProvisions += element.montant //* (currentMonth+1)
                 }
             })
 
@@ -192,8 +192,8 @@ function Charges(props) {
                         <ModalBody>
                         <Form>
                             <FormGroup> <Input onChange={(e) => setChargeDescription(e.target.value)} placeholder="Description" type="string"/></FormGroup>
-                            <FormGroup> <Input onChange={(e) => setChargeCost(parseInt(e.target.value))} placeholder="Cost" type="number"/></FormGroup>
-                            <FormGroup> <Input onChange={(e) => setChargeFrequence(parseInt(e.target.value))} placeholder="recourrance" type="select"><option>frequence de charge par an</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></Input></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeCost(parseInt(e.target.value))} placeholder="Montant" type="number"/></FormGroup>
+                            <FormGroup> <Input onChange={(e) => setChargeFrequence(parseInt(e.target.value))} placeholder="Fréquence" type="select"><option value="" disabled selected>Fréquence</option><option>Ponctuelle</option><option>Mensuelle</option><option>Trimestrielle</option><option>Annuelle</option></Input></FormGroup>
                             <FormGroup> <Label>Date de début</Label><Input onChange={(date) => setChargeDate(new Date(date.target.value))} placeholder="Date" type="date"/></FormGroup>
                         </Form>
                         </ModalBody>

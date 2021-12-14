@@ -188,7 +188,7 @@ router.post('/finance', async function (req, res) {
     montant: req.body.amountFromFront,
     description: req.body.descriptionFromFront,
     dateDebut: req.body.dateDebutFromFront,
-    frequence: req.body.frequencyFromFront,
+    //frequence: req.body.frequencyFromFront,   /* Line disabled for demo */
     regulariserCharge: req.body.totalChargesFromFront,
     regulariserProvision: req.body.totalProvisionsFromFront,
     propertyId: property.id
