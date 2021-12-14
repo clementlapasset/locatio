@@ -173,6 +173,7 @@ router.post('/upload-file', async function (req, res) {
 //  __________ Route qui gère le delete de fichier -- Alex __________ \\
 
 router.delete('/delete-file', async function(req, res){
+  console.log(req.body.docId)
   var document = await documentModel.deleteOne({id: req.body.docId})
   console.log(document)
 })

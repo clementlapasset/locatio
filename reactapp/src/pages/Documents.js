@@ -36,12 +36,14 @@ function Documents(props) {
 
     // ------------------- Suppression d'un document ------------------- \\
     const deleteDoc = async (idDoc) => {
-        var deleteDoc = await fetch('/delete-file', {
+        console.log("reloadComponent")
+        var deleteDocument = await fetch('/delete-file', {
             method: "DELETE",
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `docId=${idDoc}`
         })
-        setReloadComponent(deleteDoc)
+        setReloadComponent("deletedDocument")
+        
     }
 
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
@@ -129,9 +131,10 @@ function Documents(props) {
                                             if (parseInt(doctype.type) === i) {
 
                                                 return (
-                                                    <div  style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                                    <div  style={{ borderBottom: "solid", borderBottomWidth: "1px", borderBottomColor: "#ced4da", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                        <p></p>
                                                         <p className="accordionswagg" onClick={() => downloadDoc(doctype._id)} style={{ marginTop: "5px", marginBottom: "5px", cursor: "pointer" }}>- {doctype.title} -</p>
-                                                        <FaTrashAlt onClick={() => deleteDoc(doctype._id)}></FaTrashAlt>
+                                                        <FaTrashAlt className="trash" onClick={() => deleteDoc(doctype._id)} style={{marginRight: "5px", cursor: "pointer"}}></FaTrashAlt>
                                                     </div>
                                                 )
                                             }
