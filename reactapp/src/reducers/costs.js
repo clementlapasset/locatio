@@ -1,6 +1,6 @@
 export default function(costsFromFront = [], action){
-    if(action.type === 'costs'){
-        return [...costsFromFront, action.costs]
+    if(action.type === 'cost'){
+        return [...costsFromFront, action.cost]
     } else {
         return costsFromFront
     }
