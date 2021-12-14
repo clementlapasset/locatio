@@ -3,8 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import { Navbar, NavbarBrand, Nav, NavLink, NavItem, NavbarText, Popover, PopoverHeader, PopoverBody, ListGroup, ListGroupItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPowerOff, faUserCircle, faHouseUser } from '@fortawesome/free-solid-svg-icons'
 
 export default function NavBarMain() {
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -12,7 +11,9 @@ export default function NavBarMain() {
 
     return (
         <Navbar style={{ backgroundColor: '#2A327D', justifyContent: 'space-between' }}>
-            <NavbarBrand style={{ color: '#FFFFFF', marginLeft: '20px' }}><img src='../images/rent.png' style={{ padding: '10px' }} alt="" href="/" />Locatio</NavbarBrand>
+            <NavLink href="/">
+                <NavbarBrand style={{ color: '#FFFFFF', marginLeft: '20px' }}><FontAwesomeIcon icon={faHouseUser} size={'lg'} inverse style={{ marginRight: '15px' }} />Locatio</NavbarBrand>
+            </NavLink>
             <Nav>
                 <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/documents">Documents</Link></NavItem>
                 <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/charges">Charges</Link></NavItem>

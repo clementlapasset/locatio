@@ -151,7 +151,7 @@ function Documents(props) {
                     <Modal
                         isOpen={isVisible}
                     >
-                        <ModalHeader toggle={function noRefCheck() { }}>
+                        <ModalHeader >
                             Ajouter un document
                         </ModalHeader>
                         <ModalBody>
