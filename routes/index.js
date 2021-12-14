@@ -153,10 +153,8 @@ router.post('/upload-file', async function (req, res) {
   console.log(document)
   console.log("token dans le backend " +req.body.token)
   var user = await userModel.findOne({token: req.body.token})
-  console.log("Console log de user: "+user)
-
   var property = await propertyModel.findOne({landlordId: user.id})
-  console.log(property)
+  
 
   var newDocument = new documentModel({
     type: req.body.type,

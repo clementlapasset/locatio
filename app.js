@@ -2,6 +2,8 @@ var fileUpload = require('express-fileupload');
 var fs = require('fs');
 var documentModel = require('./models/documents')
 var financeModel = require('./models/finances')
+var userModel = require('./models/users')
+var propertyModel = require('./models/properties')
 
 
 var createError = require('http-errors');
@@ -34,9 +36,14 @@ app.use(express.static(path.resolve(__dirname, 'reactapp/build')));
 
 
 //  __________ Route qui gère l'affichage des documents -- Alex __________ \\
-app.get('/document', async function (req, res) {
+app.get('/document/:id', async function (req, res) {
+  console.log("token reçu du front " +req.params.id)
+  var user = await userModel.findOne({token: req.params.id})
+  console.log("Récupération du userId " +user.id)
+  var property = await propertyModel.find({landlordId: user.id})
+  console.log("Récupération property " +property)
 
-  var documents = await documentModel.find();
+  var documents = await documentModel.find({propertyId: property.id});
   console.log(documents)
   res.json(documents)
 })

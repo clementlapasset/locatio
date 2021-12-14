@@ -26,7 +26,7 @@ function Documents(props) {
     // ------------------- Lecture base de données a l'initialisation du composant ------------------- \\
     useEffect(() => {
         const findDocuments = async () => {
-            const data = await fetch('/document')
+            const data = await fetch(`/document/${props.token}`)
             const body = await data.json()
             setDocumentsByType(body)
             console.log(body)
@@ -36,11 +36,12 @@ function Documents(props) {
 
     // ------------------- Suppression d'un document ------------------- \\
     const deleteDoc = async (idDoc) => {
-        await fetch('/delete-file', {
+        var deleteDoc = await fetch('/delete-file', {
             method: "DELETE",
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `docId=${idDoc}`
         })
+        setReloadComponent(deleteDoc)
     }
 
     // ------------------- Upload d'un document sur serveur distant (backend)------------------- \\
