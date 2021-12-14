@@ -59,11 +59,12 @@ function BarChart(props) {
       var sumProvisions = 0;
       chartData.forEach((element) => {
         if (element.chargeType === 'provision') {
-          sumProvisions += (element.total * element.frequency)
+          sumProvisions += element.total
         }
       })
 
-      var lineChartMonthly = labels.map(() => sumProvisions / labels.length)
+      var lineChartMonthly = labels.map(() => sumProvisions )
+
       setLineChartData(lineChartMonthly)
 
     } loadData()

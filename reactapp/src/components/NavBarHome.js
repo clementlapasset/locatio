@@ -3,7 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from "react-router-dom";
 import { Navbar, NavbarBrand, Nav, NavLink, NavItem, Button, Input, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import {connect} from 'react-redux'
-import { SiHomeadvisor } from "react-icons/si";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHouseUser } from '@fortawesome/free-solid-svg-icons'
+
 
 function NavBarHome(props) {
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -48,7 +50,7 @@ function NavBarHome(props) {
 
     return (
         <Navbar style={{backgroundColor:'#2A327D', justifyContent:'space-between'}}>
-        <NavbarBrand style={{color:'#FFFFFF'}}><Link to="/" style={{ textDecoration: 'none', color:'white' }}><SiHomeadvisor style={{padding:'10px', color:'white'}} />Locatio</Link></NavbarBrand>
+        <NavbarBrand style={{color:'#FFFFFF'}}><Link to="/" style={{ textDecoration: 'none', color:'white' }}><FontAwesomeIcon icon={faHouseUser} size={'lg'} inverse style={{ marginRight: '15px' }} />Locatio</Link></NavbarBrand>
         <Nav>
         <img src='../images/logo.png' style={{padding:'10px'}} alt=""/>
         <NavItem >
