@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, ModalBody, ModalHeader, ModalFooter, Input } from 'reactstrap';
+import { Accordion, AccordionItem, AccordionHeader, Button, Collapse, Modal, ModalBody, ModalHeader, ModalFooter, Input, Alert } from 'reactstrap';
 import NavBarMain from "../components/NavBarMain"
 import { FileUploader } from "react-drag-drop-files";
 import '../App.css'
 import { FaTrashAlt } from 'react-icons/fa';
 import { connect } from 'react-redux'
+
 
 
 function Documents(props) {
@@ -19,6 +20,7 @@ function Documents(props) {
     const fileTypes = ["PDF"];
     const [file, setFile] = useState(null);
     const [reloadComponent, setReloadComponent] = useState(null)
+    const [deleteStatus, setDeleteStatus] = useState("")
 
 
 
@@ -40,6 +42,13 @@ function Documents(props) {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `docId=${idDoc}`
         })
+        var response = await deleteDocument.json()
+        console.log(response.result)
+
+        if(response.result){
+            setDeleteStatus(<Alert>Suppression effectuée !</Alert>)
+        }
+
         setReloadComponent(deleteDocument)  
     }
 
@@ -105,9 +114,13 @@ function Documents(props) {
         <div>
             <NavBarMain />
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <div style={{width: "100%"}}>
+                {deleteStatus}
+                </div>
+                
 
 
-                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Créez ou consultez vos documents</h1>
+                <h1 style={{ marginTop: "50px", marginBottom: "50px" }}>Mettez en ligne ou consultez vos documents</h1>
 
 
                 <div style={{ margin: "auto" }}>
@@ -147,11 +160,7 @@ function Documents(props) {
                     <Modal
                         isOpen={isVisible}
                     >
-<<<<<<< HEAD
-                        <ModalHeader>
-=======
                         <ModalHeader >
->>>>>>> d044bdd636fbdc4d7fa16545acbe710ea42fbb92
                             Ajouter un document
                         </ModalHeader>
                         <ModalBody>

@@ -74,14 +74,14 @@ app.get('/download-file', async function (req, res) {
 });
 
 app.get('/finance/:id', async function (req, res) {
-
+  console.log("je suis dans la route")
   var user =  await userModel.findOne({token: req.params.id})
 
   var property = await propertyModel.findOne({landlordId: user.id})
 
 
   var financeListCharges = await financeModel.find({propertyId: property.id})
-
+  console.log(financeListCharges)
   res.json(financeListCharges)
 
 })
