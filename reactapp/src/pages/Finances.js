@@ -41,13 +41,12 @@ function Finance(props) {
     var currentMonth = new Date().getMonth()
 
     useEffect(() => {
-        console.log("UseEffect")
         async function loadData() {
             console.log(props.token)
             var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
             
-            var filteredList = response.filter(item => item.type === 'cost' || item.type === 'rent')
+            var filteredList = response.filter(item => item.type === 'fixedCost' || item.type === 'variableCost' || item.type === 'rent')
             console.log(filteredList)
             setFinanceList(filteredList)
             console.log('finance list is',financeList)
@@ -65,15 +64,14 @@ function Finance(props) {
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `typeFromFront=cost&descriptionFromFront=${costDescription}&amountFromFront=${costAmount}&dateDebutFromFront=${costDate}&token=${props.token}`
+            body: `typeFromFront=variableCost&descriptionFromFront=${costDescription}&amountFromFront=${costAmount}&dateDebutFromFront=${costDate}&token=${props.token}`
         });
 
         var response = await rawResponse.json();
 
         toggle()
-        setPageUpdate(true)
-        props.onClickButton('add')
-        
+        props.onClickButton(response)
+        setPageUpdate(!pageUpdate)
     }
 
     //******************************Function to DELETE charge in DB and relaunch useEffect********************/
@@ -90,7 +88,7 @@ function Finance(props) {
         console.log('has document been deleted', response.result)
         
         setPageUpdate(true)
-        props.onClickButton('delete')
+        props.onClickButton(response)
         setModalConfirmDelete(!modalConfirmDelete)
     }
 

@@ -104,11 +104,7 @@ function Charges(props) {
 
         } loadData()
 
-        setPageUpdate(false)
-
-        if (totalProvisions === 0 && totalCharges === 0) {
-            setdisabled(true)
-        }
+        console.log('button status via use effect: ',disabled)
     }, [pageUpdate])
 
     //******************************Function to POST new charge to DB and relaunch useEffect********************/
@@ -123,18 +119,17 @@ function Charges(props) {
 
         var response = await rawResponse.json();
 
-
-
         toggle()
-        setdisabled(false)
-        setPageUpdate(true)
         props.onClickButton('add')
+        setdisabled(false)
+        setPageUpdate(!pageUpdate)
+        console.log('button is disabled when charge added: ',disabled)
     }
     //***********************************Function to RESET all charges Locataire/proprietaire***********************/
     var resetCharges = async () => {
 
         console.log(totalCharges)
-        
+
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -148,8 +143,9 @@ function Charges(props) {
         setdisabled(true)
         toggleModalRegul()
         props.onClickButton('reset')
+        setPageUpdate(!pageUpdate)
     }
-            //***********************************Function to DELETE a charge Locataire/proprietaire***********************/
+    //***********************************Function to DELETE a charge Locataire/proprietaire***********************/
 
     var clickToDeleteCharge = async (chargeToDelete) => {
 
@@ -161,17 +157,17 @@ function Charges(props) {
         console.log(deleteCharge)
         var response = await deleteCharge.json()
         console.log('has document been deleted', response.result)
-        
+
         setPageUpdate(true)
         props.onClickButton('delete')
         setModalConfirmDelete(!modalConfirmDelete)
     }
 
     //***********************************Message for modal Regul. charges***********************/
-    if (totalProvisions - totalCharges>0){
+    if (totalProvisions - totalCharges > 0) {
         var modalRegulCharges = <p>Vous devez rembourser {totalProvisions - totalCharges}€ à vos locataires</p>
     } else {
-        modalRegulCharges = <p>Vous devez rembourser {totalCharges - totalProvisions }€ à vos locataires</p>
+        modalRegulCharges = <p>Vous devez rembourser {totalCharges - totalProvisions}€ à vos locataires</p>
     }
 
     //***********************************Message for modal Regul. charges***********************/
@@ -181,9 +177,9 @@ function Charges(props) {
 
         <div>
             <NavBarMain />
-            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign:'center' }}>Visualisez et régularisez les charges locatives</h1>
+            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign: 'center' }}>Visualisez et régularisez les charges locatives</h1>
             <Container fluid>
-                
+
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Col lg='5'>
                         <h5>Equilibre sur la période en cours</h5>
@@ -201,7 +197,7 @@ function Charges(props) {
                             <Button disabled={disabled} onClick={() => toggleModalRegul()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Régulariser les charges</Button>
                         </Card>
                     </Col>
-                    <Col lg='6' style={{paddingTop:'30px'}}><BarChart  /></Col>
+                    <Col lg='6' style={{ paddingTop: '30px' }}><BarChart /></Col>
                 </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px' }}><Col style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h3>Charges et provisions</h3>
@@ -212,18 +208,19 @@ function Charges(props) {
                         Ajouter une charge
                     </Button>
                 </Col></Row>
-                <Row style={{ height: '34vh', overflow: 'auto' }}>
-                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF', height:'10px'  }}><tr><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th></tr></thead><tbody>
+                <Row style={{  overflow: 'auto' }}>
+                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr style={{height:'30px'}}><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
 
-                        {financeList.map((finance) => {
-                            if (finance.type === 'charge'){
+                        {financeList.map((finance, i) => {
+                            console.log(finance,'was created')
+                            if (finance.type === 'charge') {
                                 var badgeColor = 'danger'
                             } else {
                                 badgeColor = 'success'
                             }
                             return (
-                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
-                            )    
+                                <tr style={{height:'50px'}} key={i}><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
+                            )
                         })}
 
                     </tbody>
@@ -262,9 +259,9 @@ function Charges(props) {
                     Régularisation des charges
                 </ModalHeader>
                 <ModalBody>
-                    
+
                     {modalRegulCharges}
-                    
+
                 </ModalBody>
                 <ModalFooter>
                     <Button
@@ -285,9 +282,9 @@ function Charges(props) {
                     Confirm Suppression
                 </ModalHeader>
                 <ModalBody>
-                    
+
                     Are you sure you want to delete this?
-                    
+
                 </ModalBody>
                 <ModalFooter>
                     <Button
@@ -311,17 +308,12 @@ function mapDispatchToProps(dispatch) {
         onClickButton: function (clickDescription) {
             console.log('passed to reducer:', clickDescription)
             dispatch({ type: 'update', update: clickDescription })
-
-        },
-        handleResetCharges: function (resetResponse) {
-            dispatch({ type: 'resetCharges', reset: resetResponse })
-            console.log('this has passed to the reducer to reset charges', resetResponse)
         }
     }
 }
 
 function mapStateToProps(state) {
-    return { reset: state.resetCharges, token: state.token }
+    return { token: state.token }
 }
 
 export default connect(
