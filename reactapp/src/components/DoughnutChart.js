@@ -14,7 +14,7 @@ function DoughnutChart(props) {
 
 
     useEffect(() => {
-
+        
         async function loadData() {
 
             var rawResponse = await fetch(`/finance/${props.token}`);

@@ -29,8 +29,6 @@ function LineChart(props) {
 
   const [lineChartRent, setLineChartRent] = useState([])
   const [lineChartCosts, setLineChartCosts] = useState([])
-  const [showActual, setShowActual] = useState(false)
-
 
   const labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -40,7 +38,7 @@ function LineChart(props) {
       var rawResponse = await fetch(`/finance/${props.token}`);
       var response = await rawResponse.json();
 
-      var filteredResponse = response.filter(item => item.type === 'cost' || item.type === 'rent')
+      var filteredResponse = response.filter(item => item.type === 'fixedCost' || item.type === 'variableCost' || item.type === 'rent')
 
       let chartData = filteredResponse.map((item) => {
         return ({ month: new Date(item.dateDebut).getMonth(), total: item.montant, type: item.type, frequency: item.frequence, description: item.description })
@@ -48,59 +46,46 @@ function LineChart(props) {
       /*************************************************CALCULATE ANNUAL RENT**************************************************** */
       var rent = chartData.find(element => element.type === 'rent')
 
-      let accumulatedRent = 0
-
-      var accumulatedRentTable = labels.map(() => {
+      var monthlyRevenue = labels.map(() => {
         var montlyRent = rent.total
-        return accumulatedRent += montlyRent
+        return montlyRent
       })
 
-      setLineChartRent(accumulatedRentTable)
-      /*************************************************CALCULATE ANNUAL FIXED COSTS**************************************************** */
-      
-      if(showActual) {
-        var filteredTableByCosts = chartData.filter(item => item.type === 'cost')
-
-        var reducer = filteredTableByCosts.reduce((acc, item) => {
-          let isExist = acc.find(({ month }) => item.month === month);
+      setLineChartRent(monthlyRevenue)
+      /*************************************************CALCULATE ANNUAL FIXED & VARIABLE COSTS**************************************************** */
+      var reducer = chartData.reduce((acc, item) => {
+        let isExist = acc.find(({ month }) => item.month === month);
+        if (item.type === 'variableCost') {
           if (isExist) {
             isExist.total += item.total;
           } else {
             acc.push(item);
           }
-          return acc;
-        }, []);
-  
-        var newArray = labels.map((label = 0, i) => {
-  
-          var monthExists = reducer.find(month => i === month.month)
-  
-          if (monthExists) {
-            return label = monthExists.total
-          } else {
-            return label = 0
-          }
-  
-        })
-        setLineChartCosts(newArray)
-      }else{
-        var credit = chartData.find(element => element.description === 'MensualitéCrédit')
-        var annexCosts = chartData.find(element => element.description === 'CoûtAnnexe')
-  
-        var creditYear = credit.total
-        var annexYear = annexCosts.total
-  
-        var totalFixedCostsMonthly = (creditYear + annexYear)
-  
-        let accumulatedFixedCosts = 0
-  
-        var accumulatedFixedCostTable = labels.map(() => accumulatedFixedCosts += totalFixedCostsMonthly)
-  
-        setLineChartCosts(accumulatedFixedCostTable)
-      }
+        }
+        return acc;
+      }, []);
+
+      var totalFixedCost = 0
+      var fixedCosts = chartData.filter(element => element.type === 'fixedCost')
+
+      fixedCosts.forEach(e => e.total += totalFixedCost)
+
+      var newArray = labels.map((label = 0, i) => {
+
+        var monthExists = reducer.find(month => i === month.month)
+
+        if (monthExists) {
+          return label = monthExists.total + totalFixedCost
+        } else {
+          return label = totalFixedCost
+        }
+      })
+
+      setLineChartCosts(newArray)
+
     } loadData()
 
-  }, [props.costs,showActual])
+  }, [props.update])
 
   const options = {
     responsive: true,
@@ -145,7 +130,7 @@ function LineChart(props) {
 }
 
 function mapStateToProps(state) {
-  return { costs: state.costs, token: state.token }
+  return { update: state.update, token: state.token }
 }
 
 export default connect(
