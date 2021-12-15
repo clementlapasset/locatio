@@ -41,14 +41,14 @@ function Finance(props) {
     var currentMonth = new Date().getMonth()
 
     useEffect(() => {
-
+        console.log("UseEffect")
         async function loadData() {
             console.log(props.token)
             var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
-
+            
             var filteredList = response.filter(item => item.type === 'cost' || item.type === 'rent')
-
+            console.log(filteredList)
             setFinanceList(filteredList)
             console.log('finance list is',financeList)
 
