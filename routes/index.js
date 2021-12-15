@@ -216,4 +216,18 @@ router.delete('/delete-cost', async function(req, res){
  
 })
 
+router.delete('/delete-charge', async function(req, res){
+
+  console.log('id to be deleted', req.body.chargeId)
+
+  var cost = await financeModel.deleteOne({_id: req.body.chargeId})
+  console.log(cost)
+  if(cost.deletedCount===1){
+    res.json({result: true})
+  }else {
+    res.json({result: false})
+  }
+ 
+})
+
 module.exports = router;

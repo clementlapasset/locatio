@@ -12,6 +12,7 @@ function DoughnutChart(props) {
 
     var currentMonth = new Date().getMonth()
 
+
     useEffect(() => {
 
         async function loadData() {
@@ -42,7 +43,7 @@ function DoughnutChart(props) {
 
         } loadData()
 
-    }, [props.costs])
+    }, [props.update])
 
     const labels = ["Dépenses","Loyer"]
 
@@ -85,7 +86,7 @@ function DoughnutChart(props) {
 }
 
 function mapStateToProps(state) {
-    return { costs: state.costs, token: state.token }
+    return { update: state.update, token: state.token }
   }
   
   export default connect(
