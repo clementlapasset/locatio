@@ -6,10 +6,12 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { connect } from 'react-redux'
 import Doughnut from '../components/DoughnutChart'
 import LineChart from '../components/LineChart'
+import { finance } from 'faker';
 
 
 function Finance(props) {
 
+    console.log(props.token)
 
     // state variable to store list of all finance documents 
     const [financeList, setFinanceList] = useState([])
@@ -18,10 +20,20 @@ function Finance(props) {
     const [costDescription, setCostDescription] = useState('')
     const [costAmount, setCostAmount] = useState(null)
     const [costDate, setCostDate] = useState(new Date(''))
+    const [costFrequence, setCostFrequence] = useState(null)
 
     // state variable to control modal popup
     const [modal, setModal] = useState(false);
+    const [modalConfirmDelete, setModalConfirmDelete] = useState(false)
+    const [costToDelete, setCostToDelete] = useState({})
+
     const toggle = () => setModal(!modal);
+
+    const toggleModalConfirmDelete = (finance) => {
+        setModalConfirmDelete(!modalConfirmDelete)
+        setCostToDelete(finance)
+    }
+    
 
     // state variable to control useEffect with every additional charge added
     const [pageUpdate, setPageUpdate] = useState(false)
@@ -38,6 +50,7 @@ function Finance(props) {
             var filteredList = response.filter(item => item.type === 'cost' || item.type === 'rent')
             console.log(filteredList)
             setFinanceList(filteredList)
+            console.log('finance list is',financeList)
 
         } loadData()
 
@@ -57,28 +70,28 @@ function Finance(props) {
 
         var response = await rawResponse.json();
 
-        props.onAddCostClick(response)
-
         toggle()
         setPageUpdate(true)
-
+        props.onClickButton('add')
+        
     }
 
+    //******************************Function to DELETE charge in DB and relaunch useEffect********************/
 
-    var clickToDeleteCost = async (costId) => {
-
-        console.log('costId is', costId)
+    var clickToDeleteCost = async (costToDelete) => {
 
         var deleteCost = await fetch('/delete-cost', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `costId=${costId}`
+            body: `costId=${costToDelete._id}`
         });
-
+        console.log(deleteCost)
         var response = await deleteCost.json()
-        console.log('has document been deleted', response)
-
+        console.log('has document been deleted', response.result)
+        
         setPageUpdate(true)
+        props.onClickButton('delete')
+        setModalConfirmDelete(!modalConfirmDelete)
     }
 
     return (
@@ -103,9 +116,16 @@ function Finance(props) {
                 <Row style={{ height: '34vh', overflow: 'auto' }}>
                     <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr><th style={{ width: '25%' }}>Status</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
 
-                        {financeList.map((finance) => (
-                            <tr><th scope="row"><Badge pill style={{ backgroundColor: '#f1f1f1' }} >{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => clickToDeleteCost(finance._id)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
-                        ))}
+                        {financeList.map((finance) => {
+                            if (finance.type === 'cost'){
+                                var badgeColor = 'danger'
+                            } else {
+                                badgeColor = 'success'
+                            }
+                            return(
+                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }} >{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
+                            )      
+                        })}
 
                     </tbody>
                     </Table>
@@ -120,6 +140,7 @@ function Finance(props) {
                     <Form>
                         <FormGroup> <Input onChange={(e) => setCostDescription(e.target.value)} placeholder="Description" type="string" /></FormGroup>
                         <FormGroup> <Input onChange={(e) => setCostAmount(parseInt(e.target.value))} placeholder="Cost" type="number" /></FormGroup>
+                        <FormGroup> <Input onChange={(e) => setCostFrequence(parseInt(e.target.value))} placeholder="Fréquence" type="select"><option value="" disabled selected>Fréquence</option><option>Ponctuelle</option><option>Mensuelle</option><option>Trimestrielle</option><option>Annuelle</option></Input></FormGroup>
                         <FormGroup> <Input onChange={(date) => setCostDate(new Date(date.target.value))} placeholder="Date" type="date" /></FormGroup>
                     </Form>
                 </ModalBody>
@@ -136,14 +157,39 @@ function Finance(props) {
                     </Button>
                 </ModalFooter>
             </Modal>
+            <Modal isOpen={modalConfirmDelete}
+            >
+                <ModalHeader style={{ justifyContent: 'center' }} >
+                    Confirm Suppression
+                </ModalHeader>
+                <ModalBody>
+                    
+                    Are you sure you want to delete this?
+                    
+                </ModalBody>
+                <ModalFooter>
+                    <Button
+                        style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
+                        onClick={() => clickToDeleteCost(costToDelete)}
+                    >
+                        Supprimer
+                    </Button>
+                    {' '}
+                    <Button onClick={() => toggleModalConfirmDelete()}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </div>
     )
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAddCostClick: function (costResponse) {
-            dispatch({ type: 'cost', cost: costResponse })
+        onClickButton: function (clickDescription) {
+            console.log('passed to reducer:', clickDescription)
+            dispatch({ type: 'update', update: clickDescription })
+
         },
     }
 }

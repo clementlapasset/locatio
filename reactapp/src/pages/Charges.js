@@ -3,6 +3,7 @@ import { Button, Col, Container, Row, Table, Card, CardBody, CardText, Modal, Mo
 import NavBarMain from '../components/NavBarMain'
 import BarChart from '../components/BarChart'
 import { useParams } from 'react-router-dom';
+import { FaTrashAlt } from 'react-icons/fa';
 
 import { connect } from 'react-redux'
 
@@ -30,9 +31,20 @@ function Charges(props) {
     const [modalRegul, setModalRegul] = useState(false);
     const toggleModalRegul = () => setModalRegul(!modalRegul);
 
+    // state variable to control modal popup to delete a charge
+    const [modalConfirmDelete, setModalConfirmDelete] = useState(false)
+    const [chargeToDelete, setChargeToDelete] = useState({})
+
+    const toggleModalConfirmDelete = (finance) => {
+        setModalConfirmDelete(!modalConfirmDelete)
+        setChargeToDelete(finance)
+    }
+
     // state variable to control useEffect with every additional charge added
-    const [chargeAdded, setChargeAdded] = useState(false)
     const [resetChargesUseEffect, setResetChargesUseEffect] = useState([])
+
+    // state variable to control useEffect with every additional charge added
+    const [pageUpdate, setPageUpdate] = useState(false)
 
     const [disabled, setdisabled] = useState(false)
 
@@ -92,15 +104,12 @@ function Charges(props) {
 
         } loadData()
 
-        if (chargeAdded) {
-            loadData()
-            setChargeAdded(false)
-        }
-        console.log(disabled)
+        setPageUpdate(false)
+
         if (totalProvisions === 0 && totalCharges === 0) {
             setdisabled(true)
         }
-    }, [chargeAdded, resetChargesUseEffect])
+    }, [pageUpdate])
 
     //******************************Function to POST new charge to DB and relaunch useEffect********************/
 
@@ -115,15 +124,17 @@ function Charges(props) {
         var response = await rawResponse.json();
 
 
-        props.onAddChargeClick(response)
 
         toggle()
         setdisabled(false)
-        setChargeAdded(true)
+        setPageUpdate(true)
+        props.onClickButton('add')
     }
     //***********************************Function to RESET all charges Locataire/proprietaire***********************/
     var resetCharges = async () => {
+
         console.log(totalCharges)
+        
         var rawResponse = await fetch('/finance', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -132,14 +143,28 @@ function Charges(props) {
 
         var response = await rawResponse.json();
 
-        props.handleResetCharges(response)
-
         setTotalProvisions(0)
         setTotalCharges(0)
         setdisabled(true)
-
-        setResetChargesUseEffect(props.reset)
         toggleModalRegul()
+        props.onClickButton('reset')
+    }
+            //***********************************Function to DELETE a charge Locataire/proprietaire***********************/
+
+    var clickToDeleteCharge = async (chargeToDelete) => {
+
+        var deleteCharge = await fetch('/delete-charge', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `chargeId=${chargeToDelete._id}`
+        });
+        console.log(deleteCharge)
+        var response = await deleteCharge.json()
+        console.log('has document been deleted', response.result)
+        
+        setPageUpdate(true)
+        props.onClickButton('delete')
+        setModalConfirmDelete(!modalConfirmDelete)
     }
 
     //***********************************Message for modal Regul. charges***********************/
@@ -196,7 +221,7 @@ function Charges(props) {
                                 badgeColor = 'success'
                             }
                             return (
-                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td></tr>
+                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }}>{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
                             )    
                         })}
 
@@ -253,15 +278,39 @@ function Charges(props) {
                     </Button>
                 </ModalFooter>
             </Modal>
+            <Modal isOpen={modalConfirmDelete}
+            >
+                <ModalHeader style={{ justifyContent: 'center' }} >
+                    Confirm Suppression
+                </ModalHeader>
+                <ModalBody>
+                    
+                    Are you sure you want to delete this?
+                    
+                </ModalBody>
+                <ModalFooter>
+                    <Button
+                        style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
+                        onClick={() => clickToDeleteCharge(chargeToDelete)}
+                    >
+                        Supprimer
+                    </Button>
+                    {' '}
+                    <Button onClick={() => toggleModalConfirmDelete()}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </div>
     )
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAddChargeClick: function (chargeResponse) {
-            dispatch({ type: 'charge', charge: chargeResponse })
-            console.log('this has passed to the reducer', chargeResponse)
+        onClickButton: function (clickDescription) {
+            console.log('passed to reducer:', clickDescription)
+            dispatch({ type: 'update', update: clickDescription })
+
         },
         handleResetCharges: function (resetResponse) {
             dispatch({ type: 'resetCharges', reset: resetResponse })

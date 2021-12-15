@@ -30,8 +30,8 @@ function NavBarHome(props) {
           const body = await data.json()
           
           if(body.result === true){
-            setUserExists(true)
             props.addToken(body.token)
+            setUserExists(true)
             setId(body.token)
           }  else {
             setErrorsSignin(body.error)
