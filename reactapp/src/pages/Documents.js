@@ -147,11 +147,7 @@ function Documents(props) {
                     <Modal
                         isOpen={isVisible}
                     >
-<<<<<<< HEAD
-                        <ModalHeader>
-=======
                         <ModalHeader >
->>>>>>> d044bdd636fbdc4d7fa16545acbe710ea42fbb92
                             Ajouter un document
                         </ModalHeader>
                         <ModalBody>

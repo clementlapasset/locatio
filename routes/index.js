@@ -174,13 +174,6 @@ router.post('/upload-file', async function (req, res) {
 router.delete('/delete-file', async function(req, res){
 
   var document = await documentModel.deleteOne({id: req.body.docId})
-<<<<<<< HEAD
-  console.log(document)
-
-  res.json({result: true})
-=======
-
->>>>>>> d044bdd636fbdc4d7fa16545acbe710ea42fbb92
 })
 
 
@@ -214,6 +207,20 @@ router.delete('/delete-cost', async function(req, res){
   console.log('id to be deleted', req.body.costId)
 
   var cost = await financeModel.deleteOne({_id: req.body.costId})
+  console.log(cost)
+  if(cost.deletedCount===1){
+    res.json({result: true})
+  }else {
+    res.json({result: false})
+  }
+ 
+})
+
+router.delete('/delete-charge', async function(req, res){
+
+  console.log('id to be deleted', req.body.chargeId)
+
+  var cost = await financeModel.deleteOne({_id: req.body.chargeId})
   console.log(cost)
   if(cost.deletedCount===1){
     res.json({result: true})

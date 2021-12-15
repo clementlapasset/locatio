@@ -1,7 +1,7 @@
-export default function(costsFromFront = [], action){
-    if(action.type === 'cost'){
-        return [...costsFromFront, action.cost]
+export default function(update = '', action){
+    if(action.type === 'update'){
+        return action.update
     } else {
-        return costsFromFront
+        return update
     }
 }
