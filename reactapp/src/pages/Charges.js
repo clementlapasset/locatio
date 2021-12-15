@@ -156,16 +156,17 @@ function Charges(props) {
 
         <div>
             <NavBarMain />
+            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign:'center' }}>Visualisez et régularisez les charges locatives</h1>
             <Container fluid>
-                <Row style={{ marginTop: '20px' }}><Col lg={{ size: 6 }}><Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Ce mois-ci</Button>{' '}<Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Cette année</Button></Col></Row>
+                
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Col lg='5'>
                         <h5>Equilibre sur la période en cours</h5>
                         <Card>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingLeft: '16px', paddingRight: '16px' }}>
-                                <span style={{ width: '125px', textAlign: 'center' }}>Global Provisions</span>
-                                <span style={{ width: '125px', textAlign: 'center' }}>Global Charges</span>
-                                <span style={{ width: '125px', textAlign: 'center' }}>Global Balance</span>
+                                <span style={{ width: '125px', textAlign: 'center' }}>Total des charges provisionnées</span>
+                                <span style={{ width: '125px', textAlign: 'center' }}>Total des charges réelles</span>
+                                <span style={{ width: '125px', textAlign: 'center' }}>Écart global</span>
                             </div>
                             <CardBody style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div className='circleProvision'><CardText style={{ color: '#FFFFFF', margin: 'auto' }}>{totalProvisions}€</CardText></div> -
@@ -175,7 +176,7 @@ function Charges(props) {
                             <Button disabled={disabled} onClick={() => toggleModalRegul()} style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Régulariser les charges</Button>
                         </Card>
                     </Col>
-                    <Col lg='6'><BarChart /></Col>
+                    <Col lg='6' style={{paddingTop:'30px'}}><BarChart  /></Col>
                 </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px' }}><Col style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <h3>Charges et provisions</h3>
@@ -187,7 +188,7 @@ function Charges(props) {
                     </Button>
                 </Col></Row>
                 <Row style={{ height: '34vh', overflow: 'auto' }}>
-                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th></tr></thead><tbody>
+                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF', height:'10px'  }}><tr><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th></tr></thead><tbody>
 
                         {financeList.map((finance) => {
                             if (finance.type === 'charge'){

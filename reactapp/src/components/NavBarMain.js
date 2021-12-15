@@ -15,10 +15,9 @@ export default function NavBarMain() {
                 <NavbarBrand style={{ color: '#FFFFFF', marginLeft: '20px' }}><FontAwesomeIcon icon={faHouseUser} size={'lg'} inverse style={{ marginRight: '15px' }} />Locatio</NavbarBrand>
             </NavLink>
             <Nav>
-                <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/documents">Documents</Link></NavItem>
-                <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/charges">Charges</Link></NavItem>
-                <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/finances">Finance</Link></NavItem>
-                <NavItem style={{ paddingInline: '20px' }}><Link style={{ color: '#FFFFFF' }} to="/incidents">Incidents</Link></NavItem>
+                <NavItem style={{ paddingInline: '2vw' }}><Link style={{ color: '#FFFFFF' }} to="/documents">Documents</Link></NavItem>
+                <NavItem style={{ paddingInline: '2vw' }}><Link style={{ color: '#FFFFFF' }} to="/charges">Charges</Link></NavItem>
+                <NavItem style={{ paddingInline: '2vw' }}><Link style={{ color: '#FFFFFF' }} to="/finances">Finances</Link></NavItem>
             </Nav>
             <Nav>
                 <NavLink id="PopoverMyAccount" style={{ color: 'white', cursor: "pointer" }}>

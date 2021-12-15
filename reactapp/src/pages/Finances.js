@@ -31,7 +31,7 @@ function Finance(props) {
     useEffect(() => {
 
         async function loadData() {
-
+            console.log(props.token)
             var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
 
@@ -85,6 +85,7 @@ function Finance(props) {
 
         <div>
             <NavBarMain />
+            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign:'center' }}>Visualisez les revenus et coûts de votre investissement</h1>
             <Container fluid>
                 <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     {/******************************INSERT GRAPH*************************************** */}

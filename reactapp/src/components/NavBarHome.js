@@ -30,8 +30,8 @@ function NavBarHome(props) {
           const body = await data.json()
           
           if(body.result === true){
-            setUserExists(true)
             props.addToken(body.token)
+            setUserExists(true)
             setId(body.token)
           }  else {
             setErrorsSignin(body.error)
@@ -69,7 +69,7 @@ function NavBarHome(props) {
                     <Input onChange={(e) => setSignInEmail(e.target.value)} className="Login-home" type="email"  placeholder="Email" />
                     <Input onChange={(e) => setSignInPassword(e.target.value)} className="Login-home" type="password"  placeholder="Password" />
                     {tabErrorsSignin}
-                    <Button onClick={() => handleSubmitSignin()} className="Login-home" >Valider</Button>
+                    <Button onClick={() => handleSubmitSignin()} className="Login-home" style={{backgroundColor:'#00C689', border:'none'}} >Valider</Button>
                 </PopoverBody>
             </Popover>
         </NavItem>
