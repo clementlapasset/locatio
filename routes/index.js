@@ -174,6 +174,13 @@ router.post('/upload-file', async function (req, res) {
 router.delete('/delete-file', async function(req, res){
 
   var document = await documentModel.deleteOne({id: req.body.docId})
+  console.log(document)
+  if(document.deletedCount === 1){
+    res.json({result: true})
+  }else{
+    res.json({result: false})
+  }
+  
 })
 
 
