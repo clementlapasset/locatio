@@ -19,7 +19,7 @@ function Signup(props) {
         const data = await fetch('/sign-up-landlord', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `firstName=${signUpFirstname}&lastName=${signUpLastname}&email=${signUpEmail}&password=${signUpPassword}&landlord=${true}`
+            body: `firstName=${signUpFirstname}&lastName=${signUpLastname}&email=${signUpEmail}&password=${signUpPassword}&isLandlord=${true}`
         })
         const body = await data.json()
 

@@ -46,7 +46,7 @@ router.post('/sign-up-landlord', async function (req, res) {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      isLandlord: req.body.landlord,
+      isLandlord: req.body.isLandlord,
       password: hash,
       token: uid2(32),
     })
@@ -71,7 +71,7 @@ router.post('/sign-up-tenant', async function (req, res) {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
-    isLandlord: req.body.landlord,
+    isLandlord: req.body.isLandlord,
     propertyId: property.id
   })
   saveUser = await newUser.save()

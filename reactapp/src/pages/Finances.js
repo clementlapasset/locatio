@@ -98,17 +98,17 @@ function Finance(props) {
             <NavBarMain />
             <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign: 'center' }}>Visualisez les revenus et coûts de votre investissement</h1>
             <Container fluid>
-                <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingRight:'30px' }}>
+                <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingRight: '30px' }}>
                     {/******************************INSERT GRAPH*************************************** */}
 
                     <Col lg='6' style={{ position: 'relative', height: '52vh' }}>
-                        <div style={{ textAlign:'center' }} >
+                        <div style={{ textAlign: 'center' }} >
                             Mois en cours (décembre)
                         </div>
                         <Doughnut />
                     </Col>
                     <Col lg='6' style={{ position: 'relative', height: '52vh' }}>
-                        <div style={{ textAlign:'center' }} >
+                        <div style={{ textAlign: 'center' }} >
                             Année en cours (2021)
                         </div>
                         <LineChart />
@@ -127,12 +127,12 @@ function Finance(props) {
                     <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr><th style={{ width: '25%' }}>Status</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
 
                         {financeList.map((finance) => {
-                            if (finance.type === 'fixedCost')  {
+                            if (finance.type === 'fixedCost') {
                                 var badgeColor = 'danger'
-                                var badgeTitle = 'Coût fixe'
+                                var badgeTitle = 'Coût mensuel'
                             } else if (finance.type === 'variableCost') {
                                 badgeColor = 'danger'
-                                badgeTitle = 'Coût variable'
+                                badgeTitle = 'Coût ponctuel'
                             } else {
                                 badgeColor = 'success'
                                 badgeTitle = 'Loyer'
@@ -149,7 +149,7 @@ function Finance(props) {
             <Modal isOpen={modal}
             >
                 <ModalHeader style={{ justifyContent: 'center' }} >
-                    Ajouter une charge
+                    Ajouter une dépense
                 </ModalHeader>
                 <ModalBody>
                     <Form>
@@ -168,18 +168,18 @@ function Finance(props) {
                     </Button>
                     {' '}
                     <Button onClick={() => toggle()}>
-                        Cancel
+                        Annuler
                     </Button>
                 </ModalFooter>
             </Modal>
             <Modal isOpen={modalConfirmDelete}
             >
                 <ModalHeader style={{ justifyContent: 'center' }} >
-                    Confirm Suppression
+                    Confirmer la suppression
                 </ModalHeader>
                 <ModalBody>
 
-                    Are you sure you want to delete this?
+                    Souhaitez-vous supprimer cette dépense ?
 
                 </ModalBody>
                 <ModalFooter>
@@ -191,7 +191,7 @@ function Finance(props) {
                     </Button>
                     {' '}
                     <Button onClick={() => toggleModalConfirmDelete()}>
-                        Cancel
+                        Annuler
                     </Button>
                 </ModalFooter>
             </Modal>

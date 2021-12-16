@@ -28,7 +28,7 @@ export default function Homepage() {
                   <br></br> - Régulariser facilement les charges locataires 
                   <br></br> - Centraliser au même endroit l'ensemble des documents liée à votre bien 
                 </CardText>
-                <Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Sign-up</Button>
+                <Button style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}>Inscription</Button>
               </CardBody>
             </Card>
           </Col>

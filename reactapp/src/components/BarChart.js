@@ -63,7 +63,7 @@ function BarChart(props) {
         }
       })
 
-      var lineChartMonthly = labels.map(() => sumProvisions)
+      var lineChartMonthly = labels.map(() => 100)
 
       setLineChartData(lineChartMonthly)
 

@@ -54,7 +54,7 @@ function NavBarHome(props) {
         <Nav>
         <img src='../images/logo.png' style={{padding:'10px'}} alt=""/>
         <NavItem >
-            <NavLink id="PopoverLogin" style={{color:'white', cursor:"pointer"}} >Login</NavLink>
+            <NavLink id="PopoverLogin" style={{color:'white', cursor:"pointer"}} >Connexion</NavLink>
             <Popover
                 flip
                 placement="bottom"
@@ -75,7 +75,7 @@ function NavBarHome(props) {
         </NavItem>
         <Nav pills >
             <NavItem style={{marginRight:'20px'}}>
-                <NavLink style={{backgroundColor:'#00C689'}} active href="/signup" >Sign-up</NavLink>
+                <NavLink style={{backgroundColor:'#00C689'}} active href="/signup" >Inscription</NavLink>
             </NavItem>
             </Nav>
         </Nav>

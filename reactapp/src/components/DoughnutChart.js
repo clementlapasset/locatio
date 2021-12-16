@@ -9,6 +9,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 function DoughnutChart(props) {
 
     const [doughnutChartData, setDoughnutChartData] = useState([])
+    const [cashFlow, setCashFlow] = useState(10)
 
     var currentMonth = new Date().getMonth()
 
@@ -38,12 +39,14 @@ function DoughnutChart(props) {
                 }
 
             })
-
+            setCashFlow(rent.total - costsMonth)
             setDoughnutChartData([{ total: costsMonth }, { type: 'rent', total: rent.total }])
-
+    
         } loadData()
 
     }, [props.update])
+
+    useEffect(() => console.log('Evolution cashflow : ',cashFlow), [cashFlow])
 
     const labels = ["Dépenses", "Loyer"]
 
@@ -71,11 +74,35 @@ function DoughnutChart(props) {
         ],
     };
 
+    const plugins = [{
+        afterDraw: function (chart) {
+            var width = chart.width,
+                height = chart.height,
+                ctx = chart.ctx;
+            ctx.restore();
+            var fontSize = (height / 160).toFixed(2);
+            ctx.font = fontSize + "em sans-serif";
+            ctx.textBaseline = "top";
+            var text = '',
+                textX = Math.round((width - ctx.measureText(text).width) / 2),
+                textY = height / 2;
+            ctx.fillText(text, textX, textY);
+            ctx.save();
+        }
+    }]
+
+
     return (
         <>
             <Doughnut
                 options={{ responsive: true, maintainAspectRatio: false }}
-                data={data} />
+                data={data}
+                plugins={plugins}
+            />
+            <div style={{position:'absolute', left:'47%', top:'52%', textAlign:'center', fontWeight:'bold'}}>
+                Total<br></br>
+                {cashFlow}€
+            </div>
         </>
     )
 
