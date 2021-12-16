@@ -147,7 +147,7 @@ router.post('/property-info', async function (req, res) {
 
 router.post('/upload-file', async function (req, res) {
   
-  documentName = '/Users/alex/Desktop/locatio/files/' + uniqid() + '.pdf';
+  documentName = '/Users/klemo/la-capsule-batch-39/projects/locatio/files/' + uniqid() + '.pdf'; 
   var document = await req.files.document
   document.mv(documentName)
 

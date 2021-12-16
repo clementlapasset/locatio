@@ -32,12 +32,12 @@ function InformationLocation(props) {
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=fixedCost&frequencyFromFront=12&descriptionFromFront=MensualitéCrédit&dateDebutFromFront=${currentDate}&token=${props.token}`
+                body: `amountFromFront=${monthlyCreditCost}&typeFromFront=fixedCost&frequencyFromFront=12&descriptionFromFront=Mensualité Crédit&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             await fetch('/finance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=fixedCost&frequencyFromFront=12&descriptionFromFront=CoûtAnnexe&dateDebutFromFront=${currentDate}&token=${props.token}`
+                body: `amountFromFront=${monthlyAnnexCost}&typeFromFront=fixedCost&frequencyFromFront=12&descriptionFromFront=Assurance Habitation&dateDebutFromFront=${currentDate}&token=${props.token}`
             })
             console.log("Finances submitted with user's token :", props.token)
             navigate('/information-tenant');

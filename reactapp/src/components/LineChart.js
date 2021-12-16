@@ -66,9 +66,12 @@ function LineChart(props) {
       }, []);
 
       var totalFixedCost = 0
+
       var fixedCosts = chartData.filter(element => element.type === 'fixedCost')
 
-      fixedCosts.forEach(e => e.total += totalFixedCost)
+      fixedCosts.forEach(e => {
+        totalFixedCost += e.total
+      })
 
       var newArray = labels.map((label = 0, i) => {
 
@@ -97,6 +100,11 @@ function LineChart(props) {
         display: true,
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
   };
 
   const data = {
@@ -120,9 +128,6 @@ function LineChart(props) {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '25px' }}>
-        Projection
-      </div>
       <Line options={options} data={data} />
     </>
   )

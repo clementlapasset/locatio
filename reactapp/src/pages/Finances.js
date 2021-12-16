@@ -33,7 +33,7 @@ function Finance(props) {
         setModalConfirmDelete(!modalConfirmDelete)
         setCostToDelete(finance)
     }
-    
+
 
     // state variable to control useEffect with every additional charge added
     const [pageUpdate, setPageUpdate] = useState(false)
@@ -45,11 +45,11 @@ function Finance(props) {
             console.log(props.token)
             var rawResponse = await fetch(`/finance/${props.token}`);
             var response = await rawResponse.json();
-            
+
             var filteredList = response.filter(item => item.type === 'fixedCost' || item.type === 'variableCost' || item.type === 'rent')
             console.log(filteredList)
             setFinanceList(filteredList)
-            console.log('finance list is',financeList)
+            console.log('finance list is', financeList)
 
         } loadData()
 
@@ -86,7 +86,7 @@ function Finance(props) {
         console.log(deleteCost)
         var response = await deleteCost.json()
         console.log('has document been deleted', response.result)
-        
+
         setPageUpdate(true)
         props.onClickButton(response)
         setModalConfirmDelete(!modalConfirmDelete)
@@ -96,15 +96,26 @@ function Finance(props) {
 
         <div>
             <NavBarMain />
-            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign:'center' }}>Visualisez les revenus et coûts de votre investissement</h1>
+            <h1 style={{ marginTop: "50px", marginBottom: "20px", textAlign: 'center' }}>Visualisez les revenus et coûts de votre investissement</h1>
             <Container fluid>
-                <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingRight:'30px' }}>
                     {/******************************INSERT GRAPH*************************************** */}
-                    <Col lg='6' style={{ position: 'relative', height: '40vh' }}><Doughnut /></Col>
-                    <Col lg='6'><LineChart /></Col>
+
+                    <Col lg='6' style={{ position: 'relative', height: '52vh' }}>
+                        <div style={{ textAlign:'center' }} >
+                            Mois en cours (décembre)
+                        </div>
+                        <Doughnut />
+                    </Col>
+                    <Col lg='6' style={{ position: 'relative', height: '52vh' }}>
+                        <div style={{ textAlign:'center' }} >
+                            Année en cours (2021)
+                        </div>
+                        <LineChart />
+                    </Col>
                 </Row>
                 <Row style={{ marginTop: '20px', paddingBottom: '10px' }}><Col style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h3>Dépenses</h3>
+                    <h3>Détails</h3>
                     <Button
                         style={{ backgroundColor: '#00C689', borderColor: '#00C689' }}
                         onClick={() => toggle()}
@@ -116,14 +127,19 @@ function Finance(props) {
                     <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr><th style={{ width: '25%' }}>Status</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
 
                         {financeList.map((finance) => {
-                            if (finance.type === 'cost'){
+                            if (finance.type === 'fixedCost')  {
                                 var badgeColor = 'danger'
+                                var badgeTitle = 'Coût fixe'
+                            } else if (finance.type === 'variableCost') {
+                                badgeColor = 'danger'
+                                badgeTitle = 'Coût variable'
                             } else {
                                 badgeColor = 'success'
+                                badgeTitle = 'Loyer'
                             }
-                            return(
-                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }} >{finance.type}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
-                            )      
+                            return (
+                                <tr><th scope="row"><Badge pill color={badgeColor} style={{ width: '100px' }} >{badgeTitle}</Badge></th><td>{finance.description}</td><td>{finance.montant}€</td><td>{new Date(finance.dateDebut).toLocaleDateString()}</td><td><FaTrashAlt className="trash" onClick={() => toggleModalConfirmDelete(finance)} style={{ marginRight: "5px", cursor: "pointer" }}></FaTrashAlt></td></tr>
+                            )
                         })}
 
                     </tbody>
@@ -162,9 +178,9 @@ function Finance(props) {
                     Confirm Suppression
                 </ModalHeader>
                 <ModalBody>
-                    
+
                     Are you sure you want to delete this?
-                    
+
                 </ModalBody>
                 <ModalFooter>
                     <Button

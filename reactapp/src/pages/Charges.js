@@ -120,7 +120,7 @@ function Charges(props) {
         var response = await rawResponse.json();
 
         toggle()
-        props.onClickButton('add')
+        props.onClickButton(response)
         setdisabled(false)
         setPageUpdate(!pageUpdate)
         console.log('button is disabled when charge added: ',disabled)
@@ -142,7 +142,7 @@ function Charges(props) {
         setTotalCharges(0)
         setdisabled(true)
         toggleModalRegul()
-        props.onClickButton('reset')
+        props.onClickButton(response)
         setPageUpdate(!pageUpdate)
     }
     //***********************************Function to DELETE a charge Locataire/proprietaire***********************/

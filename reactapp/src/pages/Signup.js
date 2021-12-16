@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import { Col, Button, Form, FormGroup, Input } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
-import NavBarMain from '../components/NavBarMain';
+import NavBarSignup from '../components/NavBarSignup';
 import { connect } from 'react-redux'
 
 function Signup(props) {
@@ -38,7 +38,7 @@ function Signup(props) {
 
     return (
         <div>
-            <NavBarMain />
+            <NavBarSignup />
 
             <div className="Signup-page" lg={10}>
                 <div className="Signup-area">
