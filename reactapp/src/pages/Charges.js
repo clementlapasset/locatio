@@ -208,8 +208,8 @@ function Charges(props) {
                         Ajouter une charge
                     </Button>
                 </Col></Row>
-                <Row style={{ height: '34vh', overflow: 'auto' }}>
-                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr style={{ height: '30px' }}><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
+                <Row style={{  overflow: 'auto' }}>
+                    <Table><thead style={{ borderBottomColor: '#FFB039', position: 'sticky', top: '0', backgroundColor: '#FFB039', color: '#FFFFFF' }}><tr><th style={{ width: '25%' }}>Type</th><th style={{ width: '25%' }}>Description</th><th style={{ width: '25%' }}>Montant</th><th style={{ width: '25%' }}>Date</th><th>Supprimer</th></tr></thead><tbody>
 
                         {financeList.map((finance, i) => {
                             if (finance.type === 'charge') {
